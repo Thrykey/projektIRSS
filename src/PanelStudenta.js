@@ -1,6 +1,7 @@
 import { setDisplayByElement, setTextContentByElement, createSpan } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 import { CookieHandler } from './CookieHandler.js';
+const axios = require('axios')
 
 const cookies = new CookieHandler();
 
