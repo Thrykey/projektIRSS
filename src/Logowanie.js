@@ -1,5 +1,9 @@
-import { setDisplayByElement, setTextContentByElement, urlHasHash, urlIncludes } from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlHasHash, urlIncludes, getTokenValue } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
+
+const APIUrl = 'https://irss-backend.onrender.com'
+
+// const axios = requiere('axios')
 
 /**
  * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
@@ -65,9 +69,11 @@ function checkUrlParams() {
         document.getElementById('logowanie').style.gridTemplateRows = '1fr 1fr'
         document.getElementById('logowanie').style.height = '70%'
     }
-    if (urlHasHash('#uncover')) { uncover() }
+    if (urlHasHash('uncover')) { uncover() }
 }
 checkUrlParams();
+
+if (urlHasHash('code')) localStorage.setItem('code', getTokenValue('code'))
 
 
 
@@ -190,6 +196,36 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 })
 
 
+async function sendVerReq(userEmail, indexValue) {
+    const code = localStorage.getItem('code')
+
+    if (!code) {
+        alert('Nie masz zaproszenia.')
+        return
+    }
+
+    const data = { 'email': userEmail, 'invite-code': code }
+
+    const res = await fetch(APIUrl + '/auth/register-with-invite', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+            // 'Authorization': 'Barer ' + token
+        },
+        body: JSON.stringify(data)
+    }).then(
+        res => res.json()
+    )
+    if (res.ok) {
+        console.log('Dane poprawne, wysłany maila')
+        setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
+        document.documentElement.style.setProperty('--lineColorValidation', 'rgb(15, 250, 132)')
+        document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
+        document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
+    }
+}
+
+
 const wyslijBtn = document.getElementById('wyslijKod');
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
@@ -251,7 +287,8 @@ wyslijBtn.addEventListener('click', () => {
         .forEach(el => {
             el.classList.add('active');
         });
-    setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`);
+    sendVerReq(userEmail, indexValue)
+
 });
 
 console.warn('Jak czegoś tutaj szukasz, to pewnie znajdziesz. \

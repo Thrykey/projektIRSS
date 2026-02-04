@@ -125,9 +125,14 @@ document.getElementById('wniosekBtn').addEventListener('click', () => {
 
     document.getElementById('panelRejestracji').classList.add('hide')
     setTimeout(() => { document.getElementById('feedbackWyslania').classList.add('show') }, 1000)
-    console.log('email z cookies:', cookies.get('email'));
-    console.log('lista preferencji:', getPreferences());
-    console.log('token zapisów:', getToken());
+
+    const apiLink = 'https://irss-backend.onrender.com'
+
+
+
+    // console.log('email z cookies:', cookies.get('email'));
+    // console.log('lista preferencji:', getPreferences());
+    // console.log('token zapisów:', getToken());
 });
 
 document.getElementsByClassName('adnotacjeSpan')[0].addEventListener('click', () => {

@@ -85,6 +85,16 @@ export function urlIncludes(val) {
  * @returns bool
  */
 export function urlHasHash(val) {
-    const url = new URL(window.location);
-    return url.hash == val
+    const parts = window.location.hash.split("#");
+
+    return parts.some(p => p.startsWith(val));
+}
+
+function getTokenValue(source) {
+    const parts = window.location.hash.split("#");
+
+    const found = parts.find(p => p.startsWith(key + "="));
+
+    return found ? found.split("=")[1] : null;
+
 }
