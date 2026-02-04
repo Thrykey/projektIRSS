@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logowanie</title>
+    <script type="module" src="../src/Logowanie.js"></script>
+    <link rel="stylesheet" href="../styles/MainLayout.css">
+    <link rel="stylesheet" href="../styles/Logowanie.css">
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="left">
+            <!-- <a href="https://skni.com.pl/#cases" blank="_blank" class="logoSKNI">
+                <img src="./assets/SKNILogo.png" alt="logo koła naukowego SKNI" class="logoSKNI"></img>
+            </a> -->
+        </div>
+
+        <div class="middle">
+            <div class="leftLine"></div>
+            <p id="informacjaCookies" style="display: none;"></p>
+            <div id="podmien" style="display: none;">
+                <button type="button" id="uncover">Podmień adres</button>
+            </div>
+            <div id="logowanie">
+                <div id="email">
+                    <span>Podaj Maila Uczelnianego <span style="color: red;font-size: 30px;">*</span></span>
+                    <br>
+                    <div class="formGroup">
+                        <input type="text" id="mail" class="formField">
+                        <div class="dropdownWrapper" id="dropdownWrapperID">
+                            <button class="dropdown" id="dropdownBtn">Wybierz domene</button>
+                            <div class="dropdownContent">
+                                <span id="ukenChoice">@student.uken.krakow.pl</span>
+                                <span id="upChoice">@student.up.krakow.pl</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="index">
+                        <input type="text" inputmode="numeric" pattern="\d{9}" id="indexInput" maxlength="7">
+                        <span>Nr Indexu<span style=" color: red;font-size: 30px;">*</span></span>
+                    </div>
+                </div>
+                <div id="starostaPasswd">
+                    <span>Podaj Hasło Dostępu<span style="color: red;font-size: 30px;">*</span></span><br>
+                    <div class="formGroup">
+                        <input type="password" id="passwd" class="formField">
+                        <span id="sprawdzPasswd">sprawdź</span>
+                    </div>
+                </div>
+                <div id="wyslij">
+                    <button type="submit" id="wyslijKod" disabled="true">Wyślij kod potwierdzający</button>
+                    <span id="zalogujStarosta">Zaloguj Jako Starosta</span>
+                </div>
+            </div>
+            <div id="prosbaKodu">
+                <span id="potwierdzenieSpan"></span>
+                <div class="pairLabelInput">
+                    <label>Kod:</label>
+                    <input type="text" name="potwierdzenieKod" id="potwierdzKod">
+                </div>
+                <button type="button">Potwierdź Kod</button>
+
+            </div>
+            <div class="rightLine"></div>
+        </div>
+        <div class="right">
+            <div id="PanelStarosty">
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,160 @@
+@import url(./Constants.css);
+
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: black;
+    color: white;
+    overflow-y: hidden;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/logo_ibii.png');
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-position: center calc(50% + 12px);
+    margin: 0px;
+    user-select: none;
+}
+
+@media (max-width: 1100px) {
+    body {
+        background-size: 110%;
+        overflow-y: auto;
+    }
+}
+
+
+
+/* Siatka sekcji */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr var(--MiddleSegmentWidth) 1fr;
+    gap: 10px;
+    height: 100vh;
+    max-height: 100vh;
+}
+
+
+
+/* Sekcje */
+.left {
+    display: grid;
+    min-width: 0;
+    /* background-color: blue; */
+    /* dla debugowania */
+}
+
+.logoSKNI {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 150px;
+    height: auto;
+}
+
+.middle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 100%;
+    /* background-color: red; */
+    /* dla debugowania */
+
+    height: var(--MiddleSegmentMaxHeight);
+    margin-top: 50%;
+    transform: translateY(-50%);
+
+    border-right: solid 40px var(--PaddingLineGradient);
+    border-left: solid 40px var(--PaddingLineGradient);
+}
+
+/* Boczne linie środkowej sekcji */
+.leftLine {
+    background: var(--PaddingLineGradient);
+    position: fixed;
+    height: 100%;
+    width: var(--LineWidth);
+}
+
+.rightLine {
+    background: var(--PaddingLineGradient);
+    position: fixed;
+    right: 0;
+    height: 100%;
+    width: var(--LineWidth);
+}
+
+.leftLine::before,
+.rightLine::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle,
+            var(--lineColorValidation),
+            var(--lineColorValidationFade) 110%);
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+}
+
+.leftLine.active::before,
+.rightLine.active::before {
+    opacity: 1;
+}
+
+.right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: start;
+    min-width: 0;
+    /* background-color: blue; */
+    /* dla debugowania */
+}
+
+
+/* Responsywność z svh i vw*/
+@media (max-width: 1100px) {
+    .grid-container {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        height: 98svh;
+        width: 100svw;
+    }
+
+    .middle {
+        height: 100svh;
+    }
+
+
+    .left,
+    .right {
+        display: none;
+    }
+
+    .middle {
+        top: 30svh;
+        position: absolute;
+        height: 98svh;
+    }
+
+    .leftLine,
+    .rightLine {
+        height: 100svh;
+        width: var(--PhoneLineWidth);
+    }
+}
+
+.dynamicErrorTooltip {
+    font-family: 'Courier New', Courier, monospace;
+    position: absolute;
+    background-color: #ff4d4f;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1;
+    /* trollge */
+    transform: translateY(150%);
+    display: none;
+}

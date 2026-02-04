@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="PL-pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/PanelStudenta.css">
+    <link rel="stylesheet" href="./styles/MainLayout.css">
+    <script type="module" src="./src/PanelStudenta.js"></script>
+    <script type="module" src="./src/ScalingPreferenceColors.js"></script>
+    <title>Studencki Panel</title>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="left">
+            <!-- <a href="https://skni.com.pl/#cases" blank="_blank" class="logoSKNI">
+                <img src="./assets/SKNILogo.png" alt="logo koła naukowego SKNI" class="logoSKNI"></img>
+            </a> -->
+        </div>
+
+        <div class="middle">
+            <div class="leftLine"></div>
+            <div id="panelRejestracji">
+                <div class="informacje">
+                    <span class="welcome">Witamy w pomocnicznym systemie rejestracji do grup labolatoryjnych!</span>
+                </div>
+                <div class="logowanie">
+                    <!-- <span class="zalogujSieSpan">Potwierdź swój mail <b>z domeny uczelnianej</b>
+                    (@studnet.uken.krakow.pl)</span> <br>
+                <button type="button" class="microsoftLogowanie">Wyślij mail potwierdzający</button> <br>-->
+                    <!-- <input type="email" name="" class="mailStudencki" placeholder="" disabled="true" id="mail12"> -->
+
+                    <button id="setCookieBtn">Set Cookie</button>
+                    <button id="removeCookieBtn">Remove Cookie</button>
+                    <p id="status"></p>
+                    <button type="button" id="zmienEmail">Zmień wskazany email</button>
+
+                </div>
+                <span class="wyboryGrupoweSpanMobile">Preferencje</span>
+
+                <div class="wyborGrup">
+                    <span class="wyboruGrupoweSpanDesktop">Wybierz</span>
+                    <div class="wybor">
+                        <!-- <span>Najbardziej</span> 
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL1"><span class="nrGrupySpan">L1</span></div>
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL2"><span class="nrGrupySpan">L2</span></div>
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL3"><span class="nrGrupySpan">L3</span></div>
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL4"><span class="nrGrupySpan">L4</span></div>
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL5"><span class="nrGrupySpan">L5</span></div>
+                    <div class="wyborGrupyLabolatoryjnej" id="grupaL6"><span class="nrGrupySpan">L6</span></div>
+                    <span>Najmniej</span> -->
+                    </div>
+                </div>
+                <div class="adnotacje">
+                    <span class="adnotacjeSpan">adnotacje o RODO i FAQ</span>
+                </div>
+                <div class="wyslijWniosek">
+                    <button type="submit" class="wniosekBtn" id="wniosekBtn">Gotowe</button>
+                </div>
+            </div>
+            <div id="feedbackWyslania">
+                <span>Dziękujemy za wysłanie zgłoszenia! <br> Twój zapytanie jest przetwarzane, nie opuszczaj
+                    strony.</span>
+            </div>
+            <div class="rightLine"></div>
+        </div>
+        <div class="right">
+            <div id="PanelStarosty">
+                <button id="PanelStarostyBtn">Panel Starosty</button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="Pl-pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/MainLayout.css">
+    <link rel="stylesheet" href="../styles/PanelStarosty.css">
+    <script type="module" src="../src/PanelStarosty.js"></script>
+    <title>Panel Starosty</title>
+</head>
+
+<body>
+    <div class="grid-container">
+        <div class="left">
+            <!-- <a href="https://skni.com.pl/#cases" blank="_blank" class="logoSKNI">
+                <img src="../assets/SKNILogo.png" alt="logo koła naukowego SKNI" class="logoSKNI"></img>
+            </a> -->
+        </div>
+        <div class="middle">
+            <div class="leftLine"></div>
+            <div id="gridLayout">
+                <div class="informacje">
+                    <span class="welcome">Witamy w panelu starosty!</span>
+                </div>
+                <div class="logowanie">
+                    <span id="status"></span>
+                    <button type="button" id="zalogujSieStatus">Zaloguj się</button>
+                </div>
+                <span class="informacje">Informacje o kierunku:</span>
+                <div class="informacjeDoGenerowania">
+                    <div class="pairLabelInput">
+                        <label for="nazwaKierunku">Nazwa Kierunku<span
+                                style="color: red;font-size: 20px;">*</span></label>
+                        <input type="value" name="nazwaKierunku" class="nazwaKierunku" id="nazwaKierunku" placeholder=""
+                            disabled="true">
+                    </div>
+                    <div class="pairLabelInput">
+                        <label for="nazwaKierunku">Rok studiów <span
+                                style="color: red;font-size: 20px;">*</span></label>
+                        <input type="number" name="rokStudiow" class="rokStudiow numberInputSizing" id="rokStudiow"
+                            placeholder="" min="1" max="3" disabled="true">
+                    </div>
+                    <div class="pairLabelInput">
+                        <label for="nazwaKierunku">Stopien studiow<span
+                                style="color: red;font-size: 20px;">*</span></label>
+                        <input type="number" name="stopienStudiow" class="stopienStudiow numberInputSizing"
+                            id="stopienStudiow" placeholder="" min="1" max="2" disabled="true">
+                    </div>
+                </div>
+                <span class="dodatkoweInformacje">Dodatkowe informacje:</span>
+                <div class="dodatkoweInformacjeDoGenerowania">
+
+                    <div class="upperHalf">
+                        <div class="pairLabelInput">
+                            <label for="iloscGrup">Ilość grup LAB <span
+                                    style="color: red;font-size: 20px;">*</span></label>
+                            <input type="number" name="iloscGrup" class="iloscGrup numberInputSizing" id="iloscGrup"
+                                placeholder="" min="1" max="10" disabled="true">
+                        </div>
+                        <div class="pairLabelInput">
+                            <label for="maxOsob">Max osób w grupie<span
+                                    style="color: red;font-size: 20px;">*</span></label>
+                            <input type="number" name="maxOsob" class="maxOsob numberInputSizing" id="maxOsob"
+                                placeholder="" min="1" max="30" disabled="true">
+                        </div>
+                    </div>
+                    <div class="lowerHalf">
+                        <div class="pairLabelInput">
+                            <label>Kto Pierwszy ten lepszy?</label>
+                            <input type="radio" name="KPTN" class="KPTN" id="KPTN" disabled="true" checked="true">
+                        </div>
+                        <div class="pairLabelInput">
+                            <label>Randomowo?</label>
+                            <input type="radio" name="KPTN" class="KPTN" id="random" disabled="true">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="generujLink">
+                    <button type="submit" class="generujLinkBtn">Generuj link do rejestracji</button>
+                    <span class="generujLinkSpan">Link jest generowany na 3 dni</span>
+                </div>
+            </div>
+            <div id="infoGather">
+                <span>Link został wygenerowany poprawnie!</span>
+                <span class="formField">http://127.0.0.1:3000/index.html/?inf-6g-aiujsdhasid</span>
+
+            </div>
+            <div class="rightLine"></div>
+        </div>
+        <div class="right">
+
+        </div>
+</body>
+
+</html>

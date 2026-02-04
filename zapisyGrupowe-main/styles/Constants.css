@@ -1,0 +1,17 @@
+:root {
+    --MainBlueColor: #325BC2;
+    /* Z jakiegoś powodu, na logo to nie jest gradient */
+    --SubstituteBlueGradient: linear-gradient(45deg, #418CD9 0%, #56CFF8 100%);
+    --SubstitueMainBlue: #418CD9;
+    --SubstituteSecondaryBlue: #56CFF8;
+    --MainOrangeGradient: linear-gradient(45deg, #805237 0%, #C86223 100%);
+    --PaddingLineGradient: radial-gradient(circle, #805237, rgba(200, 98, 35, 0) 110%);
+
+    --LineWidth: 2px;
+    --PhoneLineWidth: 5px;
+    --lineColorValidation: rgba(0, 0, 0, 1);
+    --lineColorValidationFade: rgba(255, 255, 255, 0);
+
+    --MiddleSegmentWidth: 1000px;
+    --MiddleSegmentMaxHeight: 700px;
+}
