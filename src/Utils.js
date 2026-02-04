@@ -90,7 +90,7 @@ export function urlHasHash(val) {
     return parts.some(p => p.startsWith(val));
 }
 
-function getTokenValue(source) {
+export function getTokenValue(key) {
     const parts = window.location.hash.split("#");
 
     const found = parts.find(p => p.startsWith(key + "="));

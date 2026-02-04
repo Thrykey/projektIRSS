@@ -223,6 +223,10 @@ async function sendVerReq(userEmail, indexValue) {
         document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
         document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
     }
+    if (!res.ok) {
+        console.log(":(");
+
+    }
 }
 
 
