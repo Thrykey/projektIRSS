@@ -71,12 +71,11 @@ export function clampValues(userInput, min, max) {
 
 /**
  * Funkcja sprawdzająca czy w URL występuje jakaś wartość
- * @param {String} val - wartość szukana w url, po '?' 
+ * @param {String} key - wartość szukana w url, po '?' 
  * @returns bool
  */
-export function urlIncludes(val) {
-    const url = new URL(window.location);
-    return url.search.includes(val)
+export function urlIncludes(key) {
+    return new URL(window.location.href).searchParams.get(key);
 }
 
 /**
@@ -97,4 +96,16 @@ export function getTokenValue(key) {
 
     return found ? found.split("=")[1] : null;
 
+}
+
+export function appendQueryParam(key, value) {
+    const url = new URL(window.location.href);
+    url.searchParams.append(key, value);
+    window.history.replaceState(null, "", url.toString());
+}
+
+export function removeQueryParam(key) {
+    const url = new URL(window.location.href);
+    url.searchParams.delete(key);
+    window.history.replaceState(null, "", url.toString());
 }

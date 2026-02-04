@@ -1,7 +1,7 @@
-import { setDisplayByElement, setTextContentByElement, createSpan } from './Utils.js';
+import { setDisplayByElement, setTextContentByElement, createSpan, urlHasHash, urlIncludes, getTokenValue, removeQueryParam } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 import { CookieHandler } from './CookieHandler.js';
-const axios = require('axios')
+
 
 const cookies = new CookieHandler();
 
@@ -66,26 +66,112 @@ function checkCookies() {
 
 /* ---------- GET DATA FUNCTIONS ---------- */
 
-function getPreferences() {
-    const container = document.querySelector('.wybor');
-    if (!container) return [];
+// function getPreferences() {
+//     const container = document.querySelector('.wybor');
+//     if (!container) return [];
 
-    const groupNumbers = [];
+//     const groupNumbers = [];
 
-    for (const child of container.children) {
-        if (child.id && child.id.startsWith('grupaL')) {
-            const num = parseInt(child.id.replace('grupaL', ''), 10);
-            if (!isNaN(num)) groupNumbers.push(num);
-        }
+//     for (const child of container.children) {
+//         if (child.id && child.id.startsWith('grupaL')) {
+//             const num = parseInt(child.id.replace('grupaL', ''), 10);
+//             if (!isNaN(num)) groupNumbers.push(num);
+//         }
+//     }
+//     return groupNumbers;
+// }
+
+// function getToken() {
+//     const query = window.location.search.slice(1);
+//     const match = query.match(/-(\d+)G-(.+)$/i);
+//     return match && match[2] ? match[2] : null;
+// }
+
+if (urlIncludes('token')) {
+    localStorage.setItem('token', urlIncludes('token'))
+    console.log('Zapisano JWT pomyślnie, usuwanie z URL');
+
+    removeQueryParam('token')
+}
+// localStorage.removeItem('token')
+function reactToJWT() {
+    if (!localStorage.getItem('token')) {
+        window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
+        return
     }
-    return groupNumbers;
+}
+// reactToJWT()
+
+
+function getCurrentPreferences() {
+    const groups = document.querySelectorAll('.wyborGrupyLabolatoryjnej');
+    const preferences = [];
+
+    groups.forEach((el, index) => {
+        const groupIdMatch = el.id.match(/\d+$/);
+        const groupId = groupIdMatch ? parseInt(groupIdMatch[0], 10) : 0;
+
+        preferences.push({
+            group_id: groupId,
+            priority: index + 1
+        });
+    });
+    return { preferences };
 }
 
-function getToken() {
-    const query = window.location.search.slice(1);
-    const match = query.match(/-(\d+)G-(.+)$/i);
-    return match && match[2] ? match[2] : null;
+
+const APIUrl = 'https://irss-backend.onrender.com'
+
+async function sendPreferences() {
+    try {
+        const token = localStorage.getItem('token')
+        if (!token) {
+            console.warn('Brak tokenu!');
+            return
+        }
+
+        const data = getCurrentPreferences()
+        const res = await fetch(APIUrl + '/student/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Barer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+
+
+        const status = response.status;
+        const resData = await res.json();
+
+        switch (status) {
+            case 200:
+                console.log('Request wysłany poprawnie');
+
+                document.documentElement.style.setProperty('--lineColorValidation', 'rgba(15, 133, 250, 1)');
+                document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 231, 250, 0)');
+                document.querySelectorAll('.leftLine, .rightLine').forEach(el => el.classList.add('active'));
+
+                document.getElementById('panelRejestracji').classList.add('hide');
+                setTimeout(() => {
+                    document.getElementById('feedbackWyslania').classList.add('show');
+                }, 1000);
+                break;
+
+            case 422:
+                console.error('Błąd 422 - niepoprawne dane:');
+                console.table(resData.detail);
+                break;
+
+            default:
+                console.warn(`Nieoczekiwany status: ${status}`, resData);
+        }
+    } catch (err) {
+        console.error('Błąd sieci lub inny problem:', err);
+    }
 }
+
+
 
 /* ---------- EVENT LISTENERS ---------- */
 
@@ -97,11 +183,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById('PanelStarostyBtn').addEventListener('click', () => {
-    window.location.href = './pages/Logowanie.html?starosta';
+    window.location.href = './pages/Logowanie.html?starosta=true';
 });
 
 document.getElementById('zmienEmail').addEventListener('click', () => {
-    window.location.href = './pages/Logowanie.html?#uncover';
+    window.location.href = './pages/Logowanie.html?uncover=true';
 });
 
 document.getElementById('setCookieBtn').addEventListener('click', () => {
@@ -115,20 +201,7 @@ document.getElementById('removeCookieBtn').addEventListener('click', () => {
 });
 
 document.getElementById('wniosekBtn').addEventListener('click', () => {
-    document.documentElement.style.setProperty('--lineColorValidation', 'rgba(15, 133, 250, 1)')
-    document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 231, 250, 0)')
-    document
-        .querySelectorAll('.leftLine, .rightLine')
-        .forEach(el => {
-            el.classList.add('active');
-        });
-
-    document.getElementById('panelRejestracji').classList.add('hide')
-    setTimeout(() => { document.getElementById('feedbackWyslania').classList.add('show') }, 1000)
-
-    const apiLink = 'https://irss-backend.onrender.com'
-
-
+    sendPreferences()
 
     // console.log('email z cookies:', cookies.get('email'));
     // console.log('lista preferencji:', getPreferences());

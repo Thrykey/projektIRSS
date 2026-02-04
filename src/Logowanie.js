@@ -1,4 +1,4 @@
-import { setDisplayByElement, setTextContentByElement, urlHasHash, urlIncludes, getTokenValue } from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
 const APIUrl = 'https://irss-backend.onrender.com'
@@ -8,22 +8,19 @@ const APIUrl = 'https://irss-backend.onrender.com'
 /**
  * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
  */
-const cookies = new CookieHandler()
 
-
-if (cookies.exists('email')) {
+if (localStorage.getItem('email')) {
     setDisplayByElement('logowanie', 'none')
     setDisplayByElement('podmien', 'block')
 
     const strongifiedEmail = document.createElement('strong')
-    strongifiedEmail.textContent = `${cookies.get('email')}`
+    strongifiedEmail.textContent = `${localStorage.get('email')}`
 
     setDisplayByElement('informacjaCookies', 'block')
     setTextContentByElement('informacjaCookies', `W twojej sesji zapisany jest zalogowany email: `)
     document.getElementById('informacjaCookies').appendChild(strongifiedEmail)
 }
 else uncover()
-
 
 
 /**
@@ -52,7 +49,7 @@ const inputFields = {
 }
 
 function checkUrlParams() {
-    if (urlIncludes('starosta')) {
+    if (urlIncludes('user') == 'starosta') {
         console.info('Renderowanie dodatkowego elementu dla starosty')
 
         setDisplayByElement('starostaPasswd', 'grid')
@@ -69,29 +66,30 @@ function checkUrlParams() {
         document.getElementById('logowanie').style.gridTemplateRows = '1fr 1fr'
         document.getElementById('logowanie').style.height = '70%'
     }
-    if (urlHasHash('uncover')) { uncover() }
+    if (urlIncludes('uncover')) { uncover() }
 }
 checkUrlParams();
 
-if (urlHasHash('code')) localStorage.setItem('code', getTokenValue('code'))
+if (urlIncludes('code')) localStorage.setItem('code', getTokenValue('code'))
+console.log(getTokenValue('code'));
+
 
 
 
 document.getElementById('zalogujStarosta').addEventListener('click', () => {
-    const url = new URL(window.location);
-    const hasStarosta = url.search.includes('starosta');
+    const hasStarosta = urlIncludes('user');
 
-    if (hasStarosta) {
-        url.search = '';
+    if (hasStarosta == 'starosta') {
+        removeQueryParam('user')
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako starosta')
         inputFields.HASLO = undefined
     } else {
-        url.search = '?starosta';
+        appendQueryParam('user', 'starosta')
+
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
         inputFields.HASLO = false
     }
 
-    history.pushState(null, '', url);
     enableSend()
     checkUrlParams();
 });
@@ -109,7 +107,8 @@ const validEmails = ['student.uken.krakow.pl', 'student.up.krakow.pl']
 function reactToEmailChange(buttonValue) {
 
     if (validEmails.includes(buttonValue)) {
-        document.getElementById('email').style.gridTemplateRows = 'auto 1fr auto 0px'
+
+        document.getElementById('email').style.gridTemplateRows = validEmails[0].includes(buttonValue) ? 'auto 1fr auto 0px' : 'auto 1fr auto 45px'
         inputFields.DOMENA = true
         enableSend()
         document.getElementById('email').addEventListener('transitionstart', () => {
@@ -134,7 +133,7 @@ document.getElementById('upChoice').addEventListener('click', () => {
 
 function handleDynamicValues() {
     let innerValue = document.getElementById('mail').value.replace(' ', '')
-    //jakub.bieniek@student.up.krakow.pl
+
     document.getElementById('indexInput').value = ''
     inputFields.INDEX = false
     if (innerValue.length >= 3) {
@@ -217,15 +216,23 @@ async function sendVerReq(userEmail, indexValue) {
         res => res.json()
     )
     if (res.ok) {
-        console.log('Dane poprawne, wysłany maila')
-        setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-        document.documentElement.style.setProperty('--lineColorValidation', 'rgb(15, 250, 132)')
-        document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
-        document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
-    }
-    if (!res.ok) {
-        console.log(":(");
 
+    }
+    const status = res.status
+
+    console.log(status);
+
+    switch (status) {
+        case 200: {
+            console.log('Dane poprawne, wysłany maila')
+            localStorage.setItem('email', userEmail)
+            setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
+            document.documentElement.style.setProperty('--lineColorValidation', 'rgb(15, 250, 132)')
+            document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
+            document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
+        }
+        case 422:
+            console.log('cos jest nie tak');
     }
 }
 

@@ -345,7 +345,7 @@ body {
 
 #prosbaKodu {
     display: none;
-    grid-template-rows: 2fr 1fr 2fr;
+    grid-template-rows: 1fr;
     justify-items: center;
     align-items: center;
     position: absolute;
@@ -358,43 +358,6 @@ body {
     background: linear-gradient(45deg, rgba(65, 140, 217, 0.2) 0%, rgba(86, 207, 248, 0.2) 100%);
     z-index: 5;
     transition: all 1s cubic-bezier(0.58, 0.00, 0.08, 1.00);
-
-    &>:first-child {
-        align-self: end;
-    }
-
-
-    &>:last-child {
-        align-self: start;
-    }
-
-    &>button {
-        border-radius: 6px;
-        border: solid 1px black;
-        padding: 8px 12px;
-        font-size: 14px;
-        line-height: 25px;
-        background: #56CFF8;
-        transition: background .3s ease, border .3s ease, color .3s ease;
-        text-shadow: 1px 1px 2px #805237;
-        cursor: pointer;
-    }
-
-    &>button:not(:disabled):hover {
-        background: var(--SubstitueMainBlue);
-        color: white;
-        cursor: pointer;
-    }
-
-    &>button:not(:disabled):active {
-        transform: scale(1.05);
-    }
-
-    &>button:disabled {
-        background-color: #696969;
-        color: white;
-        cursor: not-allowed;
-    }
 }
 
 .pairLabelInput {
