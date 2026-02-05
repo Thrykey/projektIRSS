@@ -88,14 +88,14 @@ function checkCookies() {
 // }
 
 if (urlIncludes('access_token')) {
-    localStorage.setItem('token', urlIncludes('token'))
+    localStorage.setItem('access_token', urlIncludes('access_token'))
     console.log('Zapisano JWT pomyślnie, usuwanie z URL');
 
     removeQueryParam('access_token')
 }
 // localStorage.removeItem('token')
 function reactToJWT() {
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.getItem('access_token')) {
         window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
         return
     }
@@ -124,7 +124,7 @@ const APIUrl = 'https://irss-backend.onrender.com'
 
 async function sendPreferences() {
     try {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('access_token')
         if (!token) {
             console.warn('Brak tokenu!');
             return
