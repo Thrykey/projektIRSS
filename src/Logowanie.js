@@ -214,7 +214,7 @@ async function sendVerReq(userEmail, indexValue) {
         body: JSON.stringify(data)
     })
 
-    const status = response.status;
+    const status = res.status;
     const resData = await res.json();
 
     console.log(status);
