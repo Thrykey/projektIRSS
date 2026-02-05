@@ -70,8 +70,9 @@ function checkUrlParams() {
 }
 checkUrlParams();
 
-if (urlIncludes('code')) localStorage.setItem('code', getTokenValue('code'))
-console.log(getTokenValue('code'));
+if (urlIncludes('code')) localStorage.setItem('code', urlIncludes('code'))
+console.log(urlIncludes('code'));
+
 
 
 
