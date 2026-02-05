@@ -91,7 +91,7 @@ if (urlIncludes('access_token')) {
     localStorage.setItem('token', urlIncludes('token'))
     console.log('Zapisano JWT pomyślnie, usuwanie z URL');
 
-    removeQueryParam('token')
+    removeQueryParam('access_token')
 }
 // localStorage.removeItem('token')
 function reactToJWT() {
