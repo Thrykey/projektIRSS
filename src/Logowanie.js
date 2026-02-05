@@ -203,7 +203,10 @@ async function sendVerReq(userEmail, indexValue) {
         return
     }
 
-    const data = { 'email': userEmail, 'invite-code': code }
+    const data = {
+        email: userEmail.toString(),
+        invite_code: code.toString()
+    }
 
     const res = await fetch(APIUrl + '/auth/register-with-invite', {
         method: 'POST',
