@@ -212,13 +212,10 @@ async function sendVerReq(userEmail, indexValue) {
             // 'Authorization': 'Barer ' + token
         },
         body: JSON.stringify(data)
-    }).then(
-        res => res.json()
-    )
-    if (res.ok) {
+    })
 
-    }
-    const status = res.status
+    const status = response.status;
+    const resData = await res.json();
 
     console.log(status);
 
@@ -230,9 +227,12 @@ async function sendVerReq(userEmail, indexValue) {
             document.documentElement.style.setProperty('--lineColorValidation', 'rgb(15, 250, 132)')
             document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
             document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
+            break
         }
         case 422:
-            console.log('cos jest nie tak');
+            console.error('Błąd 422 - niepoprawne dane:')
+            console.table(resData.detail)
+            break
     }
 }
 
