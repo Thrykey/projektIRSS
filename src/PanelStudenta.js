@@ -87,7 +87,7 @@ function checkCookies() {
 //     return match && match[2] ? match[2] : null;
 // }
 
-if (urlIncludes('token')) {
+if (urlIncludes('access_token')) {
     localStorage.setItem('token', urlIncludes('token'))
     console.log('Zapisano JWT pomyślnie, usuwanie z URL');
 
@@ -100,7 +100,7 @@ function reactToJWT() {
         return
     }
 }
-// reactToJWT()
+reactToJWT()
 
 
 function getCurrentPreferences() {
