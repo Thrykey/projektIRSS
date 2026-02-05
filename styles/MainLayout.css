@@ -89,16 +89,45 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle,
-            var(--lineColorValidation),
-            var(--lineColorValidationFade) 110%);
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
+    background: radial-gradient(circle, rgba(200, 200, 200, 0.2), rgba(200, 200, 200, 0) 110%);
+    opacity: 1;
+    z-index: 0;
 }
 
-.leftLine.active::before,
-.rightLine.active::before {
+.leftLine::after,
+.rightLine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(15, 133, 250, 1), rgba(15, 231, 250, 0) 110%);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
+}
+
+.leftLine.active::after,
+.rightLine.active::after {
     opacity: 1;
+}
+
+.leftLine .successLayer,
+.rightLine .successLayer {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(15, 250, 132, 1), rgba(15, 250, 93, 0) 110%);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 2;
+}
+
+.leftLine .errorLayer,
+.rightLine .errorLayer {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(250, 15, 15, 1), rgba(250, 80, 80, 0) 110%);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 3;
 }
 
 .right {

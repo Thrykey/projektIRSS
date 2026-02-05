@@ -27,7 +27,9 @@ else uncover()
  * Funkcja zmieniająca display elementów po zaakceptowani zmiany maila, lub przekierowaniu
  */
 function uncover() {
+    document.getElementById('logowanie').classList.remove('hide');
     setDisplayByElement('logowanie', 'grid')
+    document.getElementById('logowanie').classList.add('show');
     setDisplayByElement('informacjaCookies', 'none')
     setDisplayByElement('podmien', 'none')
 }
@@ -72,9 +74,6 @@ checkUrlParams();
 
 if (urlIncludes('code')) localStorage.setItem('code', urlIncludes('code'))
 console.log(urlIncludes('code'));
-
-
-
 
 
 document.getElementById('zalogujStarosta').addEventListener('click', () => {
@@ -228,9 +227,12 @@ async function sendVerReq(userEmail, indexValue) {
             console.log('Dane poprawne, wysłany maila')
             localStorage.setItem('email', userEmail)
             setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-            document.documentElement.style.setProperty('--lineColorValidation', 'rgb(15, 250, 132)')
-            document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
-            document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
+            document.getElementById('prosbaKodu').classList.add('success')
+            document.querySelectorAll('.leftLine, .rightLine')
+                .forEach(el => {
+                    el.classList.remove('active')
+                    el.querySelector('.successLayer').style.opacity = '1'
+                })
             break
         case 422:
             console.error('Błąd 422 - niepoprawne dane:')
@@ -276,31 +278,26 @@ wyslijBtn.addEventListener('click', () => {
     mailTooltip.style.display = 'none';
 
     if (hasError) {
-        document.documentElement.style.setProperty('--lineColorValidation', 'rgb(250, 6, 6)')
-        document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(242, 44, 44, 0)')
-        document
-            .querySelectorAll('.leftLine, .rightLine')
-            .forEach(el => {
-                el.classList.add('active');
-            });
-        setTimeout(() => document
-            .querySelectorAll('.leftLine, .rightLine')
-            .forEach(el => {
-                el.classList.remove('active');
-            }), 3000)
+        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+            el.querySelector('.errorLayer').style.opacity = '1';
+            el.querySelector('.successLayer').style.opacity = '0';
+        })
+        setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+            el.querySelector('.errorLayer').style.opacity = '0';
+            el.querySelector('.successLayer').style.opacity = '0';
+        }), 3000)
         return;
     }
 
     const userEmail = (mailValue + domainValue).toLowerCase();
-    setDisplayByElement('logowanie', 'none')
-    setDisplayByElement('prosbaKodu', 'grid')
-    document.documentElement.style.setProperty('--lineColorValidation', 'rgba(15, 133, 250, 1)')
-    document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 231, 250, 0)')
+    document.getElementById('logowanie').classList.remove('show');
+    document.getElementById('logowanie').classList.add('hide');
+    document.getElementById('prosbaKodu').classList.add('show');
     document
         .querySelectorAll('.leftLine, .rightLine')
         .forEach(el => {
-            el.classList.add('active');
-        });
+            el.classList.add('active')
+        })
     sendVerReq(userEmail, indexValue)
 
 });
