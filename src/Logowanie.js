@@ -220,7 +220,7 @@ async function sendVerReq(userEmail, indexValue) {
     console.log(status);
 
     switch (status) {
-        case 200: {
+        case 200:
             console.log('Dane poprawne, wysłany maila')
             localStorage.setItem('email', userEmail)
             setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
@@ -228,7 +228,6 @@ async function sendVerReq(userEmail, indexValue) {
             document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 250, 93, 0)')
             document.getElementById('prosbaKodu').style.background = 'linear-gradient(45deg, rgba(15, 250, 132, 0.2) 0%, rgba(15, 250, 93, 0.2) 100%)'
             break
-        }
         case 422:
             console.error('Błąd 422 - niepoprawne dane:')
             console.table(resData.detail)
