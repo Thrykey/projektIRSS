@@ -14,7 +14,7 @@ if (localStorage.getItem('email')) {
     setDisplayByElement('podmien', 'block')
 
     const strongifiedEmail = document.createElement('strong')
-    strongifiedEmail.textContent = `${localStorage.get('email')}`
+    strongifiedEmail.textContent = `${localStorage.getItem('email')}`
 
     setDisplayByElement('informacjaCookies', 'block')
     setTextContentByElement('informacjaCookies', `W twojej sesji zapisany jest zalogowany email: `)
@@ -33,7 +33,7 @@ function uncover() {
 }
 
 document.getElementById('uncover').addEventListener('click', () => {
-    history.pushState(null, '', '#uncover');
+    removeQueryParam('uncover')
     uncover()
 })
 
