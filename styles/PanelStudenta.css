@@ -1,17 +1,30 @@
 @import url(./Constants.css);
 
 
-/* Content sekcji środkowego panelu */
-.informacje {
-    position: fixed;
-    top: 0%;
-    left: 50%;
-    transform: translateX(-50%);
+#panelRejestracji {
+    display: grid;
+    grid-template-rows: 1fr 2fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 1s cubic-bezier(0.58, 0.00, 0.08, 1.00);
+
+    &.hide {
+        opacity: 0;
+        pointer-events: none;
+    }
 }
 
+
 @media (max-width: 1100px) {
+    #panelRejestracji {
+        grid-template-rows: 1fr 3fr 1fr 1fr;
+    }
+
     .informacje {
-        position: absolute;
         top: -2vh;
         width: 70dvw;
         text-align: center;
@@ -21,61 +34,13 @@
 
 }
 
-.logowanie {
-    position: fixed;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 20%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-
-    &>button {
-        border-radius: 6px;
-        border: solid 1px black;
-        padding: 8px 12px;
-        font-size: 14px;
-        line-height: 25px;
-        background: var(--SubstituteSecondaryBlue);
-        transition: background .3s ease, border .3s ease, color .3s ease;
-        text-shadow: 1px 1px 2px #805237;
-        cursor: pointer;
-    }
-
-    &>button:hover {
-        background: var(--SubstitueMainBlue);
-        color: white;
-        cursor: pointer;
-    }
-
-    &>button:active {
-        transform: scale(1.05);
-    }
-}
-
-#setCookieBtn {
-    position: inherit;
-    left: 5%;
-    top: 20%;
-}
-
-#removeCookieBtn {
-    position: inherit;
-    left: 5%;
-    top: 65%;
-}
-
 
 /* Responsywność logowania */
 @media (max-width: 1100px) {
     .logowanie {
-        position: absolute;
         top: 7vh;
-        width: 85%;
-        height: 20vh;
+        width: 85svh;
+        height: 20svh;
         text-align: center;
         margin-bottom: 2vh;
     }
@@ -83,12 +48,9 @@
 
 /* Wybór grupy */
 .wyborGrup {
-    position: fixed;
-    top: 45%;
-    left: 50%;
+    /* position: fixed; */
     width: 85%;
-    height: 20%;
-    transform: translateX(-50%);
+    height: 40%;
     font-size: 18px;
     justify-content: center;
     display: block;
@@ -101,16 +63,8 @@
 
 .wyboruGrupoweSpanDesktop {
     display: block;
-    position: absolute;
-    left: 50%;
-    top: -15%;
-    transform: translateX(-50%);
     user-select: none;
-}
-
-.wyboryGrupoweSpanDesktop:first-child span {
-    position: absolute;
-    left: 0%;
+    justify-self: center;
 }
 
 
@@ -162,8 +116,6 @@
 }
 
 .bladLinku {
-    position: absolute;
-    top: 40%;
     width: 100%;
     text-align: center;
     justify-items: center;
@@ -171,11 +123,9 @@
 
 @media (max-width: 1100px) {
     .wyborGrup {
-        position: absolute;
-        top: 28vh;
         width: 30vw;
-        height: calc(70vh - 30vh);
-        max-height: calc(70vh - 30vh);
+        height: calc(70svh - 30svh);
+        max-height: calc(70svh - 30svh);
         /* overflow: hidden; */
         justify-content: center;
         align-items: center;
@@ -221,9 +171,8 @@
     }
 
     .wyboryGrupoweSpanMobile {
-        /* display: none; */
         display: block;
-        left: 6vw;
+        bottom: 20px;
         position: relative;
     }
 
@@ -236,12 +185,6 @@
 
 /* Adnotacje RODO i FAQ */
 .adnotacje {
-    position: fixed;
-    top: 80%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 10%;
     justify-content: center;
     align-items: center;
     display: flex;
@@ -249,28 +192,20 @@
 
 @media (max-width: 1100px) {
     .adnotacje {
-        position: absolute;
-        top: 82vh;
-        margin-bottom: 2vh;
+        top: -30svh;
     }
 }
 
 /* Przycisk wysyłania wniosku */
 .wyslijWniosek {
-    position: fixed;
-    top: 67.5%;
-    left: 50%;
-    transform: translateX(-50%);
     width: 60%;
-    height: 10%;
     justify-content: center;
     align-items: center;
-    display: flex;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
 
     &>button {
         border-radius: 6px;
-        width: 40%;
-        height: 60%;
         border: solid 1px black;
         padding: 8px 12px;
         font-size: 14px;
@@ -292,8 +227,8 @@
 @media (max-width: 1100px) {
     .wyslijWniosek {
         position: inherit;
-        top: 75vh;
-        margin-bottom: 2vh;
+        top: 75svh;
+        width: 100svw;
     }
 }
 
@@ -349,18 +284,6 @@
     color: transparent;
 }
 
-#panelRejestracji {
-    width: 100%;
-    height: 100%;
-    opacity: 1;
-    pointer-events: all;
-    transition: opacity 1s cubic-bezier(0.58, 0.00, 0.08, 1.00);
-
-    &.hide {
-        opacity: 0;
-        pointer-events: none;
-    }
-}
 
 #feedbackWyslania {
     transition: opacity 1s cubic-bezier(0.58, 0.00, 0.08, 1.00);

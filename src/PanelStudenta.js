@@ -54,15 +54,15 @@ export function generujWyborGrup() {
 
 /* ---------- COOKIE HANDLING ---------- */
 
-function checkCookies() {
-    if (cookies.exists('email')) {
-        setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
-        setTextContentByElement('zmienEmail', 'zmień wskazany email')
-    } else {
-        setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila`)
-        setTextContentByElement('zmienEmail', 'potwierdz email')
-    }
-}
+// function checkCookies() {
+//     if (cookies.exists('email')) {
+//         setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
+//         setTextContentByElement('zmienEmail', 'zmień wskazany email')
+//     } else {
+//         setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila`)
+//         setTextContentByElement('zmienEmail', 'potwierdz email')
+//     }
+// }
 
 /* ---------- GET DATA FUNCTIONS ---------- */
 
@@ -103,6 +103,8 @@ function reactToJWT() {
 reactToJWT()
 
 
+
+
 function getCurrentPreferences() {
     const groups = document.querySelectorAll('.wyborGrupyLabolatoryjnej');
     const preferences = [];
@@ -122,6 +124,18 @@ function getCurrentPreferences() {
 
 const APIUrl = 'https://irss-backend.onrender.com'
 
+// async function getMe() {
+//   const cached = sessionStorage.getItem("me")
+//   if (cached) return JSON.parse(cached)
+
+//   const me = await fetch(APIUrl + "/auth/me", {
+//     credentials: "include"
+//   }).then(res => res.json())
+
+//   sessionStorage.setItem("me", JSON.stringify(me))
+//   return me
+// }
+
 async function sendPreferences() {
     try {
         const token = localStorage.getItem('access_token')
@@ -137,6 +151,7 @@ async function sendPreferences() {
                 'Content-Type': 'application/json',
                 'Authorization': 'Barer ' + token
             },
+            // credentials: 'include',
             body: JSON.stringify(data)
         })
 

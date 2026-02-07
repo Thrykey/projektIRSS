@@ -10,9 +10,8 @@ export class CookieHandler {
     set(name, value, days = 1) {
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + days);
-        const flags = `; Secure; SameSite=Lax`;
 
-        document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expiry.toUTCString()}; path=/${flags}`;
+        document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)}; expires=${expiry.toUTCString()}; path=/; Secure; SameSite=Lax`;
     }
 
     /**

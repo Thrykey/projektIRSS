@@ -3,7 +3,6 @@ import { CookieHandler } from './CookieHandler.js'
 
 const APIUrl = 'https://irss-backend.onrender.com'
 
-// const axios = requiere('axios')
 
 /**
  * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
@@ -40,9 +39,6 @@ document.getElementById('uncover').addEventListener('click', () => {
 })
 
 
-/**
- * Widoczność elementu jak tag to starosta -> logowanie się przez przycisk panel starosty lub link
- */
 const inputFields = {
     EMAIL: false,
     INDEX: false,
