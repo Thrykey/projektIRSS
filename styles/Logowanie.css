@@ -363,16 +363,21 @@ body {
     justify-items: center;
     align-items: center;
     position: absolute;
+    color: white;
 
     height: 90%;
     width: 80%;
     left: 50%;
-
-    border-radius: 10px;
     transform: translateX(-50%);
 
-    opacity: 0;
+    border-radius: 10px;
     z-index: 5;
+
+    background: linear-gradient(45deg,
+            rgba(65, 140, 217, 0.2) 0%,
+            rgba(86, 207, 248, 0.2) 100%);
+
+    opacity: 0;
     transition: opacity 0.5s ease-in-out;
 }
 
@@ -381,30 +386,33 @@ body {
     pointer-events: all;
 }
 
-#prosbaKodu::before {
-    border-radius: 10px;
-    content: '';
+#prosbaKodu .success,
+#prosbaKodu .error {
     position: absolute;
     inset: 0;
-    background: linear-gradient(45deg,
-            rgba(65, 140, 217, 0.2) 0%,
-            rgba(86, 207, 248, 0.2) 100%);
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1;
 }
 
-#prosbaKodu::after {
-    border-radius: 10px;
-    content: '';
-    position: absolute;
-    inset: 0;
+#prosbaKodu .success {
     background: linear-gradient(45deg,
             rgba(15, 250, 132, 0.2) 0%,
             rgba(15, 250, 93, 0.2) 100%);
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
 }
 
-#prosbaKodu.success::after {
-    opacity: 1;
+#prosbaKodu .error {
+    background: linear-gradient(45deg,
+            rgba(250, 15, 15, 0.2) 0%,
+            rgba(250, 80, 80, 0.2) 100%);
+}
+
+#prosbaKodu span {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-size: 1.2rem;
 }
 
 

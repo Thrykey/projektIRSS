@@ -194,7 +194,16 @@ document.getElementById('passwd').addEventListener('input', (e) => {
     enableSend()
 })
 
+const prosbaKodu = document.getElementById("prosbaKodu");
+
+
 function showErrorColors() {
+    prosbaKodu.querySelector('.success').style.opacity = 0
+    prosbaKodu.querySelector('.error').style.opacity = 1
+
+    setTimeout(() => {
+        prosbaKodu.querySelector('.error').style.opacity = 0
+    }, 3000);
     document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
         el.querySelector('.errorLayer').style.opacity = '1';
         el.querySelector('.successLayer').style.opacity = '0';
@@ -206,12 +215,20 @@ function showErrorColors() {
 }
 
 function showSuccesColors() {
-    document.getElementById('prosbaKodu').classList.add('success')
+    prosbaKodu.querySelector('.error').style.opacity = 0
+    prosbaKodu.querySelector('.success').style.opacity = 1
+    setTimeout(() => {
+        prosbaKodu.querySelector('.success').style.opacity = 0
+    }, 3000);
     document.querySelectorAll('.leftLine, .rightLine')
         .forEach(el => {
             el.classList.remove('active')
             el.querySelector('.successLayer').style.opacity = '1'
         })
+    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '0';
+        el.querySelector('.successLayer').style.opacity = '0';
+    }), 3000)
 }
 
 async function sendVerReq(userEmail, indexValue) {
@@ -293,14 +310,7 @@ wyslijBtn.addEventListener('click', () => {
     mailTooltip.style.display = 'none';
 
     if (hasError) {
-        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-            el.querySelector('.errorLayer').style.opacity = '1';
-            el.querySelector('.successLayer').style.opacity = '0';
-        })
-        setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-            el.querySelector('.errorLayer').style.opacity = '0';
-            el.querySelector('.successLayer').style.opacity = '0';
-        }), 3000)
+        showErrorColors()
         return;
     }
 
@@ -314,7 +324,6 @@ wyslijBtn.addEventListener('click', () => {
             el.classList.add('active')
         })
     sendVerReq(userEmail, indexValue)
-
 });
 
 console.warn('Jak czegoś tutaj szukasz, to pewnie znajdziesz. \
