@@ -188,7 +188,8 @@
     justify-content: center;
     align-items: center;
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 10px;
 
     &>button {
         border-radius: 6px;
@@ -209,12 +210,39 @@
     }
 }
 
+#PanelStarostyMobile {
+    width: 100%;
+    display: none;
+
+    &>button {
+        width: 100%;
+        border-radius: 6px;
+        border: solid 1px black;
+        padding: 8px 12px;
+        font-size: 14px;
+        line-height: 25px;
+        background: var(--SubstituteSecondaryBlue);
+        transition: background .3s ease, border .3s ease, color .3s ease;
+        text-shadow: 1px 1px 2px #805237;
+        /* cursor: pointer; */
+    }
+
+    &>button:not(:disabled):hover {
+        background: var(--SubstitueMainBlue);
+        color: white;
+        cursor: pointer;
+    }
+}
 
 @media (max-width: 1100px) {
     .wyslijWniosek {
         position: inherit;
         top: 75svh;
         width: 100svw;
+    }
+
+    #PanelStarostyMobile {
+        display: inline;
     }
 }
 
