@@ -1,8 +1,24 @@
-import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam, getMe, APIUrl } from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam, APIUrl } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
-const me = getMe()
+// const me = getMe()
 
+const indexInput = document.getElementById('indexInput');
+const mailInput = document.getElementById('mail');
+const mailDomElement = document.getElementById('email');
+const prosbaKodu = document.getElementById("prosbaKodu");
+const wyslijBtn = document.getElementById('wyslijKod');
+const dropdownBtn = document.getElementById('dropdownBtn');
+
+
+const validEmails = ['student.uken.krakow.pl', 'student.up.krakow.pl']
+
+const inputFields = {
+    EMAIL: false,
+    INDEX: false,
+    DOMENA: false,
+    HASLO: undefined
+}
 /**
  * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
  */
@@ -45,12 +61,6 @@ function uncover() {
 // })
 
 
-const inputFields = {
-    EMAIL: false,
-    INDEX: false,
-    DOMENA: false,
-    HASLO: undefined
-}
 
 function checkUrlParams() {
     if (urlIncludes('user') == 'starosta') {
@@ -79,9 +89,7 @@ console.log(urlIncludes('code'));
 
 
 document.getElementById('zalogujStarosta').addEventListener('click', () => {
-    const hasStarosta = urlIncludes('user');
-
-    if (hasStarosta == 'starosta') {
+    if (urlIncludes('user') == 'starosta') {
         removeQueryParam('user')
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako starosta')
         inputFields.HASLO = undefined
@@ -102,40 +110,39 @@ function enableSend() {
     document.getElementById('wyslijKod').disabled = !(Object.values(inputFields).every(state => state != false))
 }
 
-const validEmails = ['student.uken.krakow.pl', 'student.up.krakow.pl']
 
 function reactToEmailChange(buttonValue) {
 
     if (validEmails.includes(buttonValue)) {
-
-        document.getElementById('email').style.gridTemplateRows = validEmails[0].includes(buttonValue) ? 'auto 1fr auto 0px' : 'auto 1fr auto 45px'
+        mailInput.style.gridTemplateRows = validEmails[0].includes(buttonValue) ? 'auto 1fr auto 0px' : 'auto 1fr auto 45px'
         inputFields.DOMENA = true
         enableSend()
-        document.getElementById('email').addEventListener('transitionstart', () => {
-            document.getElementById('indexInput').style.zIndex = 0
+        mailInput.addEventListener('transitionstart', () => {
+            indexInput.style.zIndex = 0
         })
     }
 }
 
 document.getElementById('ukenChoice').addEventListener('click', () => {
     setTextContentByElement('dropdownBtn', '@student.uken.krakow.pl')
-    const buttonValue = document.getElementById('dropdownBtn').innerText.replace('@', '')
-
-    reactToEmailChange(buttonValue)
+    reactToEmailChange(
+        document.getElementById('dropdownBtn').innerText.replace('@', '')
+    )
 })
 
 document.getElementById('upChoice').addEventListener('click', () => {
     setTextContentByElement('dropdownBtn', '@student.up.krakow.pl')
-    const buttonValue = document.getElementById('dropdownBtn').innerText.replace('@', '')
-
-    reactToEmailChange(buttonValue)
+    reactToEmailChange(
+        document.getElementById('dropdownBtn').innerText.replace('@', '')
+    )
 })
 
 function handleDynamicValues() {
-    let innerValue = document.getElementById('mail').value.replace(' ', '')
+    let innerValue = mailInput.value.replace(' ', '')
 
-    document.getElementById('indexInput').value = ''
+    indexInput.value = ''
     inputFields.INDEX = false
+
     if (innerValue.length >= 3) {
 
         const emailValue = innerValue.split('@')
@@ -143,46 +150,44 @@ function handleDynamicValues() {
         if (validEmails.includes(emailValue[1])) {
             setTextContentByElement('dropdownBtn', `@${innerValue.split('@')[1]}`)
             reactToEmailChange(innerValue.split('@')[1])
-            document.getElementById('mail').value = emailValue[0]
+            mailInput.value = emailValue[0]
         }
 
-        innerValue = document.getElementById('mail').value.replace(' ', '')
+        innerValue = mailInput.value.replace(' ', '')
         const slicedValue = innerValue.slice(1)
 
         inputFields.EMAIL = true
         if (/^\d+$/.test(slicedValue)) {
-            document.getElementById('indexInput').value = slicedValue
-            document.getElementById('indexInput').value.length >= 6 ? inputFields.INDEX = true : inputFields.INDEX = false
+            indexInput.value = slicedValue
+            indexInput.value.length >= 6 ? inputFields.INDEX = true : inputFields.INDEX = false
             enableSend()
             return
         }
-        document.getElementById('email').style.gridTemplateRows = 'auto 1fr auto 45px'
-        document.getElementById('email').addEventListener('transitionend', () => {
-            document.getElementById('indexInput').style.zIndex = 3
+        mailDomElement.style.gridTemplateRows = 'auto 1fr auto 45px'
+        mailDomElement.addEventListener('transitionend', () => {
+            indexInput.style.zIndex = 3
         })
 
     }
     else {
-        document.getElementById('email').style.gridTemplateRows = 'auto 1fr auto 0px'
+        mailDomElement.style.gridTemplateRows = 'auto 1fr auto 0px'
         inputFields.EMAIL = false
-        document.getElementById('email').addEventListener('transitionstart', () => {
-            document.getElementById('indexInput').style.zIndex = 0
+        mailDomElement.addEventListener('transitionstart', () => {
+            indexInput.style.zIndex = 0
         })
         enableSend()
     }
 }
 
-document.getElementById('indexInput').addEventListener('input', (el) => {
+indexInput.addEventListener('input', (el) => {
     el.target.value.length >= 6 ? inputFields.INDEX = true : inputFields.INDEX = false
     enableSend()
 })
 
-document.getElementById('mail').addEventListener('change', handleDynamicValues)
-document.getElementById('mail').addEventListener('input', handleDynamicValues)
+mailInput.addEventListener('change', handleDynamicValues)
+mailInput.addEventListener('input', handleDynamicValues)
 
-/**
- * Zmiana typu przy przycisku sprawdź
- */
+
 document.getElementById('sprawdzPasswd').addEventListener('click', () => {
     const passField = document.getElementById('passwd');
     passField.type = passField.type == 'password' ? 'text' : 'password';
@@ -194,7 +199,6 @@ document.getElementById('passwd').addEventListener('input', (e) => {
     enableSend()
 })
 
-const prosbaKodu = document.getElementById("prosbaKodu");
 
 
 function showErrorColors() {
@@ -232,52 +236,58 @@ function showSuccesColors() {
 }
 
 async function sendVerReq(userEmail, indexValue) {
-    const code = sessionStorage.getItem('code')
+    try {
+        const code = sessionStorage.getItem('code')
 
-    const passwd = document.getElementById('passwd').value
+        const passwd = document.getElementById('passwd').value
 
-    const data = {
-        email: userEmail.toString(),
-        invite_code: passwd ? passwd.toString() : code.toString()
+        const data = {
+            email: userEmail.toString(),
+            invite_code: passwd ? passwd.toString() : code.toString()
+        }
+
+        const res = await fetch(APIUrl + '/auth/register-with-invite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+                // 'Authorization': 'Barer ' + token
+            },
+            body: JSON.stringify(data)
+        })
+
+        const status = res.status;
+        const resData = await res.json();
+
+
+        switch (status) {
+            case 200:
+                console.log('Dane poprawne, wysłany maila')
+                localStorage.setItem('email', userEmail)
+                setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
+                showSuccesColors()
+                break
+            case 404:
+                console.error('Błąd 404 - brak odpowiedzi')
+                showErrorColors()
+                setTextContentByElement('potwierdzenieSpan', 'Błąd 404 - brak odpowiedzi')
+                break
+            case 422:
+                console.error('Błąd 422 - niepoprawne dane:')
+                console.table(resData.detail)
+                showErrorColors()
+                setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane:')
+                break
+        }
+    }
+    catch (err) {
+        console.error('Błąd sieci lub inny problem:', err);
+        showErrorColors()
+        setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${err}`)
     }
 
-    const res = await fetch(APIUrl + '/auth/register-with-invite', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-            // 'Authorization': 'Barer ' + token
-        },
-        body: JSON.stringify(data)
-    })
-
-    const status = res.status;
-    const resData = await res.json();
-
-
-    switch (status) {
-        case 200:
-            console.log('Dane poprawne, wysłany maila')
-            localStorage.setItem('email', userEmail)
-            setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-            showSuccesColors()
-            break
-        case 404:
-            console.error('Błąd 404 - brak odpowiedzi')
-            showErrorColors()
-            break
-        case 422:
-            console.error('Błąd 422 - niepoprawne dane:')
-            console.table(resData.detail)
-            showErrorColors()
-            break
-    }
 }
 
 
-const wyslijBtn = document.getElementById('wyslijKod');
-const indexInput = document.getElementById('indexInput');
-const mailInput = document.getElementById('mail');
-const dropdownBtn = document.getElementById('dropdownBtn');
 
 wyslijBtn.addEventListener('click', () => {
     let hasError = false;

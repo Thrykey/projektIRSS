@@ -111,14 +111,14 @@ export function removeQueryParam(key) {
 
 export const APIUrl = 'https://irss-backend.onrender.com'
 
-export async function getMe() {
-    const cached = sessionStorage.getItem("me")
-    if (cached) return JSON.parse(cached)
+// export async function getMe() {
+//     const cached = sessionStorage.getItem("me")
+//     if (cached) return JSON.parse(cached)
 
-    const me = await fetch(APIUrl + "/auth/me", {
-        credentials: "include"
-    }).then(res => res.json())
+//     const me = await fetch(APIUrl + "/auth/me", {
+//         credentials: "include"
+//     }).then(res => res.json())
 
-    sessionStorage.setItem("me", JSON.stringify(me))
-    return me
-}
+//     sessionStorage.setItem("me", JSON.stringify(me))
+//     return me
+// }
