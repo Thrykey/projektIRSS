@@ -41,7 +41,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDateTime(startInput, endInput, 0, 7, 72, 7);
 
     infoGather = document.getElementById('infoGather');
+
+    const displayStart = document.getElementById('displayStart');
+    const displayEnd = document.getElementById('displayEnd')
+    displayStart.addEventListener('click', () => {
+        startInput.showPicker?.() || startInput.focus();
+    });
+
+    displayEnd.addEventListener('click', () => {
+        endInput.showPicker?.() || endInput.focus();
+    });
+
 });
+
 
 function reactToInputs() {
     const inputsToCheck = Array.from(inputsToValidate).filter(

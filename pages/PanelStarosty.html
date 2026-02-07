@@ -81,18 +81,21 @@
                 </div>
                 <div id="wybierzCzas">
                     <div id="startAt">
-
                         <div class="pairLabelInputTime">
                             <label>Data rozpoczęcia</label>
-                            <input type="datetime-local" id="startTime">
-                            <span id="displayEnd" class="displayDate"></span>
+                            <div class="wrapper">
+                                <input type="datetime-local" id="startTime">
+                                <span id="displayStart" class="displayDate"></span>
+                            </div>
                         </div>
                     </div>
                     <div id="endsAt">
                         <div class="pairLabelInputTime">
                             <label>Data zakończenia</label>
-                            <input type="datetime-local" id="endTime">
-                            <span id="displayStart" class="displayDate"></span>
+                            <div class="wrapper">
+                                <input type="datetime-local" id="endTime">
+                                <span id="displayEnd" class="displayDate"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -100,22 +103,22 @@
                     <button type="submit" class="generujLinkBtn" disabled>Generuj link do rejestracji</button>
                     <span class="generujLinkSpan">Zapisy można przedwcześnie zamknąć</span>
                 </div>
+                <div id="infoGather">
+                    <div class="success"></div>
+                    <div class="error"></div>
+                    <span id="confirmationLink"></span>
+                    <span class="formField" id="copyLink">http://127.0.0.1:3000/index.html/?inf-6g-aiujsdhasid</span>
+                </div>
+                <div class="rightLine">
+                    <div class="successLayer"></div>
+                    <div class="errorLayer"></div>
+                </div>
             </div>
-            <div id="infoGather">
-                <div class="success"></div>
-                <div class="error"></div>
-                <span id="confirmationLink"></span>
-                <span class="formField" id="copyLink">http://127.0.0.1:3000/index.html/?inf-6g-aiujsdhasid</span>
+            <div class="right">
 
             </div>
-            <div class="rightLine">
-                <div class="successLayer"></div>
-                <div class="errorLayer"></div>
-            </div>
         </div>
-        <div class="right">
 
-        </div>
 </body>
 
 </html>
