@@ -158,7 +158,7 @@ body {
         /* top: 26svh; */
         margin-top: 0;
         width: 100%;
-        transform: translate(0);
+        transform: translateY(0);
         /* position: absolute; */
         height: 100svh;
     }
