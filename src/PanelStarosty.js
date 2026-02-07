@@ -29,6 +29,9 @@ maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsob
 
 
 const cookies = new CookieHandler()
+const submitButton = document.getElementsByClassName('generujLinkBtn');
+const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
+let infoGather = document.getElementById('infoGather');
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -39,10 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     infoGather = document.getElementById('infoGather');
 });
-
-const submitButton = document.getElementsByClassName('generujLinkBtn');
-
-const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
 
 function reactToInputs() {
     const inputsToCheck = Array.from(inputsToValidate).filter(
@@ -59,55 +58,6 @@ inputsToValidate.forEach(input => {
 });
 
 reactToInputs();
-
-let infoGather = document.getElementById('infoGather');
-
-function showErrorColors() {
-    if (!infoGather) return
-
-    infoGather.querySelector('.success').style.opacity = 0;
-    infoGather.querySelector('.error').style.opacity = 1;
-
-    setTimeout(() => {
-        infoGather.querySelector('.error').style.opacity = 0;
-    }, 3000);
-
-    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-        el.querySelector('.errorLayer').style.opacity = '1';
-        el.querySelector('.successLayer').style.opacity = '0';
-    });
-
-    setTimeout(() => {
-        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-            el.querySelector('.errorLayer').style.opacity = '0';
-            el.querySelector('.successLayer').style.opacity = '0';
-        });
-    }, 3000);
-}
-
-function showSuccessColors() {
-    if (!infoGather) return
-
-    infoGather.querySelector('.error').style.opacity = 0;
-    infoGather.querySelector('.success').style.opacity = 1;
-
-    setTimeout(() => {
-        infoGather.querySelector('.success').style.opacity = 0;
-    }, 3000);
-
-    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-        el.classList.remove('active');
-        el.querySelector('.successLayer').style.opacity = '1';
-    });
-
-    setTimeout(() => {
-        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-            el.querySelector('.errorLayer').style.opacity = '0';
-            el.querySelector('.successLayer').style.opacity = '0';
-        });
-    }, 3000);
-}
-
 
 async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit) {
     try {
@@ -138,25 +88,25 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
         switch (status) {
             case 200:
                 console.log('Link został wygenerowany poprawnie');
-                showSuccessColors()
+                showSuccessColors(infoGather)
                 setDisplayByElement('copyLink', 'block')
                 break
             case 404:
                 console.error('Błąd 404 - brak odpowiedzi')
-                showErrorColors()
+                showErrorColors(infoGather)
                 setTextContentByElement('confirmationLink', 'Błąd 404 - brak odpowiedzi')
                 break
             case 422:
                 console.error('Błąd 422 - niepoprawne dane:')
                 console.table(resData.detail)
-                showErrorColors()
+                showErrorColors(infoGather)
                 setTextContentByElement('confirmationLink', 'Błąd 422 - niepoprawne dane:' + resData.detail)
                 break
         }
     }
     catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
-        showErrorColors()
+        showErrorColors(infoGather)
         setTextContentByElement('confirmationLink', `Błąd sieci lub inny problem: ${err}`)
     }
 }

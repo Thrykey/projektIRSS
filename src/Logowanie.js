@@ -1,4 +1,4 @@
-import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam, APIUrl } from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlIncludes, appendQueryParam, removeQueryParam, APIUrl, showErrorColors, showSuccesColors } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
 // const me = getMe()
@@ -207,39 +207,6 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 
 
 
-function showErrorColors() {
-    prosbaKodu.querySelector('.success').style.opacity = 0
-    prosbaKodu.querySelector('.error').style.opacity = 1
-
-    setTimeout(() => {
-        prosbaKodu.querySelector('.error').style.opacity = 0
-    }, 3000);
-    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-        el.querySelector('.errorLayer').style.opacity = '1';
-        el.querySelector('.successLayer').style.opacity = '0';
-    })
-    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-        el.querySelector('.errorLayer').style.opacity = '0';
-        el.querySelector('.successLayer').style.opacity = '0';
-    }), 3000)
-}
-
-function showSuccesColors() {
-    prosbaKodu.querySelector('.error').style.opacity = 0
-    prosbaKodu.querySelector('.success').style.opacity = 1
-    setTimeout(() => {
-        prosbaKodu.querySelector('.success').style.opacity = 0
-    }, 3000);
-    document.querySelectorAll('.leftLine, .rightLine')
-        .forEach(el => {
-            el.classList.remove('active')
-            el.querySelector('.successLayer').style.opacity = '1'
-        })
-    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-        el.querySelector('.errorLayer').style.opacity = '0';
-        el.querySelector('.successLayer').style.opacity = '0';
-    }), 3000)
-}
 
 async function sendVerReq(userEmail, indexValue) {
     try {
@@ -268,26 +235,26 @@ async function sendVerReq(userEmail, indexValue) {
         switch (status) {
             case 200:
                 console.log('Dane poprawne, wysłany maila')
-                localStorage.setItem('email', userEmail)
+                sessionStorage.setItem('email', userEmail)
                 setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-                showSuccesColors()
+                showSuccesColors(prosbaKodu)
                 break
             case 404:
                 console.error('Błąd 404 - brak odpowiedzi')
-                showErrorColors()
+                showErrorColors(prosbaKodu)
                 setTextContentByElement('potwierdzenieSpan', 'Błąd 404 - brak odpowiedzi')
                 break
             case 422:
                 console.error('Błąd 422 - niepoprawne dane:')
                 console.table(resData.detail)
-                showErrorColors()
+                showErrorColors(prosbaKodu)
                 setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane:')
                 break
         }
     }
     catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
-        showErrorColors()
+        showErrorColors(prosbaKodu)
         setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${err}`)
     }
 
@@ -326,7 +293,7 @@ wyslijBtn.addEventListener('click', () => {
     mailTooltip.style.display = 'none';
 
     if (hasError) {
-        showErrorColors()
+        showErrorColors(prosbaKodu)
         return;
     }
 

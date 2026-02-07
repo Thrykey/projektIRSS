@@ -1,11 +1,13 @@
-import { setDisplayByElement, setTextContentByElement, createSpan, urlHasHash, urlIncludes, getTokenValue, removeQueryParam } from './Utils.js';
+import { setDisplayByElement, setTextContentByElement, createSpan, urlHasHash, urlIncludes, getTokenValue, removeQueryParam, showErrorColors, showSuccesColors, APIUrl } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 import { CookieHandler } from './CookieHandler.js';
 
 
 const cookies = new CookieHandler();
+const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
+const feedback = document.getElementById('feedbackWyslania')
 
-/* ---------- UTIL FUNCTIONS ---------- */
+// GRUPY
 
 function createGroupDiv(number) {
     const div = document.createElement('div');
@@ -18,9 +20,7 @@ function createGroupDiv(number) {
     return div;
 }
 
-/* ---------- GENERATE GROUPS ---------- */
-
-export function generujWyborGrup() {
+function generujWyborGrup() {
     const container = document.querySelector('.wybor');
     if (!container) return;
 
@@ -52,59 +52,6 @@ export function generujWyborGrup() {
     container.appendChild(createSpan('Najmniej', 'najmniejSpan'));
 }
 
-/* ---------- COOKIE HANDLING ---------- */
-
-// function checkCookies() {
-//     if (cookies.exists('email')) {
-//         setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
-//         setTextContentByElement('zmienEmail', 'zmień wskazany email')
-//     } else {
-//         setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila`)
-//         setTextContentByElement('zmienEmail', 'potwierdz email')
-//     }
-// }
-
-/* ---------- GET DATA FUNCTIONS ---------- */
-
-// function getPreferences() {
-//     const container = document.querySelector('.wybor');
-//     if (!container) return [];
-
-//     const groupNumbers = [];
-
-//     for (const child of container.children) {
-//         if (child.id && child.id.startsWith('grupaL')) {
-//             const num = parseInt(child.id.replace('grupaL', ''), 10);
-//             if (!isNaN(num)) groupNumbers.push(num);
-//         }
-//     }
-//     return groupNumbers;
-// }
-
-// function getToken() {
-//     const query = window.location.search.slice(1);
-//     const match = query.match(/-(\d+)G-(.+)$/i);
-//     return match && match[2] ? match[2] : null;
-// }
-
-if (urlIncludes('access_token')) {
-    localStorage.setItem('access_token', urlIncludes('access_token'))
-    console.log('Zapisano JWT pomyślnie, usuwanie z URL');
-
-    removeQueryParam('access_token')
-}
-// localStorage.removeItem('token')
-function reactToJWT() {
-    if (!localStorage.getItem('access_token')) {
-        window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
-        return
-    }
-}
-// reactToJWT()
-
-
-
-
 function getCurrentPreferences() {
     const groups = document.querySelectorAll('.wyborGrupyLabolatoryjnej');
     const preferences = [];
@@ -121,27 +68,45 @@ function getCurrentPreferences() {
     return { preferences };
 }
 
+// SPRAWDZANIE URL I REAKCJE
 
-const APIUrl = 'https://irss-backend.onrender.com'
+
+if (urlIncludes('access_token')) {
+    sessionStorage.setItem('access_token', urlIncludes('access_token'))
+    console.log('Zapisano JWT pomyślnie, usuwanie z URL');
+
+    removeQueryParam('access_token')
+}
+// localStorage.removeItem('token')
+function reactToJWT() {
+    if (!sessionStorage.getItem('access_token')) {
+        window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
+        return
+    }
+}
+// reactToJWT()
+
+
+// API CALLS
+
 
 // getMe()
 
 async function sendPreferences() {
     try {
-        const token = localStorage.getItem('access_token')
-        if (!token) {
-            console.warn('Brak tokenu!');
-            return
-        }
+        // const token = sessionStorage.getItem('access_token')
+        // if (!token) {
+        //     console.warn('Brak tokenu!');
+        //     return
+        // }
 
         const data = getCurrentPreferences()
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Barer ' + token
+                'Content-Type': 'application/json'
             },
-            // credentials: 'include',
+            credentials: 'include',
             body: JSON.stringify(data)
         })
 
@@ -152,42 +117,42 @@ async function sendPreferences() {
         switch (status) {
             case 200:
                 console.log('Request wysłany poprawnie');
-
-                document.documentElement.style.setProperty('--lineColorValidation', 'rgba(15, 133, 250, 1)');
-                document.documentElement.style.setProperty('--lineColorValidationFade', 'rgba(15, 231, 250, 0)');
-                document.querySelectorAll('.leftLine, .rightLine').forEach(el => el.classList.add('active'));
-
-                document.getElementById('panelRejestracji').classList.add('hide');
-                setTimeout(() => {
-                    document.getElementById('feedbackWyslania').classList.add('show');
-                }, 1000);
+                showSuccesColors(feedback)
                 break;
 
+            case 404:
+                console.error('Błąd 404 - brak odpowiedzi')
+                showErrorColors(feedback)
+                setTextContentByElement('feedbackSpan', 'Błąd 404 - brak odpowiedzi')
+                break
             case 422:
-                console.error('Błąd 422 - niepoprawne dane:');
-                console.table(resData.detail);
-                break;
+                console.error('Błąd 422 - niepoprawne dane:')
+                console.table(resData.detail)
+                showErrorColors()
+                setTextContentByElement('feedbackSpan', 'Błąd 422 - niepoprawne dane:')
+                break
 
             default:
                 console.warn(`Nieoczekiwany status: ${status}`, resData);
         }
     } catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
+        setTextContentByElement('feedbackSpan', `Błąd sieci lub inny problem: ${err}`)
+        showErrorColors(feedback)
     }
 }
 
 
 
-/* ---------- EVENT LISTENERS ---------- */
+// EVENT LISTENERY
 
 document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup();
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
-    // document.getElementById('wniosekBtn').disabled = cookies.exists('email') ? false : true
+
+    feedback = document.getElementById('feedbackWyslania');
     document.getElementById('wniosekBtn').disabled = false
 });
-
-const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
 
 panelButtons.forEach(button => {
     button.addEventListener('click', () => {
@@ -196,11 +161,16 @@ panelButtons.forEach(button => {
 })
 
 document.getElementById('wniosekBtn').addEventListener('click', () => {
+    document.getElementById('panelRejestracji').classList.remove('show');
+    document.getElementById('panelRejestracji').classList.add('hide');
+    setTimeout(() => { document.getElementById('feedbackWyslania').classList.add('show') }, 500);
+    document
+        .querySelectorAll('.leftLine, .rightLine')
+        .forEach(el => {
+            el.classList.add('active')
+        })
     sendPreferences()
 
-    // console.log('email z cookies:', cookies.get('email'));
-    // console.log('lista preferencji:', getPreferences());
-    // console.log('token zapisów:', getToken());
 });
 
 document.getElementsByClassName('adnotacjeSpan')[0].addEventListener('click', () => {

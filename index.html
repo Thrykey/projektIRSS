@@ -20,7 +20,10 @@
         </div>
 
         <div class="middle">
-            <div class="leftLine"></div>
+            <div class="leftLine">
+                <div class="successLayer"></div>
+                <div class="errorLayer"></div>
+            </div>
             <div id="panelRejestracji">
                 <div class="informacje">
                     <span class="welcome">Witamy w pomocnicznym systemie rejestracji do grup labolatoryjnych!</span>
@@ -53,10 +56,16 @@
 
             </div>
             <div id="feedbackWyslania">
-                <span>Dziękujemy za wysłanie zgłoszenia! <br> Twój zapytanie jest przetwarzane, nie opuszczaj
+                <div class="success"></div>
+                <div class="error"></div>
+                <span id="feedbackSpan">Dziękujemy za wysłanie zgłoszenia! <br> Twój zapytanie jest przetwarzane, nie
+                    opuszczaj
                     strony.</span>
             </div>
-            <div class="rightLine"></div>
+            <div class="rightLine">
+                <div class="successLayer"></div>
+                <div class="errorLayer"></div>
+            </div>
         </div>
         <div class="right">
             <div id="PanelStarosty">

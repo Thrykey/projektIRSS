@@ -123,6 +123,42 @@ export function removeQueryParam(key) {
     window.history.replaceState(null, "", url.toString());
 }
 
+export function showErrorColors(element) {
+
+    element.querySelector('.success').style.opacity = 0
+    element.querySelector('.error').style.opacity = 1
+
+    setTimeout(() => {
+        element.querySelector('.error').style.opacity = 0
+    }, 3000);
+    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '1';
+        el.querySelector('.successLayer').style.opacity = '0';
+    })
+    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '0';
+        el.querySelector('.successLayer').style.opacity = '0';
+    }), 3000)
+}
+
+export function showSuccesColors(element) {
+    element.querySelector('.error').style.opacity = 0
+    element.querySelector('.success').style.opacity = 1
+    setTimeout(() => {
+        element.querySelector('.success').style.opacity = 0
+    }, 3000);
+    document.querySelectorAll('.leftLine, .rightLine')
+        .forEach(el => {
+            el.classList.remove('active')
+            el.querySelector('.successLayer').style.opacity = '1'
+        })
+    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '0';
+        el.querySelector('.successLayer').style.opacity = '0';
+    }), 3000)
+}
+
+
 export const APIUrl = 'https://irss-backend.onrender.com'
 
 // export async function getMe() {
