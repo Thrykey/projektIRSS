@@ -143,17 +143,11 @@ body {
 /* Responsywność z svh i vw*/
 @media (max-width: 1100px) {
     .grid-container {
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr;
         justify-content: center;
         align-content: center;
-        height: 98svh;
-        width: 100svw;
     }
-
-    .middle {
-        height: 100svh;
-    }
-
 
     .left,
     .right {
@@ -161,9 +155,12 @@ body {
     }
 
     .middle {
-        top: 30svh;
-        position: absolute;
-        height: 98svh;
+        /* top: 26svh; */
+        margin-top: 0;
+        width: 100%;
+        transform: translate(0);
+        /* position: absolute; */
+        height: 100svh;
     }
 
     .leftLine,
@@ -171,6 +168,7 @@ body {
         height: 100svh;
         width: var(--PhoneLineWidth);
     }
+
 }
 
 .dynamicErrorTooltip {
