@@ -9,7 +9,7 @@ body {
     background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('../assets/logo_ibii.png');
     background-repeat: no-repeat;
     background-size: 70%;
-    background-position: center calc(50% + 12px);
+    background-position: calc(50% + 4px) calc(50% + 12px);
     margin: 0px;
     user-select: none;
 }
