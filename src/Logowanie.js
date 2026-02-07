@@ -194,6 +194,25 @@ document.getElementById('passwd').addEventListener('input', (e) => {
     enableSend()
 })
 
+function showErrorColors() {
+    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '1';
+        el.querySelector('.successLayer').style.opacity = '0';
+    })
+    setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '0';
+        el.querySelector('.successLayer').style.opacity = '0';
+    }), 3000)
+}
+
+function showSuccesColors() {
+    document.getElementById('prosbaKodu').classList.add('success')
+    document.querySelectorAll('.leftLine, .rightLine')
+        .forEach(el => {
+            el.classList.remove('active')
+            el.querySelector('.successLayer').style.opacity = '1'
+        })
+}
 
 async function sendVerReq(userEmail, indexValue) {
     const code = sessionStorage.getItem('code')
@@ -223,24 +242,16 @@ async function sendVerReq(userEmail, indexValue) {
             console.log('Dane poprawne, wysłany maila')
             localStorage.setItem('email', userEmail)
             setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-            document.getElementById('prosbaKodu').classList.add('success')
-            document.querySelectorAll('.leftLine, .rightLine')
-                .forEach(el => {
-                    el.classList.remove('active')
-                    el.querySelector('.successLayer').style.opacity = '1'
-                })
+            showSuccesColors()
+            break
+        case 404:
+            console.error('Błąd 404 - brak odpowiedzi')
+            showErrorColors()
             break
         case 422:
             console.error('Błąd 422 - niepoprawne dane:')
             console.table(resData.detail)
-            document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-                el.querySelector('.errorLayer').style.opacity = '1';
-                el.querySelector('.successLayer').style.opacity = '0';
-            })
-            setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
-                el.querySelector('.errorLayer').style.opacity = '0';
-                el.querySelector('.successLayer').style.opacity = '0';
-            }), 3000)
+            showErrorColors()
             break
     }
 }
