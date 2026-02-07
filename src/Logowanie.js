@@ -6,9 +6,15 @@ import { CookieHandler } from './CookieHandler.js'
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
 const mailDomElement = document.getElementById('email');
-const prosbaKodu = document.getElementById("prosbaKodu");
 const wyslijBtn = document.getElementById('wyslijKod');
 const dropdownBtn = document.getElementById('dropdownBtn');
+
+// dla pewnosci, ze nie jest null
+let prosbaKodu = document.getElementById("prosbaKodu");
+
+document.addEventListener('DOMContentLoaded', () => {
+    prosbaKodu = document.getElementById("prosbaKodu");
+});
 
 
 const validEmails = ['student.uken.krakow.pl', 'student.up.krakow.pl']

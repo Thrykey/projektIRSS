@@ -1,5 +1,5 @@
 import { CookieHandler } from './CookieHandler.js'
-import { setDisplayByElement, setTextContentByElement, clampValues } from './Utils.js';
+import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl } from './Utils.js';
 
 // Ustawianie ograniczeń dla pól rokStudiow i stopienStudiow
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
@@ -42,52 +42,136 @@ function changeAvailability(val) {
 }
 
 
-// function checkCookies() {
-//     if (cookies.exists('email')) {
-//         setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
-//         changeAvailability(false)
-//         setTextContentByElement('zalogujSieStatus', 'Zmień email')
-//     } else {
-//         setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila, zaloguj się aby kontynuować`)
-//         changeAvailability(true)
-//         setTextContentByElement('zalogujSieStatus', 'Zaloguj się')
-//     }
-// }
-
-function setupDateTime(input, minDays, maxDays, setDefault = true) {
-    const now = new Date();
-
-    const min = new Date(now);
-    min.setDate(now.getDate() + minDays);
-
-    const max = new Date(now);
-    max.setDate(now.getDate() + maxDays);
-
-    const toLocal = d => {
-        d.setSeconds(0, 0);
-        return d.toISOString().slice(0, 16);
-    };
-
-    input.min = toLocal(min);
-    input.max = toLocal(max);
-
-    if (setDefault) {
-        input.value = toLocal(min);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const st = document.getElementById("startTime");
     const et = document.getElementById("endTime");
 
-    setupDateTime(st, 0, 7);
+    // ustawienia: start od dzisiaj do +7 dni, end minimalnie 3 dni i 1h po start, maksymalnie 7 dni po starcie
+    setupDateTime(st, et, 0, 7, 73, 7);
 
-    setupDateTime(et, 3, 10);
+    infoGather = document.getElementById('infoGather');
 });
 
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
+
+function reactToInputs() {
+    const inputsToCheck = Array.from(inputsToValidate).filter(
+        input => input.id != 'KPTN' && input.id != 'random'
+    )
+    const allFilled = inputsToCheck.every(input => input.value && input.value.trim() != '')
+
+    submitButton[0].disabled = !allFilled;
+}
+
+inputsToValidate.forEach(input => {
+    input.addEventListener('input', reactToInputs);
+    input.addEventListener('change', reactToInputs);
+});
+
+reactToInputs();
+
+let infoGather = document.getElementById('infoGather');
+
+function showErrorColors() {
+    if (!infoGather) return
+
+    infoGather.querySelector('.success').style.opacity = 0;
+    infoGather.querySelector('.error').style.opacity = 1;
+
+    setTimeout(() => {
+        infoGather.querySelector('.error').style.opacity = 0;
+    }, 3000);
+
+    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.querySelector('.errorLayer').style.opacity = '1';
+        el.querySelector('.successLayer').style.opacity = '0';
+    });
+
+    setTimeout(() => {
+        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+            el.querySelector('.errorLayer').style.opacity = '0';
+            el.querySelector('.successLayer').style.opacity = '0';
+        });
+    }, 3000);
+}
+
+function showSuccessColors() {
+    if (!infoGather) return
+
+    infoGather.querySelector('.error').style.opacity = 0;
+    infoGather.querySelector('.success').style.opacity = 1;
+
+    setTimeout(() => {
+        infoGather.querySelector('.success').style.opacity = 0;
+    }, 3000);
+
+    document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+        el.classList.remove('active');
+        el.querySelector('.successLayer').style.opacity = '1';
+    });
+
+    setTimeout(() => {
+        document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+            el.querySelector('.errorLayer').style.opacity = '0';
+            el.querySelector('.successLayer').style.opacity = '0';
+        });
+    }, 3000);
+}
+
+
+async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit) {
+    try {
+
+        const data = {
+            campaign: {
+                title: name,
+                starts_at: startsAt,
+                ends_at: endsAt,
+                assignment_method: method,
+            },
+            group_amount: groupAmmount,
+            group_limit: groupLimit
+        }
+
+        const res = await fetch(APIUrl + '/admin/setup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+        })
+
+        const status = res.status;
+        const resData = await res.json();
+
+        switch (status) {
+            case 200:
+                console.log('Link został wygenerowany poprawnie');
+                showSuccessColors()
+                setDisplayByElement('copyLink', 'block')
+                break
+            case 404:
+                console.error('Błąd 404 - brak odpowiedzi')
+                showErrorColors()
+                setTextContentByElement('confirmationLink', 'Błąd 404 - brak odpowiedzi')
+                break
+            case 422:
+                console.error('Błąd 422 - niepoprawne dane:')
+                console.table(resData.detail)
+                showErrorColors()
+                setTextContentByElement('confirmationLink', 'Błąd 422 - niepoprawne dane:' + resData.detail)
+                break
+        }
+    }
+    catch (err) {
+        console.error('Błąd sieci lub inny problem:', err);
+        showErrorColors()
+        setTextContentByElement('confirmationLink', `Błąd sieci lub inny problem: ${err}`)
+    }
+}
 
 submitButton[0].addEventListener('click', (e) => {
     let hasError = false;
@@ -145,13 +229,38 @@ submitButton[0].addEventListener('click', (e) => {
             .forEach(el => {
                 el.classList.add('active');
             });
-        // setDisplayByElement('gridLayout', 'none')
+
+
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+
+        const inputsMap = {};
+        inputsToValidate.forEach(input => {
+            inputsMap[input.id] = input;
+        });
+
+        const name = inputsMap['nazwaKierunku'].value.trim() + '-' + inputsMap['rokStudiow'].value + 'r' + inputsMap['stopienStudiow'].value + 'st'
+        const startsAt = localToISO(document.getElementById('startTime').value)
+        const endsAt = localToISO(document.getElementById('endTime').value)
+        const method = inputsMap['KPTN'].checked ? 'fcfs' : 'random'
+        const groupAmmount = inputsMap['iloscGrup'].value
+        const groupLimit = inputsMap['maxOsob'].value
+
+        generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
+
+
         document.getElementById('gridLayout').classList.add('hide')
         setDisplayByElement('infoGather', 'grid')
         setTimeout(() => {
             document.getElementById('infoGather').classList.add('show')
 
-        }, 1000)
+            document.getElementById('gridLayout').style.height = '100vh'
+            document.getElementById('gridLayout').style.marginTop = '0'
+
+        }, 500)
         inputsToValidate.forEach(el => {
             console.log(el.name + ': ' + el.value.trim())
         })

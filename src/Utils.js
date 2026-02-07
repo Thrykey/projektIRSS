@@ -122,3 +122,72 @@ export const APIUrl = 'https://irss-backend.onrender.com'
 //     sessionStorage.setItem("me", JSON.stringify(me))
 //     return me
 // }
+
+function parseLocal(value) {
+    const [date, time] = value.split('T');
+    const [y, m, d] = date.split('-');
+    const [h, min] = time.split(':');
+    return new Date(y, m - 1, d, h, min);
+}
+
+function toLocal(d) {
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export function localToISO(localValue) {
+    const [date, time] = localValue.split('T');
+    const [year, month, day] = date.split('-').map(Number);
+    const [hour, minute] = time.split(':').map(Number);
+
+    const dateObj = new Date(year, month - 1, day, hour, minute);
+    return dateObj.toISOString();  // Zwraca w formacie z sekundami i milisekundami
+}
+
+/**
+ * Ustawia zakres i domyślną wartość dla pól datetime-local
+ * @param {HTMLInputElement} startInput - input dla startTime
+ * @param {HTMLInputElement} endInput - input dla endTime
+ * @param {number} minDaysStart - ile dni do przodu minimalnie od teraz
+ * @param {number} maxDaysStart - ile dni do przodu maksymalnie od teraz
+ * @param {number} minOffsetEnd - minimalna różnica godzin między start a end
+ * @param {number} maxOffsetEnd - maksymalna różnica dni między start a end
+ * @param {boolean} setDefault - czy ustawić domyślną wartość
+ */
+export function setupDateTime(startInput, endInput, minDaysStart, maxDaysStart, minOffsetEnd = 1, maxOffsetEnd = 7, setDefault = true) {
+    const now = new Date();
+
+    const minStart = new Date(now);
+    minStart.setDate(now.getDate() + minDaysStart);
+
+    const maxStart = new Date(now);
+    maxStart.setDate(now.getDate() + maxDaysStart);
+
+    startInput.min = toLocal(minStart);
+    startInput.max = toLocal(maxStart);
+
+    if (setDefault) {
+        startInput.value = toLocal(minStart);
+    }
+
+    function updateEndRange() {
+        const start = parseLocal(startInput.value);
+
+        const minEnd = new Date(start.getTime());
+        minEnd.setHours(minEnd.getHours() + minOffsetEnd);
+
+        const maxEnd = new Date(start.getTime());
+        maxEnd.setDate(maxEnd.getDate() + maxOffsetEnd);
+
+        endInput.min = toLocal(minEnd);
+        endInput.max = toLocal(maxEnd);
+
+        if (!endInput.value || parseLocal(endInput.value) < minEnd) {
+            endInput.value = toLocal(minEnd);
+        }
+    }
+
+    updateEndRange();
+
+    startInput.addEventListener('change', updateEndRange);
+}

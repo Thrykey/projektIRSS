@@ -18,7 +18,10 @@
             </a> -->
         </div>
         <div class="middle">
-            <div class="leftLine"></div>
+            <div class="leftLine">
+                <div class="successLayer"></div>
+                <div class="errorLayer"></div>
+            </div>
             <div id="gridLayout">
                 <div class="informacje">
                     <span class="welcome">Witamy w panelu starosty!</span>
@@ -28,20 +31,20 @@
                     <div class="pairLabelInput">
                         <label for="nazwaKierunku">Nazwa Kierunku<span
                                 style="color: red;font-size: 20px;">*</span></label>
-                        <input type="value" name="nazwaKierunku" class="nazwaKierunku" id="nazwaKierunku" placeholder=""
-                            disabled="true">
+                        <input type="value" name="nazwaKierunku" class="nazwaKierunku" id="nazwaKierunku"
+                            placeholder="">
                     </div>
                     <div class="pairLabelInput">
                         <label for="nazwaKierunku">Rok studiów <span
                                 style="color: red;font-size: 20px;">*</span></label>
                         <input type="number" name="rokStudiow" class="rokStudiow numberInputSizing" id="rokStudiow"
-                            placeholder="" min="1" max="3" disabled="true">
+                            placeholder="" min="1" max="3">
                     </div>
                     <div class="pairLabelInput">
                         <label for="nazwaKierunku">Stopień studniów<span
                                 style="color: red;font-size: 20px;">*</span></label>
                         <input type="number" name="stopienStudiow" class="stopienStudiow numberInputSizing"
-                            id="stopienStudiow" placeholder="" min="1" max="2" disabled="true">
+                            id="stopienStudiow" placeholder="" min="1" max="2">
                     </div>
                 </div>
                 <span class="dodatkoweInformacje">Dodatkowe informacje:</span>
@@ -52,56 +55,36 @@
                             <label for="iloscGrup">Ilość grup LAB <span
                                     style="color: red;font-size: 20px;">*</span></label>
                             <input type="number" name="iloscGrup" class="iloscGrup numberInputSizing" id="iloscGrup"
-                                placeholder="" min="1" max="10" disabled="true">
+                                placeholder="" min="1" max="10">
                         </div>
                         <div class="pairLabelInput">
                             <label for="maxOsob">Max osób w grupie<span
                                     style="color: red;font-size: 20px;">*</span></label>
                             <input type="number" name="maxOsob" class="maxOsob numberInputSizing" id="maxOsob"
-                                placeholder="" min="1" max="30" disabled="true">
+                                placeholder="" min="1" max="30">
                         </div>
                     </div>
                     <div class="lowerHalf">
                         <div class="pairLabelInput">
                             <label>Kto Pierwszy ten lepszy?</label>
-                            <input type="radio" name="KPTN" class="KPTN" id="KPTN" disabled="true" checked="true">
+                            <input type="radio" name="KPTN" class="KPTN" id="KPTN" checked>
                         </div>
                         <div class="pairLabelInput">
                             <label>Randomowo?</label>
-                            <input type="radio" name="KPTN" class="KPTN" id="random" disabled="true">
+                            <input type="radio" name="KPTN" class="KPTN" id="random">
                         </div>
                     </div>
 
                 </div>
                 <div id="wybierzCzas">
                     <div id="startAt">
-                        <div class="upperHalf halfsGap">
-                            <button class="quickDay" data-day="0">Dziś</button>
-                            <button class="quickDay" data-day="1">Jutro</button>
-                        </div>
-
-                        <div class="lowerHalf halfsGap">
-                            <button class="quickDay" data-day="2">+2 dni</button>
-                            <button class="quickDay" data-day="7">+7 dni</button>
-                        </div>
 
                         <div class="pairLabelInput">
                             <label>Data rozpoczęcia</label>
                             <input type="datetime-local" id="startTime">
                         </div>
                     </div>
-
                     <div id="endsAt">
-                        <div class="upperHalf halfsGap">
-                            <button class="quickDay" data-day="0">Dziś</button>
-                            <button class="quickDay" data-day="1">Jutro</button>
-                        </div>
-
-                        <div class="lowerHalf halfsGap">
-                            <button class="quickDay" data-day="2">+2 dni</button>
-                            <button class="quickDay" data-day="7">+7 dni</button>
-                        </div>
-
                         <div class="pairLabelInput">
                             <label>Data zakończenia</label>
                             <input type="datetime-local" id="endTime">
@@ -109,16 +92,21 @@
                     </div>
                 </div>
                 <div class="generujLink">
-                    <button type="submit" class="generujLinkBtn">Generuj link do rejestracji</button>
+                    <button type="submit" class="generujLinkBtn" disabled>Generuj link do rejestracji</button>
                     <span class="generujLinkSpan">Link jest generowany na 3 dni</span>
                 </div>
             </div>
             <div id="infoGather">
-                <span>Link został wygenerowany poprawnie!</span>
+                <div class="success"></div>
+                <div class="error"></div>
+                <span id="confirmationLink"></span>
                 <span class="formField" id="copyLink">http://127.0.0.1:3000/index.html/?inf-6g-aiujsdhasid</span>
 
             </div>
-            <div class="rightLine"></div>
+            <div class="rightLine">
+                <div class="successLayer"></div>
+                <div class="errorLayer"></div>
+            </div>
         </div>
         <div class="right">
 
