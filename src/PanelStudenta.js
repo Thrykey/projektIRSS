@@ -100,7 +100,7 @@ function reactToJWT() {
         return
     }
 }
-reactToJWT()
+// reactToJWT()
 
 
 
