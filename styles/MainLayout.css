@@ -28,8 +28,7 @@ body {
     display: grid;
     grid-template-columns: 1fr var(--MiddleSegmentWidth) 1fr;
     gap: 10px;
-    height: 100vh;
-    max-height: 100vh;
+    min-height: 100vh;
 }
 
 
@@ -155,17 +154,19 @@ body {
     }
 
     .middle {
-        /* top: 26svh; */
         margin-top: 0;
-        width: 100%;
         transform: translateY(0);
-        /* position: absolute; */
-        height: 100svh;
+        height: auto;
+        /* zamiast 60svh */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .leftLine,
     .rightLine {
         height: 100svh;
+        position: absolute;
         width: var(--PhoneLineWidth);
     }
 
