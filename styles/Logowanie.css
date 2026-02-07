@@ -352,8 +352,22 @@ body {
     font-size: 12px;
     cursor: pointer;
     background: linear-gradient(45deg, #805237 0%, #C86223 100%);
-    background-clip: text;
-    color: transparent;
+    padding: 10px;
+    border-radius: 6px;
+    background: linear-gradient(45deg, #805237 0%, #C86223 100%);
+    transition: all 0.5s ease;
+    text-align: center;
+    align-content: center;
+}
+
+#zalogujStarosta:not(:disabled):hover {
+    background: var(--SubstituteBlueGradient);
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+#zalogujStarosta:not(:disabled):active {
+    transform: scale(0.98);
 }
 
 
