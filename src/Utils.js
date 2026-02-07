@@ -89,6 +89,11 @@ export function urlHasHash(val) {
     return parts.some(p => p.startsWith(val));
 }
 
+/**
+ * Pobiera wartość tokena z hash w URL
+ * @param {string} key - Klucz tokena
+ * @returns {string|null} - Wartość tokena lub null, jeśli nie istnieje
+ */
 export function getTokenValue(key) {
     const parts = window.location.hash.split("#");
 
@@ -97,12 +102,21 @@ export function getTokenValue(key) {
     return found ? found.split("=")[1] : null;
 }
 
+/**
+ * Dodaje parametr query do aktualnego URL
+ * @param {string} key - Nazwa parametru
+ * @param {string} value - Wartość parametru
+ */
 export function appendQueryParam(key, value) {
     const url = new URL(window.location.href);
     url.searchParams.append(key, value);
     window.history.replaceState(null, "", url.toString());
 }
 
+/**
+ * Usuwa parametr query z aktualnego URL
+ * @param {string} key - Nazwa parametru do usunięcia
+ */
 export function removeQueryParam(key) {
     const url = new URL(window.location.href);
     url.searchParams.delete(key);
@@ -123,6 +137,10 @@ export const APIUrl = 'https://irss-backend.onrender.com'
 //     return me
 // }
 
+function pad(n) {
+    return n.toString().padStart(2, '0');
+}
+
 function parseLocal(value) {
     const [date, time] = value.split('T');
     const [y, m, d] = date.split('-');
@@ -130,31 +148,55 @@ function parseLocal(value) {
     return new Date(y, m - 1, d, h, min);
 }
 
+
 function toLocal(d) {
-    const pad = n => String(n).padStart(2, '0');
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
+/**
+ * Konwertuje lokalną wartość datetime-local na ISO
+ * @param {string} localValue - Wartość w formacie YYYY-MM-DDTHH:mm
+ * @returns {string} - ISO string z sekundami i milisekundami
+ */
 export function localToISO(localValue) {
-    const [date, time] = localValue.split('T');
-    const [year, month, day] = date.split('-').map(Number);
-    const [hour, minute] = time.split(':').map(Number);
+    return parseLocal(localValue).toISOString();
+}
 
-    const dateObj = new Date(year, month - 1, day, hour, minute);
-    return dateObj.toISOString();  // Zwraca w formacie z sekundami i milisekundami
+export function updateDisplayDate(input, format = 'DD/MM/YYYY HH:mm') {
+    const display = input.parentElement.querySelector('.displayDate');
+    if (!display) return;
+
+    if (!input.value) {
+        display.textContent = '';
+        return;
+    }
+
+    const date = new Date(input.value);
+    const day = pad(date.getDate());
+    const month = pad(date.getMonth() + 1);
+    const year = date.getFullYear();
+    const hours = pad(date.getHours());
+    const minutes = pad(date.getMinutes());
+
+    display.textContent = format
+        .replace('DD', day)
+        .replace('MM', month)
+        .replace('YYYY', year)
+        .replace('HH', hours)
+        .replace('mm', minutes);
 }
 
 /**
  * Ustawia zakres i domyślną wartość dla pól datetime-local
  * @param {HTMLInputElement} startInput - input dla startTime
  * @param {HTMLInputElement} endInput - input dla endTime
- * @param {number} minDaysStart - ile dni do przodu minimalnie od teraz
- * @param {number} maxDaysStart - ile dni do przodu maksymalnie od teraz
- * @param {number} minOffsetEnd - minimalna różnica godzin między start a end
- * @param {number} maxOffsetEnd - maksymalna różnica dni między start a end
- * @param {boolean} setDefault - czy ustawić domyślną wartość
+ * @param {number} [minDaysStart=0] - minimalna liczba dni od teraz dla startInput
+ * @param {number} [maxDaysStart=7] - maksymalna liczba dni od teraz dla startInput
+ * @param {number} [minOffsetEndH=1] - minimalna różnica godzin między start a end
+ * @param {number} [maxOffsetEndD=7] - maksymalna różnica dni między start a end
+ * @param {boolean} [setDefault=true] - czy ustawić domyślną wartość startInput
  */
-export function setupDateTime(startInput, endInput, minDaysStart, maxDaysStart, minOffsetEnd = 1, maxOffsetEnd = 7, setDefault = true) {
+export function setupDateTime(startInput, endInput, minDaysStart = 0, maxDaysStart = 7, minOffsetEndH = 1, maxOffsetEndD = 7, setDefault = true) {
     const now = new Date();
 
     const minStart = new Date(now);
@@ -166,18 +208,16 @@ export function setupDateTime(startInput, endInput, minDaysStart, maxDaysStart, 
     startInput.min = toLocal(minStart);
     startInput.max = toLocal(maxStart);
 
-    if (setDefault) {
-        startInput.value = toLocal(minStart);
-    }
+    if (setDefault) startInput.value = toLocal(minStart);
 
     function updateEndRange() {
         const start = parseLocal(startInput.value);
 
         const minEnd = new Date(start.getTime());
-        minEnd.setHours(minEnd.getHours() + minOffsetEnd);
+        minEnd.setHours(minEnd.getHours() + minOffsetEndH);
 
         const maxEnd = new Date(start.getTime());
-        maxEnd.setDate(maxEnd.getDate() + maxOffsetEnd);
+        maxEnd.setDate(maxEnd.getDate() + maxOffsetEndD);
 
         endInput.min = toLocal(minEnd);
         endInput.max = toLocal(maxEnd);
@@ -185,9 +225,17 @@ export function setupDateTime(startInput, endInput, minDaysStart, maxDaysStart, 
         if (!endInput.value || parseLocal(endInput.value) < minEnd) {
             endInput.value = toLocal(minEnd);
         }
+
+        updateDisplayDate(endInput);
     }
 
-    updateEndRange();
+    startInput.addEventListener('change', () => {
+        updateEndRange();
+        updateDisplayDate(startInput);
+    });
 
-    startInput.addEventListener('change', updateEndRange);
+    endInput.addEventListener('change', () => updateDisplayDate(endInput));
+
+    updateDisplayDate(startInput);
+    updateEndRange();
 }

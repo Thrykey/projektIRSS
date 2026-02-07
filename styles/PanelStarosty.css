@@ -98,6 +98,78 @@
     justify-content: center;
 }
 
+.pairLabelInputTime {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    user-select: none;
+
+    &>label {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: center;
+    }
+
+    &>:nth-child(3) {
+        bottom: 11%;
+        position: absolute;
+        width: 58%;
+        height: 40%;
+        margin-left: -7%;
+        user-select: none;
+        pointer-events: none;
+        align-content: center;
+        color: black;
+        background: rgb(208, 208, 208);
+
+        transition: border .3s ease, background 0.3s ease;
+    }
+
+    &>input {
+        position: relative;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 8px 16px;
+        line-height: 25px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        color: black;
+        border: 1px solid black;
+        background: rgb(208, 208, 208);
+        transition: border .3s ease, background 0.3s ease;
+
+        &:not(:disabled):focus {
+            outline: none;
+            border-color: none;
+        }
+
+        &:not(:disabled):hover {
+            background: white;
+            transition: background 0.3s;
+
+            &~ :nth-child(3) {
+                background: white;
+                transition: background 0.3s;
+            }
+        }
+
+        &:disabled {
+            background: #696969;
+        }
+
+    }
+}
+
+@media (max-width:1100px) {
+    .pairLabelInputTime {
+        &>:nth-child(3) {
+            width: 190px;
+            margin-left: -30px;
+        }
+    }
+}
+
 .numberInputSizing {
     width: 100px;
 }
@@ -198,6 +270,7 @@
     gap: 10%;
     width: 70%;
 }
+
 
 @media (max-width: 1100px) {
     #gridLayout {

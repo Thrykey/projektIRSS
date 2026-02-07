@@ -1,5 +1,5 @@
 import { CookieHandler } from './CookieHandler.js'
-import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl } from './Utils.js';
+import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl, updateDisplayDate } from './Utils.js';
 
 // Ustawianie ograniczeń dla pól rokStudiow i stopienStudiow
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
@@ -30,24 +30,12 @@ maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsob
 
 const cookies = new CookieHandler()
 
-function changeAvailability(val) {
-    document.getElementById('nazwaKierunku').disabled = val
-    document.getElementById('rokStudiow').disabled = val
-    document.getElementById('stopienStudiow').disabled = val
-    document.getElementById('iloscGrup').disabled = val
-    document.getElementById('maxOsob').disabled = val
-    document.getElementById('KPTN').disabled = val
-    document.getElementById('random').disabled = val
-    document.getElementsByClassName('generujLinkBtn')[0].disabled = val
-}
-
 
 document.addEventListener('DOMContentLoaded', () => {
-    const st = document.getElementById("startTime");
-    const et = document.getElementById("endTime");
+    const startInput = document.getElementById('startTime');
+    const endInput = document.getElementById('endTime');
 
-    // ustawienia: start od dzisiaj do +7 dni, end minimalnie 3 dni i 1h po start, maksymalnie 7 dni po starcie
-    setupDateTime(st, et, 0, 7, 73, 7);
+    setupDateTime(startInput, endInput, 0, 7, 73, 7);
 
     infoGather = document.getElementById('infoGather');
 });
