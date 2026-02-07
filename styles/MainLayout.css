@@ -10,6 +10,7 @@ body {
     background-repeat: no-repeat;
     background-size: 70%;
     background-position: calc(50% + 4px) calc(50% + 12px);
+    /* NO IDEA dlaczego to jest true center, pewnie src jest zepsute*/
     margin: 0px;
     user-select: none;
 }

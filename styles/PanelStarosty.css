@@ -6,7 +6,7 @@
     height: 100%;
     width: 100%;
     display: grid;
-    grid-template-rows: 1fr 3fr 1fr 2fr 1fr 3fr 2fr;
+    grid-template-rows: 1fr 1fr 2fr 1fr 3fr 3fr 2fr;
     justify-items: center;
     align-items: center;
     transition: opacity 1s cubic-bezier(0.58, 0.00, 0.08, 1.00);
@@ -112,18 +112,43 @@
     user-select: none;
 }
 
-.upperHalf {
-    display: grid;
-    text-align: center;
-
-    grid-template-columns: 1fr 1fr;
-}
-
+.upperHalf,
 .lowerHalf {
     display: grid;
     text-align: center;
     grid-template-columns: 1fr 1fr;
+
+    &>button {
+        border-radius: 6px;
+        border: solid 1px black;
+        padding: 8px 12px;
+        margin-top: 20px;
+        font-size: 14px;
+        line-height: 25px;
+        background: var(--SubstituteSecondaryBlue);
+        transition: background .3s ease, border .3s ease, color .3s ease;
+        text-shadow: 1px 1px 2px #805237;
+        cursor: pointer;
+    }
+
+    &>button:not(:disabled):hover {
+        background: var(--SubstitueMainBlue);
+        color: white;
+        cursor: pointer;
+    }
+
+    &>button:not(:disabled):active {
+        transform: scale(1.05);
+    }
+
+    &>button:disabled {
+        background-color: #696969;
+        color: white;
+        cursor: not-allowed;
+    }
 }
+
+
 
 .generujLink {
     display: grid;
@@ -166,6 +191,30 @@
     font-style: italic;
     opacity: 0.6;
 }
+
+#wybierzCzas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10%;
+    width: 70%;
+
+    &>#startAt {
+        &>.pairLabelInput {
+            margin-top: 10px;
+        }
+    }
+
+    &>#endsAt {
+        &>.pairLabelInput {
+            margin-top: 10px;
+        }
+    }
+}
+
+.halfsGap {
+    gap: 10px;
+}
+
 
 @media (max-width: 1100px) {
     #gridLayout {

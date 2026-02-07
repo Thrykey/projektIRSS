@@ -23,10 +23,6 @@
                 <div class="informacje">
                     <span class="welcome">Witamy w panelu starosty!</span>
                 </div>
-                <div class="logowanie">
-                    <span id="status"></span>
-                    <button type="button" id="zalogujSieStatus">Zaloguj się</button>
-                </div>
                 <span class="informacje">Informacje o kierunku:</span>
                 <div class="informacjeDoGenerowania">
                     <div class="pairLabelInput">
@@ -42,7 +38,7 @@
                             placeholder="" min="1" max="3" disabled="true">
                     </div>
                     <div class="pairLabelInput">
-                        <label for="nazwaKierunku">Stopien studiow<span
+                        <label for="nazwaKierunku">Stopień studniów<span
                                 style="color: red;font-size: 20px;">*</span></label>
                         <input type="number" name="stopienStudiow" class="stopienStudiow numberInputSizing"
                             id="stopienStudiow" placeholder="" min="1" max="2" disabled="true">
@@ -76,6 +72,41 @@
                         </div>
                     </div>
 
+                </div>
+                <div id="wybierzCzas">
+                    <div id="startAt">
+                        <div class="upperHalf halfsGap">
+                            <button class="quickDay" data-day="0">Dziś</button>
+                            <button class="quickDay" data-day="1">Jutro</button>
+                        </div>
+
+                        <div class="lowerHalf halfsGap">
+                            <button class="quickDay" data-day="2">+2 dni</button>
+                            <button class="quickDay" data-day="7">+7 dni</button>
+                        </div>
+
+                        <div class="pairLabelInput">
+                            <label>Data rozpoczęcia</label>
+                            <input type="datetime-local" id="startTime">
+                        </div>
+                    </div>
+
+                    <div id="endsAt">
+                        <div class="upperHalf halfsGap">
+                            <button class="quickDay" data-day="0">Dziś</button>
+                            <button class="quickDay" data-day="1">Jutro</button>
+                        </div>
+
+                        <div class="lowerHalf halfsGap">
+                            <button class="quickDay" data-day="2">+2 dni</button>
+                            <button class="quickDay" data-day="7">+7 dni</button>
+                        </div>
+
+                        <div class="pairLabelInput">
+                            <label>Data zakończenia</label>
+                            <input type="datetime-local" id="endTime">
+                        </div>
+                    </div>
                 </div>
                 <div class="generujLink">
                     <button type="submit" class="generujLinkBtn">Generuj link do rejestracji</button>

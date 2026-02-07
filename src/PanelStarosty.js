@@ -42,24 +42,47 @@ function changeAvailability(val) {
 }
 
 
-function checkCookies() {
-    if (cookies.exists('email')) {
-        setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
-        changeAvailability(false)
-        setTextContentByElement('zalogujSieStatus', 'Zmień email')
-    } else {
-        setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila, zaloguj się aby kontynuować`)
-        changeAvailability(true)
-        setTextContentByElement('zalogujSieStatus', 'Zaloguj się')
+// function checkCookies() {
+//     if (cookies.exists('email')) {
+//         setTextContentByElement('status', `W twojej sesji zapisany jest email: ${cookies.get('email')}`)
+//         changeAvailability(false)
+//         setTextContentByElement('zalogujSieStatus', 'Zmień email')
+//     } else {
+//         setTextContentByElement('status', `W twojej sesji nie ma zapisanego maila, zaloguj się aby kontynuować`)
+//         changeAvailability(true)
+//         setTextContentByElement('zalogujSieStatus', 'Zaloguj się')
+//     }
+// }
+
+function setupDateTime(input, minDays, maxDays, setDefault = true) {
+    const now = new Date();
+
+    const min = new Date(now);
+    min.setDate(now.getDate() + minDays);
+
+    const max = new Date(now);
+    max.setDate(now.getDate() + maxDays);
+
+    const toLocal = d => {
+        d.setSeconds(0, 0);
+        return d.toISOString().slice(0, 16);
+    };
+
+    input.min = toLocal(min);
+    input.max = toLocal(max);
+
+    if (setDefault) {
+        input.value = toLocal(min);
     }
 }
 
-document.getElementById('zalogujSieStatus').addEventListener('click', () => {
-    window.location.href = './Logowanie.html?starosta#uncover';
-})
-
 document.addEventListener('DOMContentLoaded', () => {
-    checkCookies();
+    const st = document.getElementById("startTime");
+    const et = document.getElementById("endTime");
+
+    setupDateTime(st, 0, 7);
+
+    setupDateTime(et, 3, 10);
 });
 
 const submitButton = document.getElementsByClassName('generujLinkBtn');
