@@ -1,25 +1,31 @@
-import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam } from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlIncludes, getTokenValue, appendQueryParam, removeQueryParam, getMe, APIUrl } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
-const APIUrl = 'https://irss-backend.onrender.com'
-
+const me = getMe()
 
 /**
  * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
  */
 
-if (localStorage.getItem('email')) {
-    setDisplayByElement('logowanie', 'none')
-    setDisplayByElement('podmien', 'block')
+// if (localStorage.getItem('email')) {
+//     setDisplayByElement('logowanie', 'none')
+//     setDisplayByElement('podmien', 'block')
 
-    const strongifiedEmail = document.createElement('strong')
-    strongifiedEmail.textContent = `${localStorage.getItem('email')}`
+//     const strongifiedEmail = document.createElement('strong')
+//     strongifiedEmail.textContent = `${localStorage.getItem('email')}`
 
-    setDisplayByElement('informacjaCookies', 'block')
-    setTextContentByElement('informacjaCookies', `W twojej sesji zapisany jest zalogowany email: `)
-    document.getElementById('informacjaCookies').appendChild(strongifiedEmail)
-}
-else uncover()
+//     setDisplayByElement('informacjaCookies', 'block')
+//     setTextContentByElement('informacjaCookies', `W twojej sesji zapisany jest zalogowany email: `)
+//     document.getElementById('informacjaCookies').appendChild(strongifiedEmail)
+// }
+// else uncover()
+
+
+
+// if (me) {
+//     const meStr = JSON.parse(me)
+//     if (meStr.user == 'starosta' && urlIncludes('dest') == 'panel') window.location.href = './pages/PanelStarosty.html'
+// }
 
 
 /**
@@ -33,10 +39,10 @@ function uncover() {
     setDisplayByElement('podmien', 'none')
 }
 
-document.getElementById('uncover').addEventListener('click', () => {
-    removeQueryParam('uncover')
-    uncover()
-})
+// document.getElementById('uncover').addEventListener('click', () => {
+//     removeQueryParam('uncover')
+//     uncover()
+// })
 
 
 const inputFields = {
@@ -68,7 +74,7 @@ function checkUrlParams() {
 }
 checkUrlParams();
 
-if (urlIncludes('code')) localStorage.setItem('code', urlIncludes('code'))
+if (urlIncludes('code')) sessionStorage.setItem('code', urlIncludes('code'))
 console.log(urlIncludes('code'));
 
 
@@ -93,8 +99,6 @@ document.getElementById('zalogujStarosta').addEventListener('click', () => {
 
 
 function enableSend() {
-    console.log(`checking if all info is filled, current status:`)
-    console.log(inputFields)
     document.getElementById('wyslijKod').disabled = !(Object.values(inputFields).every(state => state != false))
 }
 
@@ -192,16 +196,13 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 
 
 async function sendVerReq(userEmail, indexValue) {
-    const code = localStorage.getItem('code')
+    const code = sessionStorage.getItem('code')
 
-    if (!code) {
-        alert('Nie masz zaproszenia.')
-        return
-    }
+    const passwd = document.getElementById('passwd').value
 
     const data = {
         email: userEmail.toString(),
-        invite_code: code.toString()
+        invite_code: passwd ? passwd.toString() : code.toString()
     }
 
     const res = await fetch(APIUrl + '/auth/register-with-invite', {
@@ -216,7 +217,6 @@ async function sendVerReq(userEmail, indexValue) {
     const status = res.status;
     const resData = await res.json();
 
-    console.log(status);
 
     switch (status) {
         case 200:
@@ -233,6 +233,14 @@ async function sendVerReq(userEmail, indexValue) {
         case 422:
             console.error('Błąd 422 - niepoprawne dane:')
             console.table(resData.detail)
+            document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+                el.querySelector('.errorLayer').style.opacity = '1';
+                el.querySelector('.successLayer').style.opacity = '0';
+            })
+            setTimeout(() => document.querySelectorAll('.leftLine, .rightLine').forEach(el => {
+                el.querySelector('.errorLayer').style.opacity = '0';
+                el.querySelector('.successLayer').style.opacity = '0';
+            }), 3000)
             break
     }
 }

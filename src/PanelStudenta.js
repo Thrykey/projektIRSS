@@ -124,17 +124,7 @@ function getCurrentPreferences() {
 
 const APIUrl = 'https://irss-backend.onrender.com'
 
-// async function getMe() {
-//   const cached = sessionStorage.getItem("me")
-//   if (cached) return JSON.parse(cached)
-
-//   const me = await fetch(APIUrl + "/auth/me", {
-//     credentials: "include"
-//   }).then(res => res.json())
-
-//   sessionStorage.setItem("me", JSON.stringify(me))
-//   return me
-// }
+// getMe()
 
 async function sendPreferences() {
     try {
@@ -197,14 +187,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('wniosekBtn').disabled = false
 });
 
-document.getElementById('PanelStarostyBtn').addEventListener('click', () => {
-    window.location.href = './pages/Logowanie.html?starosta=true';
-});
+const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
 
-document.getElementById('zmienEmail').addEventListener('click', () => {
-    window.location.href = './pages/Logowanie.html?uncover=true';
-});
-
+panelButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        window.location.href = './pages/Logowanie.html?user=starosta&dest=panel';
+    })
+})
 
 document.getElementById('wniosekBtn').addEventListener('click', () => {
     sendPreferences()

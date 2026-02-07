@@ -95,7 +95,6 @@ export function getTokenValue(key) {
     const found = parts.find(p => p.startsWith(key + "="));
 
     return found ? found.split("=")[1] : null;
-
 }
 
 export function appendQueryParam(key, value) {
@@ -108,4 +107,18 @@ export function removeQueryParam(key) {
     const url = new URL(window.location.href);
     url.searchParams.delete(key);
     window.history.replaceState(null, "", url.toString());
+}
+
+export const APIUrl = 'https://irss-backend.onrender.com'
+
+export async function getMe() {
+    const cached = sessionStorage.getItem("me")
+    if (cached) return JSON.parse(cached)
+
+    const me = await fetch(APIUrl + "/auth/me", {
+        credentials: "include"
+    }).then(res => res.json())
+
+    sessionStorage.setItem("me", JSON.stringify(me))
+    return me
 }
