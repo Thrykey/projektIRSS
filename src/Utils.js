@@ -196,7 +196,7 @@ export function updateDisplayDate(input, format = 'DD/MM/YYYY HH:mm') {
  * @param {number} [maxOffsetEndD=7] - maksymalna różnica dni między start a end
  * @param {boolean} [setDefault=true] - czy ustawić domyślną wartość startInput
  */
-export function setupDateTime(startInput, endInput, minDaysStart = 0, maxDaysStart = 7, minOffsetEndH = 1, maxOffsetEndD = 7, setDefault = true) {
+export function setupDateTime(startInput, endInput, minDaysStart = 0, maxDaysStart = 7, minOffsetEndH = 0, maxOffsetEndD = 7, setDefault = true) {
     const now = new Date();
 
     const minStart = new Date(now);
@@ -208,7 +208,18 @@ export function setupDateTime(startInput, endInput, minDaysStart = 0, maxDaysSta
     startInput.min = toLocal(minStart);
     startInput.max = toLocal(maxStart);
 
-    if (setDefault) startInput.value = toLocal(minStart);
+    if (setDefault) {
+        const defaultStart = new Date();
+        defaultStart.setHours(defaultStart.getHours() + 1);
+
+        if (defaultStart < minStart) {
+            startInput.value = toLocal(minStart);
+        } else if (defaultStart > maxStart) {
+            startInput.value = toLocal(maxStart);
+        } else {
+            startInput.value = toLocal(defaultStart);
+        }
+    }
 
     function updateEndRange() {
         const start = parseLocal(startInput.value);

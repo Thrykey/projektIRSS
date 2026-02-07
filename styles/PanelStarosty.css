@@ -225,10 +225,13 @@
 .generujLink {
     display: grid;
     user-select: none;
+    justify-items: center;
+
 
     &>button {
         border-radius: 6px;
         border: solid 1px black;
+        width: 80%;
         padding: 8px 12px;
         margin-top: 20px;
         font-size: 14px;

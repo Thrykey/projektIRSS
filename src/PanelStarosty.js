@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startInput = document.getElementById('startTime');
     const endInput = document.getElementById('endTime');
 
-    setupDateTime(startInput, endInput, 0, 7, 73, 7);
+    setupDateTime(startInput, endInput, 0, 7, 72, 7);
 
     infoGather = document.getElementById('infoGather');
 });
