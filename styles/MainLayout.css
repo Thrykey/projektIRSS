@@ -147,8 +147,8 @@ body {
         justify-content: center;
         align-content: center;
         align-items: center;
-        height: 100vh;
-        width: 100vw;
+        height: 100svh;
+        width: 100svw;
         top: 0;
         position: relative;
     }

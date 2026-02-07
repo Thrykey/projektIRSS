@@ -416,13 +416,19 @@ body {
 }
 
 @media (max-width: 1100px) {
-    #prosbaKodu span {
-        position: relative;
-        z-index: 2;
-        text-align: center;
-        width: 70vw;
-        height: 50vh;
-        align-content: center;
+    #prosbaKodu {
+        &>span {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 70vw;
+            height: 50vh;
+            align-content: center;
+        }
+    }
+
+    .middle {
+        height: 60svh;
     }
 }
 
