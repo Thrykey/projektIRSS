@@ -73,7 +73,9 @@ function checkUrlParams() {
         console.info('Renderowanie dodatkowego elementu dla starosty')
 
         setDisplayByElement('starostaPasswd', 'grid')
-        inputFields.HASLO = false
+
+        inputFields.HASLO = document.getElementById('passwd').value ? true : false
+
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
 
         document.getElementById('logowanie').style.gridTemplateRows = '1fr 1fr 1fr'
@@ -101,9 +103,8 @@ document.getElementById('zalogujStarosta').addEventListener('click', () => {
         inputFields.HASLO = undefined
     } else {
         appendQueryParam('user', 'starosta')
-
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
-        inputFields.HASLO = false
+        inputFields.HASLO = document.getElementById('passwd').value ? true : false
     }
 
     enableSend()
@@ -113,6 +114,7 @@ document.getElementById('zalogujStarosta').addEventListener('click', () => {
 
 
 function enableSend() {
+    console.log(!(Object.values(inputFields).every(state => state != false)));
     document.getElementById('wyslijKod').disabled = !(Object.values(inputFields).every(state => state != false))
 }
 

@@ -112,11 +112,11 @@
     }
 
     &>:nth-child(3) {
-        bottom: 11%;
+        bottom: 7px;
         position: absolute;
-        width: 58%;
-        height: 40%;
-        margin-left: -7%;
+        height: 27px;
+        width: 180px;
+        margin-left: -20px;
         user-select: none;
         pointer-events: none;
         align-content: center;
@@ -165,7 +165,7 @@
     .pairLabelInputTime {
         &>:nth-child(3) {
             width: 190px;
-            margin-left: -30px;
+            margin-left: -15px;
         }
     }
 }
