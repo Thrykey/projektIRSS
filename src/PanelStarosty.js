@@ -1,5 +1,5 @@
 import { CookieHandler } from './CookieHandler.js'
-import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl, updateDisplayDate } from './Utils.js';
+import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl, updateDisplayDate, showErrorColors, showSuccesColors } from './Utils.js';
 
 // Ustawianie ograniczeń dla pól rokStudiow i stopienStudiow
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
@@ -201,11 +201,12 @@ submitButton[0].addEventListener('click', (e) => {
 
         generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
 
-
         document.getElementById('gridLayout').classList.add('hide')
         setDisplayByElement('infoGather', 'grid')
         setTimeout(() => {
             document.getElementById('infoGather').classList.add('show')
+            console.log(document.getElementById('infoGather'));
+
 
             document.getElementById('gridLayout').style.height = '100vh'
             document.getElementById('gridLayout').style.marginTop = '0'
