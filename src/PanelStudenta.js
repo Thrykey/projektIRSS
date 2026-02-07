@@ -193,8 +193,8 @@ async function sendPreferences() {
 document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup();
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
-    checkCookies();
-    document.getElementById('wniosekBtn').disabled = cookies.exists('email') ? false : true
+    // document.getElementById('wniosekBtn').disabled = cookies.exists('email') ? false : true
+    document.getElementById('wniosekBtn').disabled = false
 });
 
 document.getElementById('PanelStarostyBtn').addEventListener('click', () => {
@@ -205,15 +205,6 @@ document.getElementById('zmienEmail').addEventListener('click', () => {
     window.location.href = './pages/Logowanie.html?uncover=true';
 });
 
-document.getElementById('setCookieBtn').addEventListener('click', () => {
-    cookies.set('email', 'example@test.com', 1);
-    checkCookies();
-});
-
-document.getElementById('removeCookieBtn').addEventListener('click', () => {
-    cookies.delete('email');
-    checkCookies();
-});
 
 document.getElementById('wniosekBtn').addEventListener('click', () => {
     sendPreferences()
