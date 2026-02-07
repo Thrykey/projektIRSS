@@ -28,7 +28,8 @@ body {
     display: grid;
     grid-template-columns: 1fr var(--MiddleSegmentWidth) 1fr;
     gap: 10px;
-    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
 }
 
 
@@ -143,9 +144,13 @@ body {
 @media (max-width: 1100px) {
     .grid-container {
         display: grid;
-        grid-template-columns: 1fr;
         justify-content: center;
         align-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        position: relative;
     }
 
     .left,
@@ -155,21 +160,16 @@ body {
 
     .middle {
         margin-top: 0;
-        transform: translateY(0);
-        height: auto;
-        /* zamiast 60svh */
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        transform: none;
+        position: absolute;
     }
 
     .leftLine,
     .rightLine {
-        height: 100svh;
-        position: absolute;
+        height: 100vh;
+        top: 0;
         width: var(--PhoneLineWidth);
     }
-
 }
 
 .dynamicErrorTooltip {
