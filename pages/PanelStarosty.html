@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="../styles/MainLayout.css">
     <link rel="stylesheet" href="../styles/PanelStarosty.css">
 
-    <link rel="icon" type="image/png" href="./assets/favicons/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="./assets/favicons/favicon.svg" />
-    <link rel="shortcut icon" href="./assets/favicons/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicons/apple-touch-icon.png" />
-    <link rel="manifest" href="./assets/favicons/site.webmanifest" />
+    <link rel="icon" type="image/png" href="../assets/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="../assets/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="../assets/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png" />
+    <link rel="manifest" href="../assets/favicons/site.webmanifest" />
 
     <script type="module" src="../src/PanelStarosty.js"></script>
     <title>Panel Starosty</title>
@@ -29,9 +29,20 @@
                 <div class="successLayer"></div>
                 <div class="errorLayer"></div>
             </div>
-            <div id="gridLayout">
+            <div id="wybierzAkcje" class="show">
+                <span>Wybierz akcje:</span>
+                <div id="choiceButtons">
+                    <button type="button" id="nowaRejestracja">Stwórz nową rejestracje</button>
+                    <div id="seperator"></div>
+                    <button type="button" id="sprawdzRejestracje">Sprawdź twoje rejestracje</button>
+                </div>
+            </div>
+            <div id="gridLayout" class="hide">
+                <div class="powrot hide" id="powrotMobile">
+                    <button type="button" class="powrotWybory">Wróć do panelu</button>
+                </div>
                 <div class="informacje">
-                    <span class="welcome">Witamy w panelu starosty!</span>
+                    <span class="welcome">Witamy w panelu kreacji kampani!</span>
                 </div>
                 <span class="informacje">Informacje o kierunku:</span>
                 <div class="informacjeDoGenerowania">
@@ -111,17 +122,29 @@
                     <span class="generujLinkSpan">Zapisy można przedwcześnie zamknąć</span>
                 </div>
             </div>
+            <div class="hide" id="aktywneKampanie">
+                <div class="powrot hide" id="powrotMobile">
+                    <button type="button" class="powrotWybory">Wróć do panelu</button>
+                </div>
+                <div id="campaignsContainer">
+
+                </div>
+            </div>
             <div id="infoGather">
                 <div class="success"></div>
                 <div class="error"></div>
-                <span id="confirmationLink"></span>
+                <span id="confirmationLink">Generowanie link...</span>
                 <span class="formField" id="copyLink">http://127.0.0.1:3000/index.html/?inf-6g-aiujsdhasid</span>
             </div>
             <div class="rightLine">
                 <div class="successLayer"></div>
                 <div class="errorLayer"></div>
             </div>
-            <div class="right">
+
+        </div>
+        <div class="right">
+            <div class="powrot hide" id="powrotDesktop">
+                <button type="button" id="powrotWybory">Wróć do panelu</button>
             </div>
         </div>
 

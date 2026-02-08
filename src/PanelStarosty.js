@@ -1,5 +1,8 @@
 import { CookieHandler } from './CookieHandler.js'
-import { setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO, APIUrl, updateDisplayDate, showErrorColors, showSuccesColors } from './Utils.js';
+import {
+    setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO,
+    APIUrl, updateDisplayDate, showErrorColors, showSuccesColors, getMe
+} from './Utils.js';
 
 // Ustawianie ograniczeń dla pól rokStudiow i stopienStudiow
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
@@ -31,6 +34,8 @@ maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsob
 const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
+const gridLayout = document.getElementById('gridLayout')
+const wybierzAkcje = document.getElementById('wybierzAkcje')
 let infoGather = document.getElementById('infoGather');
 
 
@@ -54,6 +59,238 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
+document.getElementById('nowaRejestracja').addEventListener('click', () => {
+    wybierzAkcje.classList.remove('show')
+    wybierzAkcje.classList.add('hide')
+    setTimeout(() => {
+        gridLayout.classList.remove('hide')
+        gridLayout.classList.add('show')
+        if (window.innerWidth <= 1100) {
+            document.getElementById('gridLayout').style.height = '120vh'
+            document.getElementById('gridLayout').style.marginTop = '25vh'
+        }
+        document.querySelectorAll('.powrot').forEach(d => {
+            d.classList.remove('hide')
+            d.classList.add('show')
+        })
+    }, 500);
+
+})
+
+document.querySelectorAll('.powrot button').forEach(button => {
+
+    button.addEventListener('click', (e) => {
+        document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
+        e.target.parentElement.classList.remove('show')
+        e.target.parentElement.classList.add('hide')
+
+        gridLayout.classList.remove('show')
+        gridLayout.classList.add('hide')
+        document.getElementById('aktywneKampanie').classList.remove('show')
+        document.getElementById('aktywneKampanie').classList.add('hide')
+        setTimeout(() => {
+            if (window.innerWidth <= 1100) {
+                document.getElementById('gridLayout').style.height = '100vh'
+                document.getElementById('gridLayout').style.marginTop = '0vh'
+            }
+            wybierzAkcje.classList.remove('hide')
+            wybierzAkcje.classList.add('show')
+        }, 500);
+    })
+})
+
+async function loadCampaigns() {
+    const container = document.getElementById('campaignsContainer');
+
+    try {
+        const idResponse = sessionStorage.getItem('me') ? sessionStorage.getItem('me') : await getMe();
+        const campaignIds = await idResponse.json();
+
+        for (const id of campaignIds) {
+            const detailResponse = await fetch(APIUrl + `/admin/campaigns/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include'
+            });
+            const campaign = await detailResponse.json();
+
+            const now = new Date();
+            const endsAt = new Date(campaign.ends_at);
+            let timeLeftText;
+            if (endsAt > now) {
+                const diffMs = endsAt - now;
+                const diffHoursTotal = Math.floor(diffMs / (1000 * 60 * 60));
+                const diffMinutes = Math.floor((diffMs / (1000 * 60)) % 60);
+
+                if (diffHoursTotal >= 1) {
+                    timeLeftText = `${diffHoursTotal}h`;
+                } else {
+                    timeLeftText = `${diffMinutes}m`;
+                }
+            } else {
+                timeLeftText = 'Kampania zakończona';
+            }
+
+            const card = document.createElement('div');
+            card.classList.add('campaignCard');
+            card.classList.add(campaign.is_active ? 'active' : 'inactive');
+
+            const titleEl = document.createElement('h3');
+            titleEl.textContent = campaign.title;
+
+            const registeredEl = document.createElement('p');
+            registeredEl.textContent = `Zapisanych studentów: ${campaign.total_registered_students}`;
+
+            const timeEl = document.createElement('p');
+            timeEl.textContent = `Pozostało czasu: ${timeLeftText}`;
+
+            const footer = document.createElement('div');
+            footer.classList.add('cardFooter');
+
+            const btn = document.createElement('button');
+            btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
+            btn.addEventListener('click', async () => {
+                const url = campaign.is_active
+                    ? `/admin/campaigns/${campaign.id}/resolve`
+                    : `/admin/campaigns/${campaign.id}/download`;
+
+                try {
+                    const response = await fetch(APIUrl + url, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        credentials: 'include'
+                    });
+                    if (!response.ok) throw new Error('Błąd w API');
+
+                    if (campaign.is_active) {
+                        campaign.is_active = false;
+                        card.classList.remove('active');
+                        card.classList.add('inactive');
+                        btn.textContent = 'Download';
+                    }
+
+                    if (!campaign.is_active) {
+                        const blob = await response.blob();
+                        const downloadUrl = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = downloadUrl;
+                        a.download = `${campaign.title}`;
+                        a.click();
+                        URL.revokeObjectURL(downloadUrl);
+                    }
+
+                } catch (err) {
+                    console.error('Błąd przy wywołaniu akcji kampanii:', err);
+                }
+            });
+
+            footer.appendChild(btn);
+            card.appendChild(titleEl);
+            card.appendChild(registeredEl);
+            card.appendChild(timeEl);
+            card.appendChild(footer);
+
+            container.appendChild(card);
+        }
+    } catch (error) {
+        console.error('Błąd ładowania kampanii:', error);
+    }
+}
+
+function createDummyCard({ title, totalRegistered = 0, hoursLeft = 3, resolved = false }) {
+    const container = document.getElementById('campaignsContainer');
+
+    // obliczenie czasu pozostałego
+    let timeLeftText;
+    if (hoursLeft >= 1) {
+        timeLeftText = `${hoursLeft}h`;
+    } else {
+        timeLeftText = `${hoursLeft * 60}m`; // jeśli mniej niż godzina
+    }
+
+    // stworzenie elementów karty
+    const card = document.createElement('div');
+    card.classList.add('campaignCard');
+    card.classList.add(resolved ? 'inactive' : 'active');
+
+    const titleEl = document.createElement('h3');
+    titleEl.textContent = title;
+
+    const registeredEl = document.createElement('p');
+    registeredEl.textContent = `Zapisanych studentów: ${totalRegistered}`;
+
+    const timeEl = document.createElement('p');
+    timeEl.textContent = `Pozostało czasu: ${timeLeftText}`;
+
+    const footer = document.createElement('div');
+    footer.classList.add('cardFooter');
+
+    const btn = document.createElement('button');
+    btn.textContent = resolved ? 'Download' : 'Resolve';
+    btn.addEventListener('click', () => {
+        alert(`Kliknięto przycisk kampanii: ${title} (resolved: ${resolved})`);
+    });
+
+    footer.appendChild(btn);
+    card.appendChild(titleEl);
+    card.appendChild(registeredEl);
+    card.appendChild(timeEl);
+    card.appendChild(footer);
+
+    container.appendChild(card);
+}
+
+
+
+
+document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
+    wybierzAkcje.classList.remove('show')
+    wybierzAkcje.classList.add('hide')
+
+    document.getElementById('campaignsContainer').textContent = ''
+
+    createDummyCard({
+        title: 'Kampania 1',
+        totalRegistered: 12,
+        hoursLeft: 5,
+        resolved: false
+    });
+
+    createDummyCard({
+        title: 'Kampania 2',
+        totalRegistered: 20,
+        hoursLeft: 0,
+        resolved: true
+    });
+    createDummyCard({
+        title: 'Kampania 2',
+        totalRegistered: 20,
+        hoursLeft: 0,
+        resolved: false
+    });
+    createDummyCard({
+        title: 'Kampania 1',
+        totalRegistered: 12,
+        hoursLeft: 5,
+        resolved: false
+    });
+
+    // loadCampaigns();
+    setTimeout(() => {
+        document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
+        document.getElementById('aktywneKampanie').classList.remove('hide')
+        document.getElementById('aktywneKampanie').classList.add('show')
+        document.querySelectorAll('.powrot').forEach(d => {
+
+            d.classList.remove('hide')
+            d.classList.add('show')
+        })
+    }, 500);
+})
 
 function reactToInputs() {
     const inputsToCheck = Array.from(inputsToValidate).filter(
@@ -205,16 +442,12 @@ submitButton[0].addEventListener('click', (e) => {
         setDisplayByElement('infoGather', 'grid')
         setTimeout(() => {
             document.getElementById('infoGather').classList.add('show')
-            console.log(document.getElementById('infoGather'));
 
 
             document.getElementById('gridLayout').style.height = '100vh'
             document.getElementById('gridLayout').style.marginTop = '0'
 
         }, 500)
-        inputsToValidate.forEach(el => {
-            console.log(el.name + ': ' + el.value.trim())
-        })
     }
 });
 document.getElementById('copyLink').addEventListener('click', async () => {

@@ -82,6 +82,8 @@
     grid-auto-columns: 1fr;
     gap: 10px;
 
+
+
     justify-content: center;
 
     margin-top: 3%;
@@ -101,11 +103,23 @@
 #najbardziejSpan {
     left: 0%;
     top: -40px;
+    background: linear-gradient(90deg, #0ffa23 0%, #00990d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }
 
 #najmniejSpan {
     left: 100%;
     top: -40px;
+    background: linear-gradient(90deg, #fa0f0f 0%, #a10202 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 
 }
 
