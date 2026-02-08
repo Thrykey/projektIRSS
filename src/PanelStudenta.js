@@ -150,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup();
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
 
-    feedback = document.getElementById('feedbackWyslania');
     document.getElementById('wniosekBtn').disabled = false
 });
 

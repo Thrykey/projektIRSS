@@ -309,6 +309,7 @@ body {
     position: relative;
     display: grid;
     justify-items: center;
+    gap: 15px;
 
 
     &>button {
@@ -341,6 +342,78 @@ body {
 
 }
 
+.checkboxWrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 50%;
+    cursor: pointer;
+    user-select: none;
+    background: linear-gradient(45deg, rgba(200, 98, 35, 0.5) 0%, rgba(128, 82, 55, 0.5) 100%);
+    padding: 10px;
+    border-radius: 6px;
+
+    input {
+        display: none;
+    }
+}
+
+.customCheckbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid black;
+    background: white;
+    transition: background .3s ease, transform .15s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.checkboxWrap:hover .customCheckbox {
+    background: var(--SubstitueMainBlue);
+}
+
+.customCheckbox::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid black;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity .2s ease;
+}
+
+.checkboxWrap input:checked+.customCheckbox::after {
+    opacity: 1;
+}
+
+.checkboxWrap:active .customCheckbox {
+    transform: scale(1.15);
+}
+
+.checkboxWrap input:disabled+.customCheckbox {
+    background: #696969;
+    cursor: not-allowed;
+}
+
+.checkboxText {
+    font-size: 14px;
+
+    small {
+        font-size: 12px;
+        color: rgb(176, 176, 176);
+    }
+
+    a {
+        color: var(--SubstitueMainBlue);
+    }
+}
+
+
 @media (max-width: 1100px) {
     #wyslij {
         align-self: start;
@@ -348,13 +421,11 @@ body {
 }
 
 #zalogujStarosta {
-    margin-top: 20px;
     font-size: 12px;
     cursor: pointer;
     background: linear-gradient(45deg, #805237 0%, #C86223 100%);
     padding: 10px;
     border-radius: 6px;
-    background: linear-gradient(45deg, #805237 0%, #C86223 100%);
     transition: all 0.5s ease;
     text-align: center;
     align-content: center;

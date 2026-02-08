@@ -23,6 +23,7 @@ const inputFields = {
     EMAIL: false,
     INDEX: false,
     DOMENA: false,
+    RODO: false,
     HASLO: undefined
 }
 /**
@@ -114,7 +115,6 @@ document.getElementById('zalogujStarosta').addEventListener('click', () => {
 
 
 function enableSend() {
-    console.log(!(Object.values(inputFields).every(state => state != false)));
     document.getElementById('wyslijKod').disabled = !(Object.values(inputFields).every(state => state != false))
 }
 
@@ -130,6 +130,11 @@ function reactToEmailChange(buttonValue) {
         })
     }
 }
+
+document.getElementById('RODO').addEventListener('change', (e) => {
+    inputFields.RODO = e.target.checked
+    enableSend()
+})
 
 document.getElementById('ukenChoice').addEventListener('click', () => {
     setTextContentByElement('dropdownBtn', '@student.uken.krakow.pl')
