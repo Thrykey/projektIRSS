@@ -101,6 +101,9 @@ async function sendPreferences() {
         // }
 
         const data = getCurrentPreferences()
+
+        console.log(data);
+
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
             headers: {
