@@ -10,6 +10,7 @@
     padding: 5svw 0px 5svw 5svw;
     text-wrap: balance;
     line-height: 21px;
+    user-select: none;
 
     cursor: grab;
 
