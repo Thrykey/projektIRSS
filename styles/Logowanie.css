@@ -369,7 +369,7 @@ body {
     flex-shrink: 0;
 }
 
-.checkboxWrap:hover .customCheckbox {
+.checkboxWrap:not(:has(a:hover)):hover .customCheckbox {
     background: var(--SubstitueMainBlue);
 }
 
@@ -410,6 +410,11 @@ body {
 
     a {
         color: var(--SubstitueMainBlue);
+        transition: color 0.2s ease;
+    }
+
+    a:hover {
+        color: var(--SubstituteSecondaryBlue);
     }
 }
 
