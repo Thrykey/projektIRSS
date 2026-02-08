@@ -119,7 +119,11 @@ async function sendPreferences() {
                 console.log('Request wysłany poprawnie');
                 showSuccesColors(feedback)
                 break;
-
+            case 401:
+                console.error('Błąd 401 - brak permisji')
+                showErrorColors(feedback)
+                setTextContentByElement('feedbackSpan', 'Błąd 401 - brak permisji')
+                break
             case 404:
                 console.error('Błąd 404 - brak odpowiedzi')
                 showErrorColors(feedback)
