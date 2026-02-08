@@ -111,7 +111,7 @@ async function sendPreferences() {
         })
 
 
-        const status = response.status;
+        const status = res.status;
         const resData = await res.json();
 
         switch (status) {
