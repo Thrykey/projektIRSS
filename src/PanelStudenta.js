@@ -1,4 +1,8 @@
-import { setDisplayByElement, setTextContentByElement, createSpan, urlHasHash, urlIncludes, getTokenValue, removeQueryParam, showErrorColors, showSuccesColors, APIUrl } from './Utils.js';
+import {
+    setDisplayByElement, setTextContentByElement, createSpan, urlHasHash,
+    urlIncludes, getTokenValue, removeQueryParam, showErrorColors,
+    showSuccesColors, APIUrl
+} from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 import { CookieHandler } from './CookieHandler.js';
 
@@ -8,6 +12,8 @@ const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
 const feedback = document.getElementById('feedbackWyslania')
 
 // GRUPY
+
+getMe()
 
 function createGroupDiv(number) {
     const div = document.createElement('div');
@@ -153,19 +159,6 @@ async function sendPreferences() {
     }
 }
 
-async function getDashboard() {
-    const res = await fetch(APIUrl + "/users/dashboard", {
-        method: "GET",
-        credentials: "include"
-    });
-
-    console.log("Cookies:", req.headers.cookie);
-
-    const data = await res.json();
-
-    console.log("Dashboard:", data);
-}
-getDashboard()
 
 // EVENT LISTENERY
 

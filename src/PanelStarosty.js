@@ -29,7 +29,7 @@ maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOso
 maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 
-
+getMe()
 
 const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');

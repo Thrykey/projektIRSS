@@ -165,11 +165,13 @@ export async function getMe() {
     const cached = sessionStorage.getItem("me")
     if (cached) return JSON.parse(cached)
 
-    const me = await fetch(APIUrl + "/auth/me", {
+    const me = await fetch(APIUrl + "/users/dashboard", {
+        method: "GET",
         credentials: "include"
     }).then(res => res.json())
 
     sessionStorage.setItem("me", JSON.stringify(me))
+
     return me
 }
 
