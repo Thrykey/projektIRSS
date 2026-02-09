@@ -324,10 +324,10 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
 
         const res = await fetch(APIUrl + '/admin/campaigns/setup', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(data)
         })
 
@@ -337,7 +337,7 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
         switch (status) {
             case 200:
                 console.log('Link został wygenerowany poprawnie');
-                showSuccessColors(infoGather)
+                showSuccesColors(infoGather)
                 setDisplayByElement('copyLink', 'block')
                 break
             case 404:

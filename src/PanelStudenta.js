@@ -121,9 +121,6 @@ async function sendPreferences() {
             body: JSON.stringify(data)
         })
 
-        console.log("Cookies:", res.headers.cookie);
-
-
         const status = res.status;
         const resData = await res.json();
 
