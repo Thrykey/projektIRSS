@@ -161,7 +161,7 @@ async function getDashboard() {
 
     console.log("Dashboard:", data);
 }
-
+getDashboard()
 
 // EVENT LISTENERY
 
