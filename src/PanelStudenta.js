@@ -100,7 +100,7 @@ async function sendPreferences() {
         //     console.warn('Brak tokenu!');
         //     return
         // }
-        getDashboard()
+        // getDashboard()
         const data = getCurrentPreferences()
 
         console.log(JSON.stringify(data));
