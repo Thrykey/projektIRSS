@@ -1,14 +1,7 @@
-import {
-    setDisplayByElement, setTextContentByElement, urlIncludes,
-    appendQueryParam, removeQueryParam, APIUrl, showErrorColors,
-    showSuccesColors, getMe
-} from './Utils.js'
+import { setDisplayByElement, setTextContentByElement, urlIncludes, appendQueryParam, removeQueryParam, APIUrl, showErrorColors, showSuccesColors } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
-const me = getMe()
-
-console.log(me);
-
+// const me = getMe()
 
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
@@ -273,54 +266,6 @@ async function sendVerReq(userEmail, indexValue) {
 
 }
 
-async function sendVerReqStarosta(userEmail, indexValue) {
-    try {
-        const passwd = document.getElementById('passwd').value
-
-        const data = {
-            email: userEmail.toString(),
-            password: passwd
-        }
-
-        const res = await fetch(APIUrl + '/auth/register-starosta', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-
-        const status = res.status;
-        const resData = await res.json();
-
-
-        switch (status) {
-            case 200:
-                console.log('Dane poprawne, wysłany maila')
-                sessionStorage.setItem('email', userEmail)
-                setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-                showSuccesColors(prosbaKodu)
-                break
-            case 404:
-                console.error('Błąd 404 - brak odpowiedzi')
-                showErrorColors(prosbaKodu)
-                setTextContentByElement('potwierdzenieSpan', 'Błąd 404 - brak odpowiedzi')
-                break
-            case 422:
-                console.error('Błąd 422 - niepoprawne dane:')
-                console.table(resData.detail)
-                showErrorColors(prosbaKodu)
-                setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane:')
-                break
-        }
-    }
-    catch (err) {
-        console.error('Błąd sieci lub inny problem:', err);
-        showErrorColors(prosbaKodu)
-        setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${err}`)
-    }
-
-}
 
 
 wyslijBtn.addEventListener('click', () => {
@@ -367,12 +312,7 @@ wyslijBtn.addEventListener('click', () => {
         .forEach(el => {
             el.classList.add('active')
         })
-    if (inputFields.HASLO == true) {
-        sendVerReqStarosta(userEmail, indexValue)
-    }
-    else if (inputFields.HASLO == undefined) {
-        sendVerReq(userEmail, indexValue)
-    }
+    sendVerReq(userEmail, indexValue)
 });
 
 console.warn('Jak czegoś tutaj szukasz, to pewnie znajdziesz. \
