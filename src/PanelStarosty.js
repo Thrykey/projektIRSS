@@ -322,7 +322,7 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
             group_limit: groupLimit
         }
 
-        const res = await fetch(APIUrl + '/admin/setup', {
+        const res = await fetch(APIUrl + '/admin/campaigns/setup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
