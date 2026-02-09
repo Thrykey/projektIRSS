@@ -1,4 +1,8 @@
-import { setDisplayByElement, setTextContentByElement, urlIncludes, appendQueryParam, removeQueryParam, APIUrl, showErrorColors, showSuccesColors } from './Utils.js'
+import {
+    setDisplayByElement, setTextContentByElement, urlIncludes,
+    appendQueryParam, removeQueryParam, APIUrl, showErrorColors,
+    showSuccesColors, getMe
+} from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
 getMe()
