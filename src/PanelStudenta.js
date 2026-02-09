@@ -107,10 +107,10 @@ async function sendPreferences() {
 
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include',
             body: JSON.stringify(data)
         })
 
