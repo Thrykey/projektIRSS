@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement, createSpan, urlHasHash,
     urlIncludes, getTokenValue, removeQueryParam, showErrorColors,
-    showSuccesColors, APIUrl
+    showSuccesColors, APIUrl, getMe
 } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 import { CookieHandler } from './CookieHandler.js';
