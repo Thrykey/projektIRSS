@@ -79,7 +79,7 @@ function getCurrentPreferences() {
 
 function isLoggedIn() {
     if (!sessionStorage.getItem('loggedIn')) {
-        window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
+        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?code=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }
