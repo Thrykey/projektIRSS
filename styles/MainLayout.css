@@ -85,6 +85,7 @@ input[type=radio] {
     position: fixed;
     height: 100%;
     width: var(--LineWidth);
+    pointer-events: none;
 }
 
 .rightLine {
@@ -93,6 +94,7 @@ input[type=radio] {
     right: 0;
     height: 100%;
     width: var(--LineWidth);
+    pointer-events: none;
 }
 
 .leftLine::before,

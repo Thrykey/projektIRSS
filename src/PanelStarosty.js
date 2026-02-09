@@ -105,35 +105,34 @@ document.querySelectorAll('.powrot button').forEach(button => {
     })
 })
 
-// async function availableCampaigns() {
-//     try {
-//         const response = await fetch(APIUrl + '/users/available-campaigns', {
-//             method: 'GET',
-//             credentials: 'include',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         });
+async function availableCampaigns() {
+    try {
+        const response = await fetch(APIUrl + '/users/available-campaigns', {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-//         if (!response.ok) throw new Error('Błąd w API');
+        if (!response.ok) throw new Error('Błąd w API');
 
-//         const data = await response.json();
-//         return data.campaigns || [];
-//     } catch (err) {
-//         console.error('Błąd przy pobieraniu dostępnych kampanii:', err);
-//         return [];
-//     }
-// }
+        const data = await response.json();
+        return data.created_campaigns || [];
+    } catch (err) {
+        console.error('Błąd przy pobieraniu dostępnych kampanii:', err);
+        return [];
+    }
+}
 
 
 async function loadCampaigns() {
     const container = document.getElementById('campaignsContainer');
 
     try {
-        const idResponse = await getMe();
-        const campaignIds = await idResponse.json().campaign_id;
+        const idResponse = await availableCampaigns();
 
-        for (const id of campaignIds) {
+        for (const id of idResponse) {
             const detailResponse = await fetch(APIUrl + `/admin/campaigns/${id}`, {
                 method: 'GET',
                 credentials: 'include',
