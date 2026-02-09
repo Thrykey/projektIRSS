@@ -713,6 +713,7 @@
 }
 
 .campaignCard {
+    position: relative;
     border-radius: 8px;
     padding: 16px;
     margin: 10px;
@@ -722,18 +723,64 @@
     flex-direction: column;
     justify-content: space-between;
     transition: transform 0.2s;
+    color: black;
+
+    background: linear-gradient(45deg, rgba(65, 140, 217, 0.8), rgba(86, 207, 248, 0.8));
+    overflow: hidden;
 }
+
+.campaignCard::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("../assets/ZSLogo.png") no-repeat center center;
+    background-size: contain;
+    opacity: 0.2;
+    transform: scale(0.7);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.campaignCard>* {
+    position: relative;
+    z-index: 1;
+}
+
 
 .campaignCard:hover {
     transform: translateY(-3px);
 }
 
 .campaignCard.active {
-    background: var(--MainOrangeGradient);
+    background:
+        var(--SubstituteBlueGradient),
+        url("../assets/ZSLogo.png");
+    background-size: cover, scale(0.8);
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+
+    &>p,
+    &>h3 {
+        background: linear-gradient(27deg, rgba(255, 255, 255, 0.4) 0%, rgb(150, 150, 150, 0.4) 100%);
+        border-radius: 6px;
+        padding: 5px;
+    }
 }
 
 .campaignCard.inactive {
-    background: var(--SubstituteBlueGradient);
+    background:
+        var(--MainOrangeGradient),
+        url("../assets/ZSLogo.png");
+    background-size: cover, scale(0.8);
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
+
+    &>p,
+    &>h3 {
+        background: linear-gradient(27deg, rgba(255, 255, 255, 0.3) 0%, rgb(150, 150, 150, 0.3) 100%);
+        border-radius: 6px;
+        padding: 5px;
+    }
 }
 
 .campaignCard .cardFooter {

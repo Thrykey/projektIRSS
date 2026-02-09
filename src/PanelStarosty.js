@@ -228,6 +228,48 @@ async function loadCampaigns() {
     }
 }
 
+function createDummyCard({ title, totalRegistered = 0, hoursLeft = 3, resolved = false }) {
+    const container = document.getElementById('campaignsContainer');
+
+    // obliczenie czasu pozostałego
+    let timeLeftText;
+    if (hoursLeft >= 1) {
+        timeLeftText = `${hoursLeft}h`;
+    } else {
+        timeLeftText = `${hoursLeft * 60}m`; // jeśli mniej niż godzina
+    }
+
+    // stworzenie elementów karty
+    const card = document.createElement('div');
+    card.classList.add('campaignCard');
+    card.classList.add(resolved ? 'inactive' : 'active');
+
+    const titleEl = document.createElement('h3');
+    titleEl.textContent = title;
+
+    const registeredEl = document.createElement('p');
+    registeredEl.textContent = `Zapisanych studentów: ${totalRegistered}`;
+
+    const timeEl = document.createElement('p');
+    timeEl.textContent = `Pozostało czasu: ${timeLeftText}`;
+
+    const footer = document.createElement('div');
+    footer.classList.add('cardFooter');
+
+    const btn = document.createElement('button');
+    btn.textContent = resolved ? 'Download' : 'Resolve';
+    btn.addEventListener('click', () => {
+        alert(`Kliknięto przycisk kampanii: ${title} (resolved: ${resolved})`);
+    });
+
+    footer.appendChild(btn);
+    card.appendChild(titleEl);
+    card.appendChild(registeredEl);
+    card.appendChild(timeEl);
+    card.appendChild(footer);
+
+    container.appendChild(card);
+}
 
 document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
     wybierzAkcje.classList.remove('show')
@@ -235,6 +277,20 @@ document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
 
     document.getElementById('campaignsContainer').textContent = ''
 
+    createDummyCard({
+        title: 'Kampania 1',
+        totalRegistered: 12,
+        hoursLeft: 5,
+        resolved: false
+    });
+
+    // zakończona kampania
+    createDummyCard({
+        title: 'Kampania 2',
+        totalRegistered: 20,
+        hoursLeft: 0,
+        resolved: true
+    });
 
     loadCampaigns();
     setTimeout(() => {

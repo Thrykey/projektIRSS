@@ -83,7 +83,7 @@ function isLoggedIn() {
         return
     }
 }
-// isLoggedIn()
+isLoggedIn()
 
 
 // API CALLS
@@ -93,7 +93,7 @@ getMe()
 
 async function sendPreferences() {
     try {
-        const data = getCurrentPreferences()
+        const data = { ...getCurrentPreferences(), invite_code: urlIncludes('code') };
 
         console.log(JSON.stringify(data));
 
