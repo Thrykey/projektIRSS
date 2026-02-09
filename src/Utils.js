@@ -162,7 +162,7 @@ export function showSuccesColors(element) {
 export const APIUrl = 'https://irss-backend.onrender.com'
 
 export async function getMe() {
-    const cached = sessionStorage.getItem("me")
+    const cached = sessionStorage.getItem("loggedIn")
     if (cached) return JSON.parse(cached)
 
     const me = await fetch(APIUrl + "/users/dashboard", {
@@ -170,9 +170,7 @@ export async function getMe() {
         credentials: "include"
     }).then(res => res.json())
 
-    sessionStorage.setItem("me", JSON.stringify(me))
-
-    console.log(me)
+    sessionStorage.setItem("loggedIn", true)
 
     return me
 }
