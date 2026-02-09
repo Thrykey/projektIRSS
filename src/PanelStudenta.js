@@ -79,7 +79,7 @@ function getCurrentPreferences() {
 
 function isLoggedIn() {
     if (!sessionStorage.getItem('loggedIn')) {
-        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?code=' + urlIncludes('invite') : './pages/Logowanie.html'
+        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }
@@ -93,7 +93,7 @@ getMe()
 
 async function sendPreferences() {
     try {
-        const data = { ...getCurrentPreferences(), invite_code: urlIncludes('code') };
+        const data = { invite: urlIncludes('invite'), ...getCurrentPreferences() };
 
         console.log(JSON.stringify(data));
 

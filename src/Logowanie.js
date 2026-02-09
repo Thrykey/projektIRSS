@@ -100,8 +100,8 @@ function checkUrlParams() {
 }
 checkUrlParams();
 
-if (urlIncludes('code')) sessionStorage.setItem('code', urlIncludes('code'))
-console.log(urlIncludes('code'));
+if (urlIncludes('invite')) sessionStorage.setItem('invite', urlIncludes('invite'))
+console.log(urlIncludes('invite'));
 
 
 document.getElementById('zalogujStarosta').addEventListener('click', () => {
@@ -224,13 +224,13 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 
 async function sendVerReq(userEmail, indexValue) {
     try {
-        const code = sessionStorage.getItem('code')
+        const invite = sessionStorage.getItem('invite')
 
         const passwd = document.getElementById('passwd').value
 
         const data = {
             email: userEmail.toString(),
-            invite_code: passwd ? passwd.toString() : code.toString()
+            invite: passwd ? passwd.toString() : invite.toString()
         }
 
         const res = await fetch(APIUrl + '/auth/register-with-invite', {
