@@ -65,6 +65,7 @@ function getCurrentPreferences() {
             priority: index + 1
         });
     });
+
     return { preferences };
 }
 
@@ -102,7 +103,7 @@ async function sendPreferences() {
 
         const data = getCurrentPreferences()
 
-        console.log(data);
+        console.log(JSON.stringify(data));
 
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
