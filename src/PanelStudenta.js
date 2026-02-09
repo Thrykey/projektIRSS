@@ -115,6 +115,8 @@ async function sendPreferences() {
             body: JSON.stringify(data)
         })
 
+        console.log("Cookies:", req.headers.cookie);
+
 
         const status = res.status;
         const resData = await res.json();
@@ -156,6 +158,8 @@ async function getDashboard() {
         method: "GET",
         credentials: "include"
     });
+
+    console.log("Cookies:", req.headers.cookie);
 
     const data = await res.json();
 
