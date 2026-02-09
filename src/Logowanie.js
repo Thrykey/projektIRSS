@@ -5,7 +5,10 @@ import {
 } from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
-getMe()
+const me = getMe()
+
+console.log(me);
+
 
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
