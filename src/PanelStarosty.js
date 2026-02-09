@@ -31,6 +31,12 @@ maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsob
 
 const me = getMe()
 
+console.log(getMe());
+console.log(me);
+console.log(sessionStorage.getItem('loggedIn'));
+
+
+
 const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
@@ -366,8 +372,6 @@ submitButton[0].addEventListener('click', (e) => {
         const method = inputsMap['KPTN'].checked ? 'fcfs' : 'random'
         const groupAmmount = inputsMap['iloscGrup'].value
         const groupLimit = inputsMap['maxOsob'].value
-
-        console.log(me);
 
 
         generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
