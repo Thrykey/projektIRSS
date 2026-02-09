@@ -29,7 +29,7 @@ maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOso
 maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 
-getMe()
+const me = getMe()
 
 const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');
@@ -366,6 +366,9 @@ submitButton[0].addEventListener('click', (e) => {
         const method = inputsMap['KPTN'].checked ? 'fcfs' : 'random'
         const groupAmmount = inputsMap['iloscGrup'].value
         const groupLimit = inputsMap['maxOsob'].value
+
+        console.log(me);
+
 
         generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
 
