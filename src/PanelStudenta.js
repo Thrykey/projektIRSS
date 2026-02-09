@@ -107,6 +107,7 @@ async function sendPreferences() {
 
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
+            mode: "cors",
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
