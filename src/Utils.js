@@ -172,6 +172,8 @@ export async function getMe() {
 
     sessionStorage.setItem("me", JSON.stringify(me))
 
+    console.log(me)
+
     return me
 }
 
