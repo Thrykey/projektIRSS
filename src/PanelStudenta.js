@@ -100,7 +100,7 @@ async function sendPreferences() {
         //     console.warn('Brak tokenu!');
         //     return
         // }
-
+        getDashboard()
         const data = getCurrentPreferences()
 
         console.log(JSON.stringify(data));
@@ -151,6 +151,16 @@ async function sendPreferences() {
     }
 }
 
+async function getDashboard() {
+    const res = await fetch(APIUrl + "/users/dashboard", {
+        method: "GET",
+        credentials: "include"
+    });
+
+    const data = await res.json();
+
+    console.log("Dashboard:", data);
+}
 
 
 // EVENT LISTENERY
