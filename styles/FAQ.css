@@ -2,25 +2,18 @@
 
 
 #informations {
-    width: calc(1000px - 5svw);
-    /* display: grid; */
+    width: calc(1000px - 10svw);
     flex: 1;
     overflow-y: auto;
     scrollbar-gutter: stable;
-    padding: 5svw 0px 5svw 5svw;
-    text-wrap: balance;
+    padding: 0px 5svw 5svw 5svw;
+    text-wrap: wrap;
     line-height: 21px;
-    user-select: none;
-
-    cursor: grab;
-
-    &>span {
-        user-select: none;
-    }
+    user-select: text;
 
     &.dragging {
         cursor: grabbing;
-        user-select: none;
+        /* user-select: none; */
     }
 
     &::-webkit-scrollbar {
@@ -45,13 +38,45 @@
     }
 }
 
+/* ol {
+    line: 10px;
+} */
+.main-list>li {
+    margin-top: 28px;
+}
 
+.main-list>ol {
+    margin-top: 10px;
+
+    &>li {
+        margin-top: 7px;
+    }
+}
+
+.main-list>ul {
+    margin-top: 10px;
+
+    &>li {
+        margin-top: 7px;
+    }
+}
+
+.main-list>span {
+    display: block;
+    margin-left: 24px;
+    margin-top: 12px;
+}
+
+h2 {
+    margin-top: 40px;
+}
 
 
 #FAQ {
     position: absolute;
-    justify-self: center;
+    text-align: center;
     left: 50%;
+    width: 90%;
     transform: translateX(-50%);
     top: -80px;
 }
@@ -64,10 +89,19 @@
     }
 
     #FAQ {
-        top: 0px;
+        top: -10vh;
     }
 
     #informations::-webkit-scrollbar {
         width: 12px;
+    }
+
+    ul,
+    ol>ol {
+        padding-inline-start: 20px;
+    }
+
+    .main-list>span {
+        margin-left: 0px;
     }
 }

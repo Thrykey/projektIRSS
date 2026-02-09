@@ -625,6 +625,9 @@
     background: rgb(208, 208, 208);
     transition: border .3s ease, background 0.3s ease;
 
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     &:focus {
         outline: none;
         border-color: none;

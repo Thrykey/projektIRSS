@@ -14,7 +14,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-touch-icon.png" />
     <link rel="manifest" href="../assets/favicons/site.webmanifest" />
 
-    <script type="module" src="../src/DragNScroll.js"></script>
+    <!-- <script type="module" src="../src/DragNScroll.js"></script> -->
+    <!-- wylaczone, bo na MacOS dziwnie dziala zaznaczanie, user-select: none nie działa odpowiednio -->
 </head>
 
 <body>
@@ -27,132 +28,87 @@
             <h1 id="FAQ">FAQ</h1>
             <div id="informations">
                 <span>
-                    <h2>1. Jak działa system zapisów?</h2>
-                    <ul>
-                        <li>Każdy rocznik ma <strong>unikalny link do zapisów</strong>, który generuje starosta.</li>
-                        <li>Studenci wypełniają formularz, podając swoje </trong>preferencje grup</strong> w kolejności
-                            od
-                            najbardziej do najmniej preferowanej. </li>
-                        <li>Po zakończeniu zapisów uruchamiany jest algorytm, który automatycznie przydziela studentów
-                            do
-                            grup,
-                            biorąc pod uwagę: </li>
-                        <ol>
-                            <li>preferencje zgłoszone przez studentów</li>
-                            <li>limit miejsc w każdej grupie</li>
-                            <li>kolejność zgłoszeń (starsze zgłoszenia mają pierwszeństwo)</li>
-                        </ol>
-                    </ul>
-                </span>
-                <span>
-                    <h2>2. Kto zarządza procesem i panelem?</h2>
-                    <ul>
-                        <li><strong>Starosta</strong> jest osobą uprzywilejowaną z dostępem do panelu administracyjnego.
-                        </li>
-
-                        <li>Panel pozwala:
-                            <ol>
-                                <li>generować linki dla roczników</li>
-                                <li>ustawiać liczbę grup i limity miejsc</li>
-                                <li>pobierać listy zapisów w formie Excel/XLSX</li>
-                                <li><strong>Sekretariat i inne jednostki uczelni nie mają dostępu panelu</strong>
-                                    ani nie odpowiadają za działanie systemu.</li>
-                            </ol>
-                        </li>
-                    </ul>
-                </span>
-                <span>
-                    <h2>3. Co zrobić, jeśli nie dostałem się do preferowanej grupy?</h2>
-                    <ul>
-                        <li>System <strong>automatycznie przydziela grupy według algorytmu</strong>.</li>
-                        <li>Kolejność zgłoszeń i limit miejsc w grupach decydują o wyniku.</li>
-                        <li><strong>Wszystkie decyzje są ostateczne w systemie.</strong></li>
-                        <li>W przypadku nieprzydzielenia do preferowanej grupy, prosimy <strong>nie kierować skarg do
-                                sekretariatu</strong></li>
-                        <li>sekretariat nie odpowiada za działanie systemu.</li>
-                    </ul>
-                </span>
-                <span>
-                    <h2>4. Czy mogę zgłosić problem z systemem?</h2>
-                    <ul>
-                        <li>Tak, jeśli wystąpią <strong>problemy techniczne</strong> (np. błędy w formularzu, brak
-                            możliwości
-                            wysłania
-                            zgłoszenia), należy zgłosić je <strong>bezpośrednio do starosty</strong> odpowiedzialnego za
-                            rocznik, który
-                            przekaże informacje <strong>SKNI</strong>.</li>
-                        <li><strong>Sekretariat nie odpowiada za błędy systemu ani za przydziały grup.</strong></li>
-                    </ul>
-                </span>
-                <span>
-                    <h2>5. Czy można zmienić liczbę grup lub limity miejsc w trakcie <br>zapisów</h2>
-                    <ul>
-                        <li><strong>Nie.</strong></li>
-                        <li>Jeśli jedna grupa nie otworzy się z powodu zbyt małej liczby zapisanych osób, wówczas
-                            następuje <strong>zmiana grafiku zajęć</strong> i wymaga <strong>ponownego ustalenia grup i
-                                limitów</strong>.</li>
-                        <li>Zmiana liczby grup lub limitów miejsc wymaga <strong>ponownego uruchomienia całego procesu
-                                zapisów</strong>:
-                            <ol>
-                                <li>generowania linków,</li>
-                                <li>wprowadzenia limitów w panelu,</li>
-                                <li> ponownego przydzielania studentów.</li>
-                            </ol>
-                        </li>
-                        <li>Zmiany te są częścią planowania i organizacji, <strong></strong>nie wynikają z decyzji
-                            sekretariatu <br>lecz podmiotów nadrzędnych</strong>.</li>
-                    </ul>
-                </span>
-                <span>
-                    <h2>6. Potencjalne zamiany osób w grupach po przydziale</h2>
-                    <ul>
-                        <li>Jeśli po przypisaniu do grup pojawi się potrzeba <strong>zamiany osób między
-                                grupami</strong>, należy
-                            zgłosić to <strong>do starosty.</strong></li>
-                        <li>Starosta przekazuje następnie <strong>jedną zbiorczą wiadomość</strong> do sekretariatu z
-                            listą osób do zamiany.</li>
-                        <li>Pozwala to na sprawne wprowadzenie korekt <strong>bez indywidualnych skarg od
-                                studentów</strong>.</li>
-                    </ul>
+                    <h2>1. Czy wybór grupy na tej platformie jest ostateczny i gwarantowany?</h2>
+                    <span>Nie. Platforma jest narzędziem pomocniczym, służącym do zebrania preferencji studentów.
+                        Ostateczne listy grup oraz decyzje o przydziale należą do prowadzącego zajęcia lub dziekanatu.
+                        Dane stąd służą usprawnieniu procesu.</span>
                 </span>
 
                 <span>
-                    <h2>7. Czy istnieją alternatywy lub inne systemy?</h2>
-                    <ul>
-                        <li>Być może tak, jednak ten system został zaprojektowany jako <strong>narzędzie pomocnicze dla
-                                studentów</strong>,
-                            zapewniające szybki i przejrzysty proces zapisów.</li>
-                        <li>Nie gwarantujemy, że jest to rozwiązanie idealne – <strong>system działa zgodnie z jego
-                                aktualną logiką
-                                oraz algorytmem przydziału</strong>.</li>
-                    </ul>
+                    <h2>2. Czy muszę zakładać konto i hasło?</h2>
+                    <span>Nie. Platforma nie wymaga rejestracji ani logowania. Wystarczy wejść w link udostępniony przez
+                        organizatora, podać swój adres e-mail (oraz go potwierdzić) i dokonać wyboru.</span>
                 </span>
 
                 <span>
-                    <h2>8. Dostęp do danych i prywatność</h2>
-                    <ul>
-                        <li>Dane studentów (adres e-mail uczelniany, numer albumu, zgłoszone preferencje) są
-                            przechowywane
-                            <strong>tymczasowo</strong> i <strong>wyłącznie w celu realizacji zapisów</strong>.
-                        </li>
-                        <li>Dane mogą być usuwane po określonym czasie (np. <strong>3 dni po zakończeniu
-                                zapisów</strong>) w celu
-                            oszczędzania pamięci i ochrony prywatności.</li>
-                    </ul>
+                    <h2>3. Nie otrzymałem maila z potwierdzeniem. Czy mój głos został zapisany?</h2>
+                    <span>Jeśli po wysłaniu formularza zobaczyłeś ekran z potwierdzeniem (np. „Dziękujemy, Twój wybór
+                        został zapisany”), to głos jest w bazie. Maile z potwierdzeniem nie są wysyłane.</span>
                 </span>
 
                 <span>
-                    <h2>9. Kod źródłowy systemu</h2>
-                    <ul>
-                        <li>Kod systemu zapisów jest <strong>dostępny publicznie na GitHubie</strong>.</li>
-                        <li>Osoby zainteresowane działaniem algorytmu i logiką systemu mogą zapoznać się z repozytorium,
-                            aby
-                            <strong>uniknąć niedopowiedzeń</strong>.
-                        </li>
-                        <li>Link do repozytorium: <strong><a href="https://github.com/0x024e/zapisyGrupowe"
-                                    target="_blank">[link]</a></strong></li>
-                    </ul>
+                    <h2>4. Dlaczego muszę podawać adres e-mail?</h2>
+                    <span>Adres e-mail służy do unikalnej identyfikacji studenta i zapobiegania wielokrotnemu głosowaniu
+                        przez tę samą osobę. Jest to niezbędne do rzetelnego przeprowadzenia podziału na grupy.</span>
                 </span>
+
+                <span>
+                    <h2>5. Czy moje dane są bezpieczne?</h2>
+                    <span>Tak. Połączenie ze stroną jest szyfrowane (HTTPS). Twoje dane są dostępne wyłącznie dla
+                        organizatorów zapisów i nie są przekazywane podmiotom trzecim.</span>
+                </span>
+
+                <span>
+                    <h2>6. Kto jest administratorem moich danych?</h2>
+                    <span>Administratorem danych w ramach tego projektu jest Mikołaj Fiszer. Szczegóły znajdziesz w
+                        Klauzuli Informacyjnej dostępnej w formularzu.</span>
+                </span>
+
+                <span>
+                    <h2>7. Jak działa system zapisów?</h2>
+                    <span>Każdy rocznik ma unikalny link do zapisów, który generuje starosta. Studenci wypełniają
+                        formularz, podając swoje preferencje grup w kolejności od najbardziej do najmniej preferowanej.
+                        Po zakończeniu zapisów starosta uruchamia algorytm, który automatycznie przydziela studentów do
+                        grup, biorąc pod uwagę preferencje studentów, limit miejsc oraz kolejność zgłoszeń.</span>
+                </span>
+
+                <span>
+                    <h2>8. Kto zarządza procesem i panelem?</h2>
+                    <span>Starosta posiada dostęp do panelu administracyjnego umożliwiającego generowanie linków,
+                        ustawianie liczby grup i limitów miejsc oraz pobieranie list zapisów. Sekretariat i inne
+                        jednostki uczelni nie mają dostępu do panelu.</span>
+                </span>
+
+                <span>
+                    <h2>9. Potencjalne zamiany osób w grupach po przydziale</h2>
+                    <span>Zmiany należy zgłaszać do starosty, który przekazuje jedną zbiorczą wiadomość do sekretariatu
+                        z listą osób do zamiany.</span>
+                </span>
+
+                <span>
+                    <h2>10. Co zrobić, jeśli nie dostałem się do preferowanej grupy?</h2>
+                    <span>System automatycznie przydziela grupy według algorytmu. Kolejność zgłoszeń i limity miejsc
+                        decydują o wyniku. Prosimy nie kierować skarg do sekretariatu.</span>
+                </span>
+
+                <span>
+                    <h2>11. Gdzie mogę zgłosić problem z systemem?</h2>
+                    <span>Problemy techniczne należy zgłaszać do starosty odpowiedzialnego za rocznik, który przekaże je
+                        Mikołajowi Fiszerowi.</span>
+                </span>
+
+                <span>
+                    <h2>12. Czy istnieją alternatywy lub inne systemy?</h2>
+                    <span>Być może, jednak obecny system jest narzędziem pomocniczym działającym zgodnie z aktualną
+                        logiką i algorytmem.</span>
+                </span>
+
+                <span>
+                    <h2>13. Dostęp do danych i prywatność</h2>
+                    <span>Dane studentów są przechowywane tymczasowo i mogą zostać usunięte 3 dni po zakończeniu
+                        zapisów.</span>
+                </span>
+
 
             </div>
             <div class="rightLine"></div>

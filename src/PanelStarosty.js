@@ -110,7 +110,7 @@ async function loadCampaigns() {
 
     try {
         const idResponse = await getMe();
-        const campaignIds = await idResponse.json();
+        const campaignIds = await idResponse.json().campaign_id;
 
         for (const id of campaignIds) {
             const detailResponse = await fetch(APIUrl + `/admin/campaigns/${id}`, {
@@ -276,6 +276,12 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
                 showSuccesColors(infoGather)
                 setDisplayByElement('copyLink', 'block')
                 setTextContentByElement('copyLink', resData.invitation.invite_link)
+                setTextContentByElement('confirmationLink', 'Link wygenerowany poprawnie!')
+                break
+            case 403:
+                console.error('Błąd 403 - brak uprawnień')
+                showErrorColors(infoGather)
+                setTextContentByElement('confirmationLink', 'Błąd 403 - brak uprawnień')
                 break
             case 404:
                 console.error('Błąd 404 - brak odpowiedzi')

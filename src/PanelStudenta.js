@@ -77,36 +77,22 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
-
-if (urlIncludes('access_token')) {
-    sessionStorage.setItem('access_token', urlIncludes('access_token'))
-    console.log('Zapisano JWT pomyślnie, usuwanie z URL');
-
-    removeQueryParam('access_token')
-}
-// localStorage.removeItem('token')
-function reactToJWT() {
-    if (!sessionStorage.getItem('access_token')) {
+function isLoggedIn() {
+    if (!sessionStorage.getItem('loggedIn')) {
         window.location.href = (urlIncludes('code') != null) ? './pages/Logowanie.html?code=' + urlIncludes('code') : './pages/Logowanie.html'
         return
     }
 }
-// reactToJWT()
+// isLoggedIn()
 
 
 // API CALLS
 
 
-// getMe()
+getMe()
 
 async function sendPreferences() {
     try {
-        // const token = sessionStorage.getItem('access_token')
-        // if (!token) {
-        //     console.warn('Brak tokenu!');
-        //     return
-        // }
-        // getDashboard()
         const data = getCurrentPreferences()
 
         console.log(JSON.stringify(data));
