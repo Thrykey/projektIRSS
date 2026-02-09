@@ -105,6 +105,27 @@ document.querySelectorAll('.powrot button').forEach(button => {
     })
 })
 
+// async function availableCampaigns() {
+//     try {
+//         const response = await fetch(APIUrl + '/users/available-campaigns', {
+//             method: 'GET',
+//             credentials: 'include',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             }
+//         });
+
+//         if (!response.ok) throw new Error('Błąd w API');
+
+//         const data = await response.json();
+//         return data.campaigns || [];
+//     } catch (err) {
+//         console.error('Błąd przy pobieraniu dostępnych kampanii:', err);
+//         return [];
+//     }
+// }
+
+
 async function loadCampaigns() {
     const container = document.getElementById('campaignsContainer');
 

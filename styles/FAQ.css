@@ -73,27 +73,31 @@ h2 {
 
 
 #FAQ {
-    position: absolute;
+    position: relative;
     text-align: center;
-    left: 50%;
-    width: 90%;
-    transform: translateX(-50%);
-    top: -80px;
+    align-self: center;
+    width: 100%;
+    top: -10%;
 }
 
 @media (max-width: 1100px) {
-    #informations {
-        margin-top: 80px;
-        width: 90svw;
-        padding: 5svw;
+    #FAQ {
+        position: relative;
+        height: 10vh;
+        top: 0;
+        transform: none;
+        width: 90vw;
     }
 
-    #FAQ {
-        top: -10vh;
+    #informations {
+        margin-top: 0;
+        width: 90svw;
+        padding: 5svw;
+        height: 80vh;
     }
 
     #informations::-webkit-scrollbar {
-        width: 12px;
+        width: 9px;
     }
 
     ul,
