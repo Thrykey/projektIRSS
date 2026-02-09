@@ -1,7 +1,14 @@
-import { setDisplayByElement, setTextContentByElement, urlIncludes, appendQueryParam, removeQueryParam, APIUrl, showErrorColors, showSuccesColors } from './Utils.js'
+import {
+    setDisplayByElement, setTextContentByElement,
+    urlIncludes, appendQueryParam, removeQueryParam,
+    APIUrl, showErrorColors, showSuccesColors, getMe
+} from './Utils.js'
 import { CookieHandler } from './CookieHandler.js'
 
-// const me = getMe()
+const me = getMe()
+
+console.log(me);
+
 
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
