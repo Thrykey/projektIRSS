@@ -162,7 +162,7 @@ async function loadCampaigns() {
             const card = document.createElement('div');
             card.classList.add('campaignCard');
             card.classList.add('show');
-            card.classList.add(campaign.is_active ? 'active' : 'inactive');
+            card.classList.add(!campaign.is_active ? 'active' : 'inactive');
 
             const titleEl = document.createElement('h3');
             titleEl.textContent = campaign.title.split(3)[0].toUpperCase();
@@ -178,9 +178,9 @@ async function loadCampaigns() {
 
 
             const btn = document.createElement('button');
-            btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
+            btn.textContent = !campaign.is_active ? 'Resolve' : 'Download';
             btn.addEventListener('click', async () => {
-                const url = campaign.is_active
+                const url = !campaign.is_active
                     ? `/admin/campaigns/${campaign.id}/resolve`
                     : `/admin/campaigns/${campaign.id}/download`;
 
@@ -194,14 +194,14 @@ async function loadCampaigns() {
                     });
                     if (!response.ok) throw new Error('Błąd w API');
 
-                    if (campaign.is_active) {
+                    if (!campaign.is_active) {
                         campaign.is_active = false;
                         card.classList.remove('active');
                         card.classList.add('inactive');
                         btn.textContent = 'Download';
                     }
 
-                    if (!campaign.is_active) {
+                    if (campaign.is_active) {
                         const blob = await response.blob();
                         const downloadUrl = URL.createObjectURL(blob);
                         const a = document.createElement('a');
