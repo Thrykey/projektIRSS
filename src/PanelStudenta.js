@@ -76,7 +76,11 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
-function isLoggedIn() {
+
+async function isLoggedIn() {
+    const me = await getMe()
+    console.log(me);
+
     if (!sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
         window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
@@ -84,7 +88,6 @@ function isLoggedIn() {
 }
 console.log(sessionStorage.getItem('loggedIn'));
 
-isLoggedIn()
 
 async function sendPreferences() {
     try {
@@ -128,6 +131,7 @@ async function sendPreferences() {
 
 document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup()
+    isLoggedIn()
 
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
 
