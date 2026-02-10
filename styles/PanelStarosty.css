@@ -744,6 +744,11 @@
     pointer-events: all;
 }
 
+.campaignCard.hide {
+    opacity: 1;
+    pointer-events: all;
+}
+
 
 .campaignCard::before {
     content: "";

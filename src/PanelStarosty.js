@@ -175,7 +175,7 @@ async function loadCampaigns() {
 
             const card = document.createElement('div');
             card.classList.add('campaignCard');
-            card.classList.add('show');
+            card.classList.add('hide');
             card.classList.add(campaign.is_active ? 'active' : 'inactive');
 
             const titleEl = document.createElement('h3');
@@ -215,6 +215,8 @@ async function loadCampaigns() {
 
                     if (campaign.is_active) {
                         console.log('resloving campaign');
+                        const resData = await response.json();
+                        console.log('Kampania zamknięta:', resData);
                         campaign.is_active = false;
                         card.classList.remove('active');
                         card.classList.add('inactive');
@@ -248,6 +250,11 @@ async function loadCampaigns() {
             card.appendChild(footer);
 
             container.appendChild(card);
+
+            // Trigger animation
+            void card.offsetWidth;
+            card.classList.remove('hide');
+            card.classList.add('show');
         }
     } catch (error) {
         console.error('Błąd ładowania kampanii:', error);
