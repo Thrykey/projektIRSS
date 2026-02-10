@@ -78,18 +78,12 @@ function getCurrentPreferences() {
 // SPRAWDZANIE URL I REAKCJE
 
 function isLoggedIn() {
-    if (!sessionStorage.getItem('loggedIn')) {
+    if (!sessionStorage.getItem('loggedIn') || getMe() != null) {
         window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }
 isLoggedIn()
-
-
-// API CALLS
-
-
-getMe()
 
 async function sendPreferences() {
     try {

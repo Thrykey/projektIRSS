@@ -168,7 +168,10 @@ async function loadCampaigns() {
             card.classList.add(!campaign.is_active ? 'active' : 'inactive');
 
             const titleEl = document.createElement('h3');
-            titleEl.textContent = campaign.title.split(3)[0].toUpperCase();
+            const parts = campaign.title.split('-');
+            const firstPart = parts[0] ? parts[0].slice(0, 3) : '';
+            const rest = parts.length > 1 ? parts.slice(1).join('-') : '';
+            titleEl.textContent = (rest ? `${firstPart}-${rest}` : firstPart).toUpperCase();
 
             const registeredEl = document.createElement('p');
             registeredEl.textContent = `Zapisanych studentów: ${campaign.total_registered_students}`;
