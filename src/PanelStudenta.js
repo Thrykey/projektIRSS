@@ -33,9 +33,9 @@ function generujWyborGrup() {
     container.replaceChildren();
 
     const query = urlIncludes('group_id');
-    const match = query.slice(0, 3)[1].match(/-(\d+)G/i);
+    const match = query.split('-')[1].match(/(\d+)G/i);
     console.log(query, match);
-    console.log(query.slice(0, 3)[1]);
+    console.log(query.split('-')[1]);
 
 
 
