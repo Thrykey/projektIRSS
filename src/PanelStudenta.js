@@ -79,7 +79,10 @@ function getCurrentPreferences() {
 
 function isLoggedIn() {
     if (!sessionStorage.getItem('loggedIn') || getMe() != null) {
-        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
+        alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
+        console.log(getMe());
+        console.log(sessionStorage.getItem('LoggedIn'));
+        // window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }
