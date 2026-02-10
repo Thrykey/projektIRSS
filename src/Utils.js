@@ -176,7 +176,9 @@ export async function getMe() {
             SesessionStorage.setItem("loggedIn", true)
             return me
 
-        default: SesessionStorage.setItem("loggedIn", false)
+        default:
+            SesessionStorage.setItem("loggedIn", false)
+            return null
     }
 }
 
