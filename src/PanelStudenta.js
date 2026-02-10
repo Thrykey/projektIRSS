@@ -32,7 +32,7 @@ function generujWyborGrup() {
 
     container.replaceChildren();
 
-    const query = urlIncludes('invite');
+    const query = urlIncludes('group_id');
     const match = query.slice(0, 3)[1].match(/-(\d+)G/i);
     console.log(query, match);
     console.log(query.slice(0, 3)[1]);
