@@ -222,8 +222,8 @@ async function checkIfLoggedIn() {
     const me = await getMe();
     if (me) {
         const meStr = await me.json()
-        if (meStr.role == 'starosta') window.location.href = './PanelStarosty.html'
-        else window.location.href = '../'
+        if (meStr.role == 'starosta') alert('Jesteś zalogowany jako starosta'), window.location.href = './PanelStarosty.html'
+        else alert('Jesteś zalogowany jako student'), window.location.href = '../?group_id=' + urlIncludes('group_id')
     }
 }
 
