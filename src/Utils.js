@@ -163,7 +163,7 @@ export const APIUrl = 'https://irss-backend.onrender.com'
 
 export async function getMe() {
     const cached = sessionStorage.getItem("loggedIn")
-    if (cached) return JSON.parse(cached), console.log("cached")
+    if (cached != false) return JSON.parse(cached), console.log("cached")
 
     const me = await fetch(APIUrl + "/users/dashboard", {
         method: "GET",
