@@ -90,6 +90,9 @@ document.querySelectorAll('.powrot button').forEach(button => {
         e.target.parentElement.classList.remove('show')
         e.target.parentElement.classList.add('hide')
 
+        document.getElementById('infoGather').classList.remove('show')
+        document.getElementById('infoGather').classList.add('hide')
+
         gridLayout.classList.remove('show')
         gridLayout.classList.add('hide')
         document.getElementById('aktywneKampanie').classList.remove('show')
@@ -406,6 +409,7 @@ submitButton[0].addEventListener('click', (e) => {
         document.getElementById('gridLayout').classList.add('hide')
         setDisplayByElement('infoGather', 'grid')
         setTimeout(() => {
+            document.getElementById('infoGather').classList.remove('hide')
             document.getElementById('infoGather').classList.add('show')
 
 

@@ -561,6 +561,11 @@
     pointer-events: all;
 }
 
+#infoGather.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
 #infoGather .success,
 #infoGather .error {
     position: absolute;
