@@ -185,11 +185,11 @@ async function loadCampaigns() {
 
 
             const btn = document.createElement('button');
-            btn.textContent = !campaign.is_active ? 'Resolve' : 'Download';
+            btn.textContent = !campaign.is_active ? 'Download' : 'Resolve';
             btn.addEventListener('click', async () => {
                 const url = !campaign.is_active
-                    ? `/admin/campaigns/${campaign.id}/resolve`
-                    : `/admin/campaigns/${campaign.id}/download`;
+                    ? `/admin/campaigns/${campaign.id}/download`
+                    : `/admin/campaigns/${campaign.id}/resolve`;
 
                 try {
                     const response = await fetch(APIUrl + url, {
