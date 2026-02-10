@@ -173,11 +173,11 @@ export async function getMe() {
     const status = me.status
     switch (status) {
         case 200:
-            SesessionStorage.setItem("loggedIn", true)
+            sessionStorage.setItem("loggedIn", true)
             return me
 
         default:
-            SesessionStorage.setItem("loggedIn", false)
+            sessionStorage.setItem("loggedIn", false)
             return null
     }
 }
