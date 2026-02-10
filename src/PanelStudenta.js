@@ -77,16 +77,16 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
-function isLoggedIn() {
-    if (!sessionStorage.getItem('loggedIn') || getMe() != null) {
+async function isLoggedIn() {
+    if (await getMe() != null && !sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-        console.log(getMe());
+        console.log(await getMe());
         console.log(sessionStorage.getItem('LoggedIn'));
         // window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }
-isLoggedIn()
+await isLoggedIn()
 
 async function sendPreferences() {
     try {
@@ -115,18 +115,18 @@ async function sendPreferences() {
             case 401:
                 console.error('Błąd 401 - brak permisji')
                 showErrorColors(feedback)
-                setTextContentByElement('feedbackSpan', 'Błąd 401 - brak permisji')
+                setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 401 - brak permisji')
                 break
             case 404:
                 console.error('Błąd 404 - brak odpowiedzi')
                 showErrorColors(feedback)
-                setTextContentByElement('feedbackSpan', 'Błąd 404 - brak odpowiedzi')
+                setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 404 - brak odpowiedzi')
                 break
             case 422:
                 console.error('Błąd 422 - niepoprawne dane:')
                 console.table(resData.detail)
                 showErrorColors()
-                setTextContentByElement('feedbackSpan', 'Błąd 422 - niepoprawne dane:')
+                setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 422 - niepoprawne dane')
                 break
 
             default:
