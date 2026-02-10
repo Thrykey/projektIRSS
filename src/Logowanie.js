@@ -16,6 +16,7 @@ let prosbaKodu = document.getElementById("prosbaKodu");
 
 document.addEventListener('DOMContentLoaded', () => {
     prosbaKodu = document.getElementById("prosbaKodu");
+    checkIfLoggedIn()
 });
 
 
@@ -217,6 +218,14 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 })
 
 
+async function checkIfLoggedIn() {
+    const me = await getMe();
+    if (me) {
+        const meStr = await me.json()
+        if (meStr.role == 'starosta') window.location.href = './PanelStarosty.html'
+        else window.location.href = '../'
+    }
+}
 
 
 async function sendVerReq(userEmail, indexValue) {
