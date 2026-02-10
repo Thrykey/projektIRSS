@@ -29,14 +29,6 @@ maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOso
 maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 
-const me = getMe()
-
-console.log(getMe());
-console.log(me);
-console.log(sessionStorage.getItem('loggedIn'));
-
-
-
 const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
@@ -117,11 +109,20 @@ async function availableCampaigns() {
                 'Content-Type': 'application/json'
             }
         });
-
-        if (!response.ok) throw new Error('Błąd w API');
-
         const data = await response.json();
-        return data.created_campaigns || [];
+
+        switch (response.status) {
+            case 200:
+                return data.created_campaigns || [];
+            case 401:
+                alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
+                window.location.href = './pages/Logowanie.html'
+                return [];
+            default:
+                console.error(`Nieoczekiwany status: ${response.status}`);
+                return [];
+        }
+
     } catch (err) {
         console.error('Błąd przy pobieraniu dostępnych kampanii:', err);
         return [];
