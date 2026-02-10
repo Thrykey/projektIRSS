@@ -515,6 +515,8 @@ body {
             width: 70vw;
             height: 50vh;
             align-content: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     }
 

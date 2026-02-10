@@ -4,10 +4,7 @@ import {
     showSuccesColors, APIUrl, getMe
 } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
-import { CookieHandler } from './CookieHandler.js';
 
-
-const cookies = new CookieHandler();
 const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
 const feedback = document.getElementById('feedbackWyslania')
 

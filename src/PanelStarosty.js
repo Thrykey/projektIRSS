@@ -116,7 +116,7 @@ async function availableCampaigns() {
                 return data.created_campaigns || [];
             case 401:
                 alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-                window.location.href = './pages/Logowanie.html'
+                window.location.href = './Logowanie.html'
                 return [];
             default:
                 console.error(`Nieoczekiwany status: ${response.status}`);
@@ -189,7 +189,7 @@ async function loadCampaigns() {
             btn.addEventListener('click', async () => {
                 const url = !campaign.is_active
                     ? `/admin/campaigns/${campaign.id}/download`
-                    : `/admin/campaigns/${campaign.id}/resolve`;
+                    : `/admin/campaigns/${campaign.id}/resolve?force=false`;
 
                 try {
                     const response = await fetch(APIUrl + url, {
