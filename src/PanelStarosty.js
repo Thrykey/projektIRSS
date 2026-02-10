@@ -98,6 +98,7 @@ document.querySelectorAll('.powrot button').forEach(button => {
     })
 })
 
+const me = await getMe();
 console.log(sessionStorage.getItem('loggedIn'));
 
 async function availableCampaigns() {
@@ -145,6 +146,9 @@ async function loadCampaigns() {
                 }
             });
             const campaign = await detailResponse.json();
+
+            console.log(campaign);
+
 
             const now = new Date();
             const endsAt = new Date(campaign.ends_at);
