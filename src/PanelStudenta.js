@@ -25,8 +25,6 @@ function createGroupDiv(number) {
 }
 
 function generujWyborGrup() {
-    console.log('testowanie');
-
     const container = document.querySelector('.wybor');
     if (!container) return false;
 
@@ -78,22 +76,21 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
-await getMe()
-
 async function isLoggedIn() {
-    if (await getMe() != null && !sessionStorage.getItem('loggedIn')) {
+    const me = await getMe()
+    if (await me != null && !sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
         window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
-    console.log(getMe());
+    console.log(me);
     console.log(sessionStorage.getItem('loggedIn'));
 }
 await isLoggedIn()
 
 async function sendPreferences() {
     try {
-        const data = getCurrentPreferences()
+        const data = { invite: urlIncludes('invite'), ...getCurrentPreferences() }
 
         console.log(JSON.stringify(data));
 
@@ -119,20 +116,12 @@ async function sendPreferences() {
                 showErrorColors(feedback)
                 setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 401 - brak permisji')
                 break
-            case 404:
-                console.error('Błąd 404 - brak odpowiedzi')
-                showErrorColors(feedback)
-                setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 404 - brak odpowiedzi')
-                break
-            case 422:
-                console.error('Błąd 422 - niepoprawne dane:')
-                console.table(resData.detail)
-                showErrorColors()
-                setTextContentByElement('feedbackSpan', resData.detail || 'Błąd 422 - niepoprawne dane')
-                break
 
             default:
                 console.warn(`Nieoczekiwany status: ${status}`, resData);
+                showErrorColors(feedback)
+                setTextContentByElement('feedbackSpan', resData.detail || `Nieoczekiwany status: ${status}`)
+                break;
         }
     } catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
@@ -145,10 +134,8 @@ async function sendPreferences() {
 // EVENT LISTENERY
 
 document.addEventListener('DOMContentLoaded', () => {
-    let generating = false
-    while (!generating) {
-        setTimeout(() => { generating = generujWyborGrup() }, 100)
-    }
+    generujWyborGrup()
+
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
 
     document.getElementById('wniosekBtn').disabled = false
