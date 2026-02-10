@@ -84,9 +84,7 @@ function getCurrentPreferences() {
 async function isLoggedIn() {
     if (await getMe() != null && !sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-        console.log(await getMe());
-        console.log(sessionStorage.getItem('LoggedIn'));
-        // window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
+        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
 }

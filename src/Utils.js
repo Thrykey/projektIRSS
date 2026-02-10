@@ -170,9 +170,14 @@ export async function getMe() {
         credentials: "include"
     }).then(res => res.json())
 
-    sessionStorage.setItem("loggedIn", true)
+    const status = me.status
+    switch (status) {
+        case 200:
+            SesessionStorage.setItem("loggedIn", true)
+            return me
 
-    return me
+        default: SesessionStorage.setItem("loggedIn", false)
+    }
 }
 
 function pad(n) {
