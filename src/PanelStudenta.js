@@ -13,8 +13,6 @@ const feedback = document.getElementById('feedbackWyslania')
 
 // GRUPY
 
-getMe()
-
 function createGroupDiv(number) {
     const div = document.createElement('div');
     div.className = 'wyborGrupyLabolatoryjnej';
@@ -27,17 +25,15 @@ function createGroupDiv(number) {
 }
 
 function generujWyborGrup() {
+    console.log('testowanie');
+
     const container = document.querySelector('.wybor');
-    if (!container) return;
+    if (!container) return false;
 
     container.replaceChildren();
 
     const query = urlIncludes('group_id');
     const match = query.split('-')[1].match(/(\d+)G/i);
-    console.log(query, match);
-    console.log(query.split('-')[1]);
-
-
 
     if (!match) {
         container.appendChild(createSpan(
@@ -48,7 +44,7 @@ function generujWyborGrup() {
         setDisplayByElement('wyboryGrupoweSpanMobile', 'none');
         setDisplayByElement('wyslijWniosek', 'none');
         // alert('Link jest niepoprawny ')
-        return;
+        return false;
     }
 
     const iloscGrup = parseInt(match[1], 10);
@@ -60,6 +56,7 @@ function generujWyborGrup() {
     }
 
     container.appendChild(createSpan('Najmniej', 'najmniejSpan'));
+    return true
 }
 
 function getCurrentPreferences() {
@@ -81,12 +78,16 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
+await getMe()
+
 async function isLoggedIn() {
     if (await getMe() != null && !sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
         window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
         return
     }
+    console.log(getMe());
+    console.log(sessionStorage.getItem('loggedIn'));
 }
 await isLoggedIn()
 
@@ -98,7 +99,6 @@ async function sendPreferences() {
 
         const res = await fetch(APIUrl + '/student/register', {
             method: 'POST',
-            mode: "cors",
             credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
@@ -145,7 +145,10 @@ async function sendPreferences() {
 // EVENT LISTENERY
 
 document.addEventListener('DOMContentLoaded', () => {
-    generujWyborGrup();
+    let generating = false
+    while (!generating) {
+        setTimeout(() => { generating = generujWyborGrup() }, 100)
+    }
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
 
     document.getElementById('wniosekBtn').disabled = false
