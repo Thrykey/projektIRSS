@@ -76,14 +76,14 @@ function getCurrentPreferences() {
 
 // SPRAWDZANIE URL I REAKCJE
 
-// const me = await getMe();
-
 function isLoggedIn() {
     if (!sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
         window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
     }
 }
+console.log(sessionStorage.getItem('loggedIn'));
+
 isLoggedIn()
 
 async function sendPreferences() {
