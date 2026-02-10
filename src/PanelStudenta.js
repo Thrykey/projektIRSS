@@ -92,7 +92,7 @@ await isLoggedIn()
 
 async function sendPreferences() {
     try {
-        const data = { invite: urlIncludes('invite'), ...getCurrentPreferences() };
+        const data = getCurrentPreferences()
 
         console.log(JSON.stringify(data));
 
