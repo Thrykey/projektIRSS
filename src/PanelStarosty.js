@@ -145,6 +145,12 @@ async function loadCampaigns() {
                     'Content-Type': 'application/json'
                 }
             });
+
+            if (!detailResponse.ok) {
+                console.error(`Błąd pobierania kampanii ${id}: ${detailResponse.status}`);
+                continue;
+            }
+
             const campaign = await detailResponse.json();
 
             console.log(campaign);
@@ -195,6 +201,9 @@ async function loadCampaigns() {
                     ? `/admin/campaigns/${campaign.id}/resolve?force=false` : `/admin/campaigns/${campaign.id}/download`;
 
                 try {
+                    btn.disabled = true;
+                    btn.textContent = campaign.is_active ? 'Zamykanie...' : 'Pobieranie...';
+
                     const response = await fetch(APIUrl + url, {
                         method: 'POST',
                         credentials: 'include',
@@ -202,27 +211,33 @@ async function loadCampaigns() {
                             'Content-Type': 'application/json'
                         },
                     });
-                    if (!response.ok) throw new Error('Błąd w API');
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
                     if (campaign.is_active) {
+                        console.log('resloving campaign');
                         campaign.is_active = false;
                         card.classList.remove('active');
                         card.classList.add('inactive');
                         btn.textContent = 'Download';
+                        btn.disabled = false;
                     }
-
-                    if (!campaign.is_active) {
+                    else {
+                        console.log('downloading campaign');
                         const blob = await response.blob();
                         const downloadUrl = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = downloadUrl;
-                        a.download = `${campaign.title}`;
+                        a.download = `${campaign.title}.xlsx`;
                         a.click();
                         URL.revokeObjectURL(downloadUrl);
+                        btn.disabled = false;
                     }
 
                 } catch (err) {
                     console.error('Błąd przy wywołaniu akcji kampanii:', err);
+                    btn.disabled = false;
+                    btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
+                    alert(`Błąd: ${err.message}`);
                 }
             });
 
