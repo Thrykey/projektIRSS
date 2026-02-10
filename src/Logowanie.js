@@ -3,11 +3,6 @@ import {
     urlIncludes, appendQueryParam, removeQueryParam,
     APIUrl, showErrorColors, showSuccesColors, getMe
 } from './Utils.js'
-import { CookieHandler } from './CookieHandler.js'
-
-const me = getMe()
-
-console.log(me);
 
 
 const indexInput = document.getElementById('indexInput');
@@ -99,6 +94,8 @@ function checkUrlParams() {
     if (urlIncludes('uncover')) { uncover() }
 }
 checkUrlParams();
+
+console.log(sessionStorage.getItem('loggedIn'));
 
 if (urlIncludes('invite')) sessionStorage.setItem('invite', urlIncludes('invite'))
 console.log(urlIncludes('invite'));

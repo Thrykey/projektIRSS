@@ -1,4 +1,3 @@
-import { CookieHandler } from './CookieHandler.js'
 import {
     setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO,
     APIUrl, updateDisplayDate, showErrorColors, showSuccesColors, getMe
@@ -29,7 +28,6 @@ maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOso
 maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
 
-const cookies = new CookieHandler()
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
 const gridLayout = document.getElementById('gridLayout')
@@ -99,6 +97,8 @@ document.querySelectorAll('.powrot button').forEach(button => {
         }, 500);
     })
 })
+
+console.log(sessionStorage.getItem('loggedIn'));
 
 async function availableCampaigns() {
     try {
@@ -194,10 +194,10 @@ async function loadCampaigns() {
                 try {
                     const response = await fetch(APIUrl + url, {
                         method: 'GET',
+                        credentials: 'include',
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        credentials: 'include'
                     });
                     if (!response.ok) throw new Error('Błąd w API');
 
