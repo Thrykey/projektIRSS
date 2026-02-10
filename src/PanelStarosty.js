@@ -193,7 +193,7 @@ async function loadCampaigns() {
 
                 try {
                     const response = await fetch(APIUrl + url, {
-                        method: 'GET',
+                        method: 'POST',
                         credentials: 'include',
                         headers: {
                             'Content-Type': 'application/json'
