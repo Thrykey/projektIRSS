@@ -32,8 +32,12 @@ function generujWyborGrup() {
 
     container.replaceChildren();
 
-    const query = window.location.search.slice(1);
-    const match = query.match(/-(\d+)G-/i);
+    const query = urlIncludes('invite');
+    const match = query.slice(0, 3)[1].match(/-(\d+)G/i);
+    console.log(query, match);
+    console.log(query.slice(0, 3)[1]);
+
+
 
     if (!match) {
         container.appendChild(createSpan(
