@@ -293,14 +293,20 @@ async function sendVerReq(userEmail, indexValue) {
                 console.error('Błąd 422 - niepoprawne dane:')
                 console.table(resData.detail)
                 showErrorColors(prosbaKodu)
-                setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane:')
+                setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane: ' + (resData.detail ? resData.detail.map(err => err.msg).join(', ') : ''))
                 break
         }
     }
     catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
         showErrorColors(prosbaKodu)
-        setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${err}`)
+        let msg;
+        if (!data.invite && !passwd) msg = 'Nie wpisałeś hasła ani nie masz zaproszenia!'
+        else if (!data.invite) msg = 'Nie masz zaproszenia, sprawdź link otrzymany od starosty!'
+        else if (!data.index) msg = 'Index niepoprawny!'
+        else if (!data.email) msg = 'Mail niepoprawny!'
+
+        setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${msg || err}`)
     }
 
 }
