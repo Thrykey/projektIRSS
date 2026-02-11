@@ -220,11 +220,36 @@ document.getElementById('passwd').addEventListener('input', (e) => {
 
 async function checkIfLoggedIn() {
     const me = await getMe();
-    if (me) {
-        const meStr = await me.json()
-        if (meStr.role == 'starosta') alert('Jesteś zalogowany jako starosta'), window.location.href = './PanelStarosty.html'
-        else alert('Jesteś zalogowany jako student'), window.location.href = '../?group_id=' + urlIncludes('group_id')
+
+    if (!me) return;
+
+    const meStr = await me.json();
+
+    const invite = urlIncludes('invite');
+    const groupId = urlIncludes('group_id');
+    const dest = urlIncludes('dest');
+
+    // Jeśli zalogowany jako starosta i dest=panel -> przekieruj do panelu
+    if (meStr.role === 'starosta' && dest === 'panel') {
+        window.location.href = './PanelStarosty.html';
+        return;
     }
+
+    // Jeśli zalogowany i w URL występuje zarówno invite jak i group_id -> przekieruj zawsze
+    if (invite && groupId) {
+        const target = `../?group_id=${groupId}&invite=${invite}`;
+        window.location.href = target;
+        return;
+    }
+
+    //  Jeśli URL nie ma parametrów (np. /pages/Logowanie.html) i użytkownik to starosta -> panel
+    const hasQuery = new URL(window.location.href).search !== '';
+    if (!hasQuery && meStr.role === 'starosta') {
+        window.location.href = './PanelStarosty.html';
+        return;
+    }
+
+    // W pozostałych przypadkach - nie przekierowujemy
 }
 
 
