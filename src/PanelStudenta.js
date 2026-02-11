@@ -107,16 +107,13 @@ async function sendPreferences() {
         switch (status) {
             case 200:
                 console.log('Request wysłany poprawnie');
-                console.log(feedback);
                 showSuccesColors(feedback)
-                console.log(feedback);
+                setTextContentByElement('feedbackSpan', 'Wniosek został wysłany poprawnie!')
                 break;
 
             default:
                 console.warn(`Nieoczekiwany status: ${status}`, resData);
-                console.log(feedback);
                 showErrorColors(feedback)
-                console.log(feedback);
                 setTextContentByElement('feedbackSpan', resData.detail || `Nieoczekiwany status: ${status}`)
                 break;
         }

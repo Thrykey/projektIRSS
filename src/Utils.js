@@ -142,6 +142,7 @@ export function showErrorColors(element) {
 }
 
 export function showSuccesColors(element) {
+
     element.querySelector('.error').style.opacity = 0
     element.querySelector('.success').style.opacity = 1
     setTimeout(() => {
