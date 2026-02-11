@@ -90,6 +90,7 @@ document.querySelectorAll('.powrot button').forEach(button => {
         document.getElementById('aktywneKampanie').classList.add('hide')
         setTimeout(() => {
             document.getElementById('campaignsContainer').textContent = ''
+            document.getElementById('aktywneKampanie').style.overflow = 'hidden'
 
             if (window.innerWidth <= 1100) {
                 document.getElementById('gridLayout').style.height = '100vh'
@@ -181,6 +182,21 @@ async function loadCampaigns() {
             card.classList.add('hide');
             card.classList.add(campaign.is_active ? 'active' : 'inactive');
 
+            // add active/inactive and success/error overlay layers (under content)
+            const activeLayer = document.createElement('div');
+            activeLayer.className = 'cardActiveLayer';
+            const inactiveLayer = document.createElement('div');
+            inactiveLayer.className = 'cardInactiveLayer';
+            const successLayer = document.createElement('div');
+            successLayer.className = 'cardSuccess';
+            const errorLayer = document.createElement('div');
+            errorLayer.className = 'cardError';
+            // append layers first so content sits above them
+            card.appendChild(activeLayer);
+            card.appendChild(inactiveLayer);
+            card.appendChild(successLayer);
+            card.appendChild(errorLayer);
+
             const titleEl = document.createElement('h3');
             const parts = campaign.title.split('-');
             const firstPart = parts[0] ? parts[0].slice(0, 3) : '';
@@ -223,6 +239,9 @@ async function loadCampaigns() {
                         campaign.is_active = false;
                         card.classList.remove('active');
                         card.classList.add('inactive');
+                        // show success overlay on card briefly
+                        card.classList.add('action-success');
+                        setTimeout(() => card.classList.remove('action-success'), 1600);
                         btn.textContent = 'Download';
                         btn.disabled = false;
                     }
@@ -235,11 +254,17 @@ async function loadCampaigns() {
                         a.download = `${campaign.title}.xlsx`;
                         a.click();
                         URL.revokeObjectURL(downloadUrl);
+                        // show success overlay on card briefly
+                        card.classList.add('action-success');
+                        setTimeout(() => card.classList.remove('action-success'), 1600);
                         btn.disabled = false;
                     }
 
                 } catch (err) {
                     console.error('Błąd przy wywołaniu akcji kampanii:', err);
+                    // show error overlay briefly
+                    card.classList.add('action-error');
+                    setTimeout(() => card.classList.remove('action-error'), 2000);
                     btn.disabled = false;
                     btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
                     alert(`Błąd: ${err.message}`);
@@ -270,6 +295,7 @@ document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
     wybierzAkcje.classList.add('hide')
 
     document.getElementById('campaignsContainer').textContent = ''
+    document.getElementById('aktywneKampanie').style.overflow = 'unset'
 
     loadCampaigns();
     setTimeout(() => {

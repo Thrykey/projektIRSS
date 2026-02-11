@@ -705,13 +705,11 @@
 #aktywneKampanie.hide {
     opacity: 0;
     pointer-events: none;
-    overflow: hidden;
 }
 
 #aktywneKampanie.show {
     opacity: 1;
     pointer-events: all;
-    overflow: unset;
 }
 
 .campaignCard {
@@ -730,7 +728,7 @@
     opacity: 0;
     pointer-events: none;
 
-    background: linear-gradient(45deg, rgba(65, 140, 217, 0.8), rgba(86, 207, 248, 0.8));
+    background: transparent;
     overflow: hidden;
 
     transition: all 0.5s ease-in-out
@@ -742,8 +740,16 @@
 }
 
 .campaignCard.hide {
-    opacity: 1;
-    pointer-events: all;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.campaignCard.hide {
+    transform: translateY(10px);
+}
+
+.campaignCard.show {
+    transform: translateY(0);
 }
 
 
@@ -756,12 +762,47 @@
     opacity: 0.2;
     transform: scale(0.7);
     pointer-events: none;
-    z-index: 0;
+    z-index: -1;
 }
 
 .campaignCard>* {
     position: relative;
+    z-index: 2;
+}
+
+/* Card success / error overlay layers (fade via opacity) */
+.campaignCard .cardSuccess,
+.campaignCard .cardError {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
     z-index: 1;
+    pointer-events: none;
+}
+
+.campaignCard .cardSuccess {
+    background: linear-gradient(45deg,
+            rgba(15, 250, 132, 0.25) 0%,
+            rgba(15, 250, 93, 0.18) 100%);
+}
+
+.campaignCard .cardError {
+    background: linear-gradient(45deg,
+            rgba(250, 15, 15, 0.25) 0%,
+            rgba(250, 80, 80, 0.18) 100%);
+}
+
+/* Toggle overlays by adding action classes to the card */
+.campaignCard.action-success .cardSuccess {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.campaignCard.action-error .cardError {
+    opacity: 1;
+    pointer-events: all;
 }
 
 
@@ -770,41 +811,54 @@
 }
 
 .campaignCard.active {
-    background:
-        var(--SubstituteBlueGradient),
-        url("../assets/ZSLogo.png");
-    background-size: cover, scale(0.8);
-    background-position: center, center;
-    background-repeat: no-repeat, no-repeat;
-
-    &>p,
-    &>h3 {
-        background: linear-gradient(27deg, rgba(255, 255, 255, 0.4) 0%, rgb(150, 150, 150, 0.4) 100%);
-        border-radius: 6px;
-        padding: 5px;
-    }
+    /* visual handled by .cardActiveLayer */
 }
 
 .campaignCard.inactive {
-    background:
-        var(--MainOrangeGradient),
-        url("../assets/ZSLogo.png");
-    background-size: cover, scale(0.8);
-    background-position: center, center;
-    background-repeat: no-repeat, no-repeat;
+    /* visual handled by .cardInactiveLayer */
+}
 
-    &>p,
-    &>h3 {
-        background: linear-gradient(27deg, rgba(255, 255, 255, 0.3) 0%, rgb(150, 150, 150, 0.3) 100%);
-        border-radius: 6px;
-        padding: 5px;
-    }
+.campaignCard>p,
+.campaignCard>h3 {
+    background: linear-gradient(27deg, rgba(255, 255, 255, 0.35) 0%, rgb(150, 150, 150, 0.35) 100%);
+    border-radius: 6px;
+    padding: 5px;
 }
 
 .campaignCard .cardFooter {
     margin-top: 10px;
     display: flex;
     justify-content: flex-end;
+}
+
+/* Active / Inactive layers for smooth background transition */
+.campaignCard .cardActiveLayer,
+.campaignCard .cardInactiveLayer {
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.campaignCard .cardActiveLayer {
+    background:
+        var(--SubstituteBlueGradient);
+}
+
+.campaignCard .cardInactiveLayer {
+    background:
+        var(--MainOrangeGradient);
+}
+
+.campaignCard.active .cardActiveLayer {
+    opacity: 1;
+}
+
+.campaignCard.inactive .cardInactiveLayer {
+    opacity: 1;
 }
 
 .campaignCard button {
