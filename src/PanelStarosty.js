@@ -75,6 +75,7 @@ document.getElementById('nowaRejestracja').addEventListener('click', () => {
 
 document.querySelectorAll('.powrot button').forEach(button => {
 
+
     button.addEventListener('click', (e) => {
         document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
         e.target.parentElement.classList.remove('show')
@@ -88,6 +89,8 @@ document.querySelectorAll('.powrot button').forEach(button => {
         document.getElementById('aktywneKampanie').classList.remove('show')
         document.getElementById('aktywneKampanie').classList.add('hide')
         setTimeout(() => {
+            document.getElementById('campaignsContainer').textContent = ''
+
             if (window.innerWidth <= 1100) {
                 document.getElementById('gridLayout').style.height = '100vh'
                 document.getElementById('gridLayout').style.marginTop = '0vh'
