@@ -204,10 +204,10 @@ async function loadCampaigns() {
             titleEl.textContent = (rest ? `${firstPart}-${rest}` : firstPart).toUpperCase();
 
             const registeredEl = document.createElement('p');
-            registeredEl.textContent = `Zapisanych studentów: ${campaign.total_registered_students}`;
+            registeredEl.textContent = `Zapisanych: ${campaign.total_registered_students}`;
 
             const timeEl = document.createElement('p');
-            timeEl.textContent = `Pozostało czasu: ${timeLeftText}`;
+            timeEl.textContent = `Pozostało: ${timeLeftText}`;
 
             const footer = document.createElement('div');
             footer.classList.add('cardFooter');
