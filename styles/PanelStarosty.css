@@ -692,10 +692,6 @@
             width: 12px;
         }
     }
-
-    .grid-container.ovflowHidden {
-        overflow: hidden;
-    }
 }
 
 #aktywneKampanie {

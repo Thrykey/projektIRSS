@@ -77,7 +77,7 @@ document.querySelectorAll('.powrot button').forEach(button => {
 
 
     button.addEventListener('click', (e) => {
-        document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
+        // document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
         e.target.parentElement.classList.remove('show')
         e.target.parentElement.classList.add('hide')
 
@@ -273,7 +273,7 @@ document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
 
     loadCampaigns();
     setTimeout(() => {
-        document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
+        // document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
         document.getElementById('aktywneKampanie').classList.remove('hide')
         document.getElementById('aktywneKampanie').classList.add('show')
         document.querySelectorAll('.powrot').forEach(d => {
