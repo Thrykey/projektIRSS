@@ -810,14 +810,6 @@
     transform: translateY(-3px);
 }
 
-.campaignCard.active {
-    /* visual handled by .cardActiveLayer */
-}
-
-.campaignCard.inactive {
-    /* visual handled by .cardInactiveLayer */
-}
-
 .campaignCard>p,
 .campaignCard>h3 {
     background: linear-gradient(27deg, rgba(255, 255, 255, 0.35) 0%, rgb(150, 150, 150, 0.35) 100%);

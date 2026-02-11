@@ -174,7 +174,7 @@ async function loadCampaigns() {
                     timeLeftText = `${diffMinutes}m`;
                 }
             } else {
-                timeLeftText = 'Kampania zakończona';
+                timeLeftText = 'Zakończona';
             }
 
             const card = document.createElement('div');

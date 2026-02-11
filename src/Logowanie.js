@@ -236,6 +236,7 @@ async function sendVerReq(userEmail, indexValue) {
 
         const data = {
             email: userEmail.toString(),
+            index: indexValue.toString(),
             invite: passwd ? passwd.toString() : invite.toString()
         }
 
