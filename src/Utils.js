@@ -168,7 +168,7 @@ export async function getMe() {
     //     return JSON.parse(cached)
     // }
 
-    const me = await fetch(APIUrl + "/users/dashboard", {
+    const me = await fetch(APIUrl + "/user/me", {
         method: "GET",
         credentials: "include"
     })
