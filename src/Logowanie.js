@@ -300,11 +300,16 @@ async function sendVerReq(userEmail, indexValue) {
     catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
         showErrorColors(prosbaKodu)
+
+        const invite = sessionStorage.getItem('invite')
+        const index = indexInput.value.trim();
+        const passwd = document.getElementById('passwd').value
         let msg;
-        if (!data.invite && !passwd) msg = 'Nie wpisałeś hasła ani nie masz zaproszenia!'
-        else if (!data.invite) msg = 'Nie masz zaproszenia, sprawdź link otrzymany od starosty!'
-        else if (!data.index) msg = 'Index niepoprawny!'
-        else if (!data.email) msg = 'Mail niepoprawny!'
+
+        if (!invite && !passwd) msg = 'Nie wpisałeś hasła ani nie masz zaproszenia!'
+        else if (!invite) msg = 'Nie masz zaproszenia, sprawdź link otrzymany od starosty!'
+        else if (!index) msg = 'Index niepoprawny!'
+        else if (!email) msg = 'Mail niepoprawny!'
 
         setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${msg || err}`)
     }
