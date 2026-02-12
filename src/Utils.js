@@ -160,11 +160,6 @@ export function showSuccesColors(element) {
 }
 
 export async function getMe() {
-    // const cached = sessionStorage.getItem("loggedIn")
-    // if (cached != false) {
-    //     console.log("cached")
-    //     return JSON.parse(cached)
-    // }
 
     const me = await fetch("api/users/me", {
         method: "GET",

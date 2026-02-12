@@ -107,7 +107,7 @@ console.log(sessionStorage.getItem('loggedIn'));
 
 async function availableCampaigns() {
     try {
-        const response = await fetch('api/users/available-campaigns', {
+        const response = await fetch('/api/users/available-campaigns', {
             method: 'GET',
             credentials: 'include',
             headers: {
@@ -142,7 +142,7 @@ async function loadCampaigns() {
         const idResponse = await availableCampaigns();
 
         for (const id of idResponse) {
-            const detailResponse = await fetch(`api/admin/campaigns/${id}`, {
+            const detailResponse = await fetch(`/api/admin/campaigns/${id}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -217,7 +217,7 @@ async function loadCampaigns() {
             btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
             btn.addEventListener('click', async () => {
                 const url = campaign.is_active
-                    ? `api/admin/campaigns/${campaign.id}/resolve?force=false` : `api/admin/campaigns/${campaign.id}/download`;
+                    ? `/api/admin/campaigns/${campaign.id}/resolve?force=false` : `/api/admin/campaigns/${campaign.id}/download`;
 
                 try {
                     btn.disabled = true;
