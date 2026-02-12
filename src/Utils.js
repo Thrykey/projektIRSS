@@ -159,9 +159,6 @@ export function showSuccesColors(element) {
     }), 3000)
 }
 
-
-export const APIUrl = 'https://irss-backend.onrender.com'
-
 export async function getMe() {
     // const cached = sessionStorage.getItem("loggedIn")
     // if (cached != false) {
@@ -169,7 +166,7 @@ export async function getMe() {
     //     return JSON.parse(cached)
     // }
 
-    const me = await fetch(APIUrl + "/users/me", {
+    const me = await fetch("api/users/me", {
         method: "GET",
         credentials: "include"
     })

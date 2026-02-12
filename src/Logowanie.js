@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement,
     urlIncludes, appendQueryParam, removeQueryParam,
-    APIUrl, showErrorColors, showSuccesColors, getMe
+    showErrorColors, showSuccesColors, getMe
 } from './Utils.js'
 
 
@@ -265,7 +265,7 @@ async function sendVerReq(userEmail, indexValue) {
             invite: passwd ? passwd.toString() : invite.toString()
         }
 
-        const res = await fetch(APIUrl + '/auth/register-with-invite', {
+        const res = await fetch('api/auth/register-with-invite', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

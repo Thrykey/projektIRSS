@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement, createSpan, urlHasHash,
     urlIncludes, getTokenValue, removeQueryParam, showErrorColors,
-    showSuccesColors, APIUrl, getMe
+    showSuccesColors, getMe
 } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 
@@ -92,7 +92,7 @@ async function sendPreferences() {
 
         console.log(JSON.stringify(data));
 
-        const res = await fetch(APIUrl + '/student/register', {
+        const res = await fetch('api/student/register', {
             method: 'POST',
             credentials: 'include',
             headers: {
