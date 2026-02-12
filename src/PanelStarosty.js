@@ -142,7 +142,7 @@ async function loadCampaigns() {
         const idResponse = await availableCampaigns();
 
         for (const id of idResponse) {
-            const detailResponse = await fetch(`/admin/campaigns/${id}`, {
+            const detailResponse = await fetch(`/api/admin/campaigns/${id}`, {
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -217,7 +217,7 @@ async function loadCampaigns() {
             btn.textContent = campaign.is_active ? 'Resolve' : 'Download';
             btn.addEventListener('click', async () => {
                 const url = campaign.is_active
-                    ? `/admin/campaigns/${campaign.id}/resolve?force=false` : `/admin/campaigns/${campaign.id}/download`;
+                    ? `/api/admin/campaigns/${campaign.id}/resolve?force=false` : `/api/admin/campaigns/${campaign.id}/download`;
 
                 try {
                     btn.disabled = true;
@@ -340,7 +340,7 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
             group_limit: groupLimit
         }
 
-        const res = await fetch('/admin/campaigns/setup', {
+        const res = await fetch('/api/admin/campaigns/setup', {
             method: 'POST',
             credentials: 'include',
             headers: {

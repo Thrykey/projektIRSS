@@ -161,7 +161,7 @@ export function showSuccesColors(element) {
 
 export async function getMe() {
 
-    const me = await fetch("/users/me", {
+    const me = await fetch("/api/users/me", {
         method: "GET",
         credentials: "include"
     })
