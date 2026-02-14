@@ -5,11 +5,18 @@ import {
 } from './Utils.js'
 
 
+// ----------------- Constants and DOM elements
+
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
 const mailDomElement = document.getElementById('email');
 const wyslijBtn = document.getElementById('wyslijKod');
 const dropdownBtn = document.getElementById('dropdownBtn');
+const logowanieDom = document.getElementById('logowanie');
+const indicator = document.getElementById('indicator');
+const indicatorText = document.getElementById('indicatorText');
+const indicatorInfo = document.getElementById('indicatorInfo');
+
 
 // dla pewnosci, ze nie jest null
 let prosbaKodu = document.getElementById("prosbaKodu");
@@ -29,49 +36,24 @@ const inputFields = {
     RODO: false,
     HASLO: undefined
 }
-/**
- * Sprawdzanie zapisanego cookies, zmiana elementów w przypadku istnienia
- */
 
-// if (localStorage.getItem('email')) {
-//     setDisplayByElement('logowanie', 'none')
-//     setDisplayByElement('podmien', 'block')
-
-//     const strongifiedEmail = document.createElement('strong')
-//     strongifiedEmail.textContent = `${localStorage.getItem('email')}`
-
-//     setDisplayByElement('informacjaCookies', 'block')
-//     setTextContentByElement('informacjaCookies', `W twojej sesji zapisany jest zalogowany email: `)
-//     document.getElementById('informacjaCookies').appendChild(strongifiedEmail)
-// }
-// else uncover()
-
-
-
-// if (me) {
-//     const meStr = JSON.parse(me)
-//     if (meStr.user == 'starosta' && urlIncludes('dest') == 'panel') window.location.href = './pages/PanelStarosty.html'
-// }
-
+// ----------------- Functions
 
 /**
  * Funkcja zmieniająca display elementów po zaakceptowani zmiany maila, lub przekierowaniu
  */
 function uncover() {
-    document.getElementById('logowanie').classList.remove('hide');
+    logowanieDomclassList.remove('hide');
     setDisplayByElement('logowanie', 'grid')
-    document.getElementById('logowanie').classList.add('show');
+    logowanieDom.classList.add('show');
     setDisplayByElement('informacjaCookies', 'none')
     setDisplayByElement('podmien', 'none')
 }
 
-// document.getElementById('uncover').addEventListener('click', () => {
-//     removeQueryParam('uncover')
-//     uncover()
-// })
 
-
-
+/**
+ * Funkcja sprawdzająca parametry URL i odpowiednio modyfikująca stronę, w zależności od tego czy jest to starosta, czy student
+ */
 function checkUrlParams() {
     if (urlIncludes('user') == 'starosta') {
         console.info('Renderowanie dodatkowego elementu dla starosty')
@@ -82,15 +64,15 @@ function checkUrlParams() {
 
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
 
-        document.getElementById('logowanie').style.gridTemplateRows = '1fr 1fr 1fr'
-        document.getElementById('logowanie').style.height = '100%'
+        logowanieDom.style.gridTemplateRows = '1fr 1fr 1fr'
+        logowanieDom.style.height = '100%'
     }
     else {
         setDisplayByElement('starostaPasswd', 'none')
         setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako starosta')
 
-        document.getElementById('logowanie').style.gridTemplateRows = '1fr 1fr'
-        document.getElementById('logowanie').style.height = '70%'
+        logowanieDom.style.gridTemplateRows = '1fr 1fr'
+        logowanieDom.style.height = '70%'
     }
     if (urlIncludes('uncover')) { uncover() }
 }
@@ -98,32 +80,20 @@ checkUrlParams();
 
 console.log(sessionStorage.getItem('loggedIn'));
 
-if (urlIncludes('invite')) sessionStorage.setItem('invite', urlIncludes('invite'))
-console.log(urlIncludes('invite'));
-
-
-document.getElementById('zalogujStarosta').addEventListener('click', () => {
-    if (urlIncludes('user') == 'starosta') {
-        removeQueryParam('user')
-        setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako starosta')
-        inputFields.HASLO = undefined
-    } else {
-        appendQueryParam('user', 'starosta')
-        setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
-        inputFields.HASLO = document.getElementById('passwd').value ? true : false
-    }
-
-    enableSend()
-    checkUrlParams();
-});
 
 
 
+/**
+* Funkcja sprawdzająca czy wszystkie wymagane pola są uzupełnione, aby odblokować przycisk wysyłania kodu
+*/
 function enableSend() {
     document.getElementById('wyslijKod').disabled = !(Object.values(inputFields).every(state => state != false))
 }
 
-
+/**
+ * Funkcja reagująca na zmianę domeny maila, odpowiednio modyfikująca widok i wymagane pola
+ * @param {String} buttonValue - wartość domeny maila wybrana z dropdowna
+ */
 function reactToEmailChange(buttonValue) {
 
     if (validEmails.includes(buttonValue)) {
@@ -136,25 +106,10 @@ function reactToEmailChange(buttonValue) {
     }
 }
 
-document.getElementById('RODO').addEventListener('change', (e) => {
-    inputFields.RODO = e.target.checked
-    enableSend()
-})
 
-document.getElementById('ukenChoice').addEventListener('click', () => {
-    setTextContentByElement('dropdownBtn', '@student.uken.krakow.pl')
-    reactToEmailChange(
-        document.getElementById('dropdownBtn').innerText.replace('@', '')
-    )
-})
-
-document.getElementById('upChoice').addEventListener('click', () => {
-    setTextContentByElement('dropdownBtn', '@student.up.krakow.pl')
-    reactToEmailChange(
-        document.getElementById('dropdownBtn').innerText.replace('@', '')
-    )
-})
-
+/** 
+ * Funkcja reagująca na zmianę wartości maila, odpowiednio modyfikująca widok i wymagane pola
+ */
 function handleDynamicValues() {
     let innerValue = mailInput.value.replace(' ', '')
 
@@ -197,33 +152,31 @@ function handleDynamicValues() {
     }
 }
 
-indexInput.addEventListener('input', (el) => {
-    el.target.value.length >= 6 ? inputFields.INDEX = true : inputFields.INDEX = false
-    enableSend()
-})
+if (urlIncludes('invite')) sessionStorage.setItem('invite', urlIncludes('invite'))
+console.log(urlIncludes('invite'));
 
-mailInput.addEventListener('change', handleDynamicValues)
-mailInput.addEventListener('input', handleDynamicValues)
-
-
-document.getElementById('sprawdzPasswd').addEventListener('click', () => {
-    const passField = document.getElementById('passwd');
-    passField.type = passField.type == 'password' ? 'text' : 'password';
-})
-
-document.getElementById('passwd').addEventListener('input', (e) => {
-    if (e.target.value.length >= 1) inputFields.HASLO = true
-    else inputFields.HASLO = false
-    enableSend()
-})
-
+// -------------- API calls 
 
 async function checkIfLoggedIn() {
     const me = await getMe();
 
-    if (!me) return;
+    if (!me) {
+        console.log('error');
+
+        indicator.classList.add('error');
+        indicatorText.textContent = 'Nie jesteś zalogowany!'
+        indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+        return;
+    }
 
     const meStr = await me.json();
+
+    indicator.classList.add('animate', 'success');
+    indicatorInfo.classList.add('statusTooltip' + 'success')
+    indicatorInfo.textContent =
+        'Zalogowany jako: ' + meStr.email +
+        '\n' + 'Rola: ' + meStr.role +
+        '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
 
     const invite = urlIncludes('invite');
     const groupId = urlIncludes('group_id');
@@ -284,16 +237,10 @@ async function sendVerReq(userEmail, indexValue) {
                 setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
                 showSuccesColors(prosbaKodu)
                 break
-            case 404:
-                console.error('Błąd 404 - brak odpowiedzi')
+            default:
+                console.error(`Błąd ${status} - ${resData.message || 'Nieznany błąd'}`)
                 showErrorColors(prosbaKodu)
-                setTextContentByElement('potwierdzenieSpan', 'Błąd 404 - brak odpowiedzi')
-                break
-            case 422:
-                console.error('Błąd 422 - niepoprawne dane:')
-                console.table(resData.detail)
-                showErrorColors(prosbaKodu)
-                setTextContentByElement('potwierdzenieSpan', 'Błąd 422 - niepoprawne dane: ' + (resData.detail ? resData.detail.map(err => err.msg).join(', ') : ''))
+                setTextContentByElement('potwierdzenieSpan', `Błąd ${status} - ${resData.message || 'Nieznany błąd'}`)
                 break
         }
     }
@@ -316,6 +263,62 @@ async function sendVerReq(userEmail, indexValue) {
 
 }
 
+// ----------------- Event listeners
+
+
+document.getElementById('zalogujStarosta').addEventListener('click', () => {
+    if (urlIncludes('user') == 'starosta') {
+        removeQueryParam('user')
+        setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako starosta')
+        inputFields.HASLO = undefined
+    } else {
+        appendQueryParam('user', 'starosta')
+        setTextContentByElement('zalogujStarosta', 'Zweryfikuj się jako student')
+        inputFields.HASLO = document.getElementById('passwd').value ? true : false
+    }
+
+    enableSend()
+    checkUrlParams();
+});
+
+document.getElementById('RODO').addEventListener('change', (e) => {
+    inputFields.RODO = e.target.checked
+    enableSend()
+})
+
+document.getElementById('ukenChoice').addEventListener('click', () => {
+    setTextContentByElement('dropdownBtn', '@student.uken.krakow.pl')
+    reactToEmailChange(
+        document.getElementById('dropdownBtn').innerText.replace('@', '')
+    )
+})
+
+document.getElementById('upChoice').addEventListener('click', () => {
+    setTextContentByElement('dropdownBtn', '@student.up.krakow.pl')
+    reactToEmailChange(
+        document.getElementById('dropdownBtn').innerText.replace('@', '')
+    )
+})
+
+indexInput.addEventListener('input', (el) => {
+    el.target.value.length >= 6 ? inputFields.INDEX = true : inputFields.INDEX = false
+    enableSend()
+})
+
+mailInput.addEventListener('change', handleDynamicValues)
+mailInput.addEventListener('input', handleDynamicValues)
+
+
+document.getElementById('sprawdzPasswd').addEventListener('click', () => {
+    const passField = document.getElementById('passwd');
+    passField.type = passField.type == 'password' ? 'text' : 'password';
+})
+
+document.getElementById('passwd').addEventListener('input', (e) => {
+    if (e.target.value.length >= 1) inputFields.HASLO = true
+    else inputFields.HASLO = false
+    enableSend()
+})
 
 
 wyslijBtn.addEventListener('click', () => {
@@ -354,9 +357,9 @@ wyslijBtn.addEventListener('click', () => {
     }
 
     const userEmail = (mailValue + domainValue).toLowerCase();
-    document.getElementById('logowanie').classList.remove('show');
-    document.getElementById('logowanie').classList.add('hide');
-    document.getElementById('prosbaKodu').classList.add('show');
+    logowanieDom.classList.remove('show');
+    logowanieDom.classList.add('hide');
+    prosbaKodu.classList.add('show');
     document
         .querySelectorAll('.leftLine, .rightLine')
         .forEach(el => {

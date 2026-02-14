@@ -159,6 +159,31 @@ export function showSuccesColors(element) {
     }), 3000)
 }
 
+
+
+
+
+if (!me) {
+    console.log('error');
+
+    indicator.classList.add('error');
+    indicatorText.textContent = 'Nie jesteś zalogowany!'
+    indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+    return;
+}
+const meStr = await me.json();
+
+indicator.classList.add('animate', 'success');
+indicatorInfo.classList.add('statusTooltip' + 'success')
+indicatorInfo.textContent =
+    'Zalogowany jako: ' + meStr.email +
+    '\n' + 'Rola: ' + meStr.role +
+    '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
+}
+
+/**
+ * Funcja odpowiedzialna za sprawdzanie credentials użytkownika i ustawianie odpowiedniego statusu zalogowania
+ */
 export async function getMe() {
 
     const me = await fetch("/api/users/me", {
@@ -205,6 +230,9 @@ export function localToISO(localValue) {
     return parseLocal(localValue).toISOString();
 }
 
+/**
+ * Funckja odpowiedzialna formatowaniem daty i czasu w polu datetime-local na bardziej czytelny format, oraz ustawianiem zakresów dla pól datetime-local
+ */
 export function updateDisplayDate(input, format = 'DD/MM/YYYY HH:mm') {
     const display = input.parentElement.querySelector('.displayDate');
     if (!display) return;

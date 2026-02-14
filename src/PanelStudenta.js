@@ -28,6 +28,11 @@ function generujWyborGrup() {
     container.replaceChildren();
 
     const query = urlIncludes('group_id');
+    if (!query) {
+        // alert('Link jest niepoprawny ')
+        return false
+    };
+
     const match = query.split('-')[1].match(/(\d+)G/i);
 
     if (!match) {
@@ -76,7 +81,23 @@ function getCurrentPreferences() {
 
 async function isLoggedIn() {
     const me = await getMe()
-    console.log(me);
+
+    if (!me) {
+        indicator.classList.add('error');
+        indicatorText.textContent = 'Nie jesteś zalogowany!'
+        indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+        return;
+    }
+
+    const meStr = await me.json();
+
+    indicator.classList.add('animate', 'success');
+    indicatorInfo.classList.add('statusTooltip' + 'success')
+    indicatorInfo.textContent =
+        'Zalogowany jako: ' + meStr.email +
+        '\n' + 'Rola: ' + meStr.role +
+        '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
+
 
     if (!sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')

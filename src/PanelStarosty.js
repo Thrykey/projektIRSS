@@ -3,108 +3,36 @@ import {
     showErrorColors, showSuccesColors, getMe
 } from './Utils.js';
 
-// Ustawianie ograniczeń dla pól rokStudiow i stopienStudiow
+// ---------------- ELEMENTY DOM
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
-
-rokStudiowInput[0].addEventListener('input', () => clampValues(rokStudiowInput[0], 1, 5));
-rokStudiowInput[0].addEventListener('change', () => clampValues(rokStudiowInput[0], 1, 5));
-rokStudiowInput[0].addEventListener('blur', () => clampValues(rokStudiowInput[0], 1, 5));
-
 const stopienStudiowInput = document.getElementsByClassName('stopienStudiow');
-
-stopienStudiowInput[0].addEventListener('input', () => clampValues(stopienStudiowInput[0], 1, 2));
-stopienStudiowInput[0].addEventListener('change', () => clampValues(stopienStudiowInput[0], 1, 2));
-stopienStudiowInput[0].addEventListener('blur', () => clampValues(stopienStudiowInput[0], 1, 2));
-
 const liczbaGrupInput = document.getElementsByClassName('iloscGrup');
-
-liczbaGrupInput[0].addEventListener('input', () => clampValues(liczbaGrupInput[0], 1, 10));
-liczbaGrupInput[0].addEventListener('change', () => clampValues(liczbaGrupInput[0], 1, 10));
-liczbaGrupInput[0].addEventListener('blur', () => clampValues(liczbaGrupInput[0], 1, 10));
-
 const maxLiczbaOsobNaGrupe = document.getElementsByClassName('maxOsob');
-
-maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
-maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
-maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
-
 const submitButton = document.getElementsByClassName('generujLinkBtn');
 const inputsToValidate = document.querySelectorAll('#nazwaKierunku, #rokStudiow, #stopienStudiow, #iloscGrup, #maxOsob, #KPTN, #random');
 const gridLayout = document.getElementById('gridLayout')
 const wybierzAkcje = document.getElementById('wybierzAkcje')
 let infoGather = document.getElementById('infoGather');
 
+// ---------------- INICJALIZACJA I FUNKCJE
 
-document.addEventListener('DOMContentLoaded', () => {
-    const startInput = document.getElementById('startTime');
-    const endInput = document.getElementById('endTime');
+function reactToInputs() {
+    const inputsToCheck = Array.from(inputsToValidate).filter(
+        input => input.id != 'KPTN' && input.id != 'random'
+    )
+    const allFilled = inputsToCheck.every(input => input.value && input.value.trim() != '')
 
-    setupDateTime(startInput, endInput, 0, 7, 72, 7);
+    submitButton[0].disabled = !allFilled;
+}
 
-    infoGather = document.getElementById('infoGather');
-
-    const displayStart = document.getElementById('displayStart');
-    const displayEnd = document.getElementById('displayEnd')
-    displayStart.addEventListener('click', () => {
-        startInput.showPicker?.() || startInput.focus();
-    });
-
-    displayEnd.addEventListener('click', () => {
-        endInput.showPicker?.() || endInput.focus();
-    });
-
+inputsToValidate.forEach(input => {
+    input.addEventListener('input', reactToInputs);
+    input.addEventListener('change', reactToInputs);
 });
 
-document.getElementById('nowaRejestracja').addEventListener('click', () => {
-    wybierzAkcje.classList.remove('show')
-    wybierzAkcje.classList.add('hide')
-    setTimeout(() => {
-        gridLayout.classList.remove('hide')
-        gridLayout.classList.add('show')
-        if (window.innerWidth <= 1100) {
-            document.getElementById('gridLayout').style.height = '120vh'
-            document.getElementById('gridLayout').style.marginTop = '25vh'
-        }
-        document.querySelectorAll('.powrot').forEach(d => {
-            d.classList.remove('hide')
-            d.classList.add('show')
-        })
-    }, 500);
+reactToInputs();
 
-})
-
-document.querySelectorAll('.powrot button').forEach(button => {
-
-
-    button.addEventListener('click', (e) => {
-        // document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
-        e.target.parentElement.classList.remove('show')
-        e.target.parentElement.classList.add('hide')
-
-        document.getElementById('infoGather').classList.remove('show')
-        document.getElementById('infoGather').classList.add('hide')
-
-        gridLayout.classList.remove('show')
-        gridLayout.classList.add('hide')
-        document.getElementById('aktywneKampanie').classList.remove('show')
-        document.getElementById('aktywneKampanie').classList.add('hide')
-        setTimeout(() => {
-            document.getElementById('campaignsContainer').textContent = ''
-            document.getElementById('aktywneKampanie').style.overflow = 'hidden'
-
-            if (window.innerWidth <= 1100) {
-                document.getElementById('gridLayout').style.height = '100vh'
-                document.getElementById('gridLayout').style.marginTop = '0vh'
-            }
-            wybierzAkcje.classList.remove('hide')
-            wybierzAkcje.classList.add('show')
-        }, 500);
-    })
-})
-
-const me = await getMe();
-console.log(sessionStorage.getItem('loggedIn'));
-
+// ---------------- API CALLS 
 async function availableCampaigns() {
     try {
         const response = await fetch('/api/users/available-campaigns', {
@@ -134,6 +62,27 @@ async function availableCampaigns() {
     }
 }
 
+async function isLoggedIn() {
+    const me = await getMe()
+    if (!me) {
+        indicator.classList.add('error');
+        indicatorText.textContent = 'Nie jesteś zalogowany!'
+        indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+        return;
+    }
+
+    const meStr = me.json();
+
+    indicator.classList.add('animate', 'success');
+    indicatorInfo.classList.add('statusTooltip' + 'success')
+    indicatorInfo.textContent =
+        'Zalogowany jako: ' + meStr.email +
+        '\n' + 'Rola: ' + meStr.role +
+        '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
+
+    console.log(sessionStorage.getItem('loggedIn'));
+}
+isLoggedIn();
 
 async function loadCampaigns() {
     const container = document.getElementById('campaignsContainer');
@@ -290,41 +239,6 @@ async function loadCampaigns() {
 }
 
 
-document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
-    wybierzAkcje.classList.remove('show')
-    wybierzAkcje.classList.add('hide')
-
-    document.getElementById('campaignsContainer').textContent = ''
-    document.getElementById('aktywneKampanie').style.overflow = 'unset'
-
-    loadCampaigns();
-    setTimeout(() => {
-        // document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
-        document.getElementById('aktywneKampanie').classList.remove('hide')
-        document.getElementById('aktywneKampanie').classList.add('show')
-        document.querySelectorAll('.powrot').forEach(d => {
-
-            d.classList.remove('hide')
-            d.classList.add('show')
-        })
-    }, 500);
-})
-
-function reactToInputs() {
-    const inputsToCheck = Array.from(inputsToValidate).filter(
-        input => input.id != 'KPTN' && input.id != 'random'
-    )
-    const allFilled = inputsToCheck.every(input => input.value && input.value.trim() != '')
-
-    submitButton[0].disabled = !allFilled;
-}
-
-inputsToValidate.forEach(input => {
-    input.addEventListener('input', reactToInputs);
-    input.addEventListener('change', reactToInputs);
-});
-
-reactToInputs();
 
 async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit) {
     try {
@@ -384,6 +298,113 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
         setTextContentByElement('confirmationLink', `Błąd sieci lub inny problem: ${err}`)
     }
 }
+
+
+// ---------------- EVENT LISTENERS I INNE REAKCJE NA ZMIANY W DOM
+
+rokStudiowInput[0].addEventListener('input', () => clampValues(rokStudiowInput[0], 1, 5));
+rokStudiowInput[0].addEventListener('change', () => clampValues(rokStudiowInput[0], 1, 5));
+rokStudiowInput[0].addEventListener('blur', () => clampValues(rokStudiowInput[0], 1, 5));
+
+stopienStudiowInput[0].addEventListener('input', () => clampValues(stopienStudiowInput[0], 1, 2));
+stopienStudiowInput[0].addEventListener('change', () => clampValues(stopienStudiowInput[0], 1, 2));
+stopienStudiowInput[0].addEventListener('blur', () => clampValues(stopienStudiowInput[0], 1, 2));
+
+liczbaGrupInput[0].addEventListener('input', () => clampValues(liczbaGrupInput[0], 1, 10));
+liczbaGrupInput[0].addEventListener('change', () => clampValues(liczbaGrupInput[0], 1, 10));
+liczbaGrupInput[0].addEventListener('blur', () => clampValues(liczbaGrupInput[0], 1, 10));
+
+maxLiczbaOsobNaGrupe[0].addEventListener('input', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
+maxLiczbaOsobNaGrupe[0].addEventListener('change', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
+maxLiczbaOsobNaGrupe[0].addEventListener('blur', () => clampValues(maxLiczbaOsobNaGrupe[0], 1, 30));
+
+document.addEventListener('DOMContentLoaded', () => {
+    const startInput = document.getElementById('startTime');
+    const endInput = document.getElementById('endTime');
+
+    setupDateTime(startInput, endInput, 0, 7, 72, 7);
+
+    infoGather = document.getElementById('infoGather');
+
+    const displayStart = document.getElementById('displayStart');
+    const displayEnd = document.getElementById('displayEnd')
+    displayStart.addEventListener('click', () => {
+        startInput.showPicker?.() || startInput.focus();
+    });
+
+    displayEnd.addEventListener('click', () => {
+        endInput.showPicker?.() || endInput.focus();
+    });
+
+});
+
+document.getElementById('nowaRejestracja').addEventListener('click', () => {
+    wybierzAkcje.classList.remove('show')
+    wybierzAkcje.classList.add('hide')
+    setTimeout(() => {
+        gridLayout.classList.remove('hide')
+        gridLayout.classList.add('show')
+        if (window.innerWidth <= 1100) {
+            document.getElementById('gridLayout').style.height = '120vh'
+            document.getElementById('gridLayout').style.marginTop = '25vh'
+        }
+        document.querySelectorAll('.powrot').forEach(d => {
+            d.classList.remove('hide')
+            d.classList.add('show')
+        })
+    }, 500);
+
+})
+
+document.querySelectorAll('.powrot button').forEach(button => {
+
+
+    button.addEventListener('click', (e) => {
+        // document.getElementsByClassName('grid-container')[0].classList.remove('ovflowHidden')
+        e.target.parentElement.classList.remove('show')
+        e.target.parentElement.classList.add('hide')
+
+        document.getElementById('infoGather').classList.remove('show')
+        document.getElementById('infoGather').classList.add('hide')
+
+        gridLayout.classList.remove('show')
+        gridLayout.classList.add('hide')
+        document.getElementById('aktywneKampanie').classList.remove('show')
+        document.getElementById('aktywneKampanie').classList.add('hide')
+        setTimeout(() => {
+            document.getElementById('campaignsContainer').textContent = ''
+            document.getElementById('aktywneKampanie').style.overflow = 'hidden'
+
+            if (window.innerWidth <= 1100) {
+                document.getElementById('gridLayout').style.height = '100vh'
+                document.getElementById('gridLayout').style.marginTop = '0vh'
+            }
+            wybierzAkcje.classList.remove('hide')
+            wybierzAkcje.classList.add('show')
+        }, 500);
+    })
+})
+
+
+document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
+    wybierzAkcje.classList.remove('show')
+    wybierzAkcje.classList.add('hide')
+
+    document.getElementById('campaignsContainer').textContent = ''
+    document.getElementById('aktywneKampanie').style.overflow = 'unset'
+
+    loadCampaigns();
+    setTimeout(() => {
+        // document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
+        document.getElementById('aktywneKampanie').classList.remove('hide')
+        document.getElementById('aktywneKampanie').classList.add('show')
+        document.querySelectorAll('.powrot').forEach(d => {
+
+            d.classList.remove('hide')
+            d.classList.add('show')
+        })
+    }, 500);
+})
 
 submitButton[0].addEventListener('click', (e) => {
     let hasError = false;
