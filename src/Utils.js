@@ -159,28 +159,6 @@ export function showSuccesColors(element) {
     }), 3000)
 }
 
-
-
-
-
-if (!me) {
-    console.log('error');
-
-    indicator.classList.add('error');
-    indicatorText.textContent = 'Nie jesteś zalogowany!'
-    indicatorInfo.textContent = 'Nie jesteś zalogowany!'
-    return;
-}
-const meStr = await me.json();
-
-indicator.classList.add('animate', 'success');
-indicatorInfo.classList.add('statusTooltip' + 'success')
-indicatorInfo.textContent =
-    'Zalogowany jako: ' + meStr.email +
-    '\n' + 'Rola: ' + meStr.role +
-    '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
-}
-
 /**
  * Funcja odpowiedzialna za sprawdzanie credentials użytkownika i ustawianie odpowiedniego statusu zalogowania
  */
