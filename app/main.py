@@ -21,7 +21,7 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
     # We'll uncomment this on production
-    #root_path="/api"
+    root_path="/api"
     )
 
 origins = [
@@ -72,5 +72,8 @@ if __name__ == "__main__":
         "app.main:app",
         host="0.0.0.0",
         port=settings.BACKEND_PORT,
-        reload=settings.DEBUG
+        reload=settings.DEBUG,
+        # Dodane po reverse proxy, nginx
+        proxy_headers=True,
+        forwarded_allow_ips="*"
     )
