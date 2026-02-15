@@ -15,6 +15,17 @@ body {
     user-select: none;
 }
 
+span,
+input,
+button,
+label,
+select,
+option,
+textarea,
+div {
+    font-family: 'Courier New', Courier, monospace;
+}
+
 @media (max-width: 1100px) {
     body {
         background-size: 110%;
@@ -253,10 +264,12 @@ input[type=radio] {
     }
 
     .statusTooltip.error {
+        color: black;
         background-color: rgba(255, 0, 0, 1);
     }
 
     .statusTooltip.success {
+        color: black;
         background-color: rgba(15, 250, 132, 1);
     }
 
