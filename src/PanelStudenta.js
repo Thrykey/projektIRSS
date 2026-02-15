@@ -93,6 +93,7 @@ async function isLoggedIn() {
 
     indicator.classList.remove('error');
     indicator.classList.add('animate', 'success');
+    indicatorInfo.classList.remove('error')
     indicatorInfo.classList.add('statusTooltip' + 'success')
     indicatorText.textContent = 'Zalogowany!'
     indicatorInfo.innerHTML =

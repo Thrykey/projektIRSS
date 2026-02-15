@@ -171,10 +171,11 @@ async function checkIfLoggedIn() {
 
     indicator.classList.remove('error');
     indicator.classList.add('animate', 'success');
-    indicatorInfo.classList.add('statusTooltip' + 'success')
+    indicatorInfo.classList.remove('error')
+    indicatorInfo.classList.add('statusTooltip', 'success')
     indicatorText.textContent = 'Zalogowany!'
     indicatorInfo.innerHTML =
-        'Zalogowany jako: ' + meStr.email +
+        'Zalogowany jako: ' + meStr.email.split('@')[0] +
         '<br>' + 'Rola: ' + meStr.role;
 
     const invite = urlIncludes('invite');
