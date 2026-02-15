@@ -31,7 +31,9 @@ origins = [
     "https://localhost:8080",
     "http://127.0.0.1",
     "https://127.0.0.1",
-    "https://projektirss.onrender.com"
+    "https://projektirss.onrender.com",
+    "https://zapisy-grupowe.xyz",
+    "https://www.zapisy-grupowe.xyz"
 ]
 
 app.add_middleware(
