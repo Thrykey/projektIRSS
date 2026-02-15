@@ -161,22 +161,21 @@ async function checkIfLoggedIn() {
     const me = await getMe();
 
     if (!me) {
-        console.log('error');
-
         indicator.classList.add('error');
-        indicatorText.textContent = 'Nie jesteś zalogowany!'
-        indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+        indicatorText.textContent = 'Nie zalogowany!'
+        indicatorInfo.textContent = 'Nie zalogowany!'
         return;
     }
 
     const meStr = await me.json();
 
+    indicator.classList.remove('error');
     indicator.classList.add('animate', 'success');
     indicatorInfo.classList.add('statusTooltip' + 'success')
-    indicatorInfo.textContent =
+    indicatorText.textContent = 'Zalogowany!'
+    indicatorInfo.innerHTML =
         'Zalogowany jako: ' + meStr.email +
-        '\n' + 'Rola: ' + meStr.role +
-        '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
+        '<br>' + 'Rola: ' + meStr.role;
 
     const invite = urlIncludes('invite');
     const groupId = urlIncludes('group_id');

@@ -66,19 +66,20 @@ async function isLoggedIn() {
     const me = await getMe()
     if (!me) {
         indicator.classList.add('error');
-        indicatorText.textContent = 'Nie jesteś zalogowany!'
-        indicatorInfo.textContent = 'Nie jesteś zalogowany!'
+        indicatorText.textContent = 'Nie zalogowany!'
+        indicatorInfo.textContent = 'Nie zalogowany!'
         return;
     }
 
-    const meStr = me.json();
+    const meStr = await me.json();
 
+    indicator.classList.remove('error');
     indicator.classList.add('animate', 'success');
     indicatorInfo.classList.add('statusTooltip' + 'success')
-    indicatorInfo.textContent =
+    indicatorText.textContent = 'Zalogowany!'
+    indicatorInfo.innerHTML =
         'Zalogowany jako: ' + meStr.email +
-        '\n' + 'Rola: ' + meStr.role +
-        '\n' + 'Wygasa: ' + new Date(meStr.exp * 1000).toLocaleString();
+        '<br>' + 'Rola: ' + meStr.role;
 
     console.log(sessionStorage.getItem('loggedIn'));
 }
