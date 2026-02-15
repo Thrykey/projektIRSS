@@ -79,8 +79,8 @@ async function isLoggedIn() {
     indicatorInfo.classList.add('statusTooltip', 'success')
     indicatorText.textContent = 'Zalogowany!'
     indicatorInfo.innerHTML =
-        'Zalogowany jako: ' + meStr.email.split('@')[0] +
-        '<br>' + 'Rola: ' + meStr.role;
+        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
+        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
 
     console.log(sessionStorage.getItem('loggedIn'));
 }

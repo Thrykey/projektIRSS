@@ -97,8 +97,8 @@ async function isLoggedIn() {
     indicatorInfo.classList.add('statusTooltip', 'success')
     indicatorText.textContent = 'Zalogowany!'
     indicatorInfo.innerHTML =
-        'Zalogowany jako: ' + meStr.email.split('@')[0] +
-        '<br>' + 'Rola: ' + meStr.role;
+        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
+        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
 
     if (!sessionStorage.getItem('loggedIn')) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
