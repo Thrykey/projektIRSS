@@ -234,3 +234,14 @@ async def verify_token(token: str, db: SessionDep, invite: str | None = None):
     )
     
     return response
+
+@router.get("/logout")
+async def logout():
+    """
+    Wylogowanie użytkownika.
+    Usuwa ciasteczko z tokenem JWT, ustawiając je jako wygasłe.
+    """
+
+    response = RedirectResponse(url=f"{settings.FRONTEND_URL}/")
+    response.delete_cookie(key="access_token", path="/")
+    return response
