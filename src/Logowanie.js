@@ -157,6 +157,25 @@ console.log(urlIncludes('invite'));
 
 // -------------- API calls 
 
+// Funkcja na potrzeby testowe sekretariatu
+
+async function logout() {
+    const res = await fetch('/api/auth/logout', {
+        method: 'POST'
+    })
+
+    if (res.ok) {
+        console.log('Wylogowano pomyślnie')
+        sessionStorage.removeItem('loggedIn')
+        sessionStorage.removeItem('email')
+        window.location.reload()
+    } else {
+        console.error('Błąd podczas wylogowywania')
+    }
+}
+
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
+
 async function checkIfLoggedIn() {
     const me = await getMe();
 
