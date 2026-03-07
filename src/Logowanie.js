@@ -170,7 +170,7 @@ async function logout() {
         sessionStorage.removeItem('email')
         window.location.reload()
     } else {
-        console.error('Błąd podczas wylogowywania')
+        console.error('Błąd podczas wylogowywania, nie jesteś zalogowany')
     }
 }
 
