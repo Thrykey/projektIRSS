@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Response
 from fastapi.responses import RedirectResponse
 from sqlmodel import select, col, func
 
@@ -236,12 +236,11 @@ async def verify_token(token: str, db: SessionDep, invite: str | None = None):
     return response
 
 @router.get("/logout")
-async def logout():
+async def logout(response: Response):
     """
     Wylogowanie użytkownika.
     Usuwa ciasteczko z tokenem JWT, ustawiając je jako wygasłe.
     """
 
-    response = RedirectResponse(url=f"{settings.FRONTEND_URL}/")
     response.delete_cookie(key="access_token", path="/")
-    return response
+    return {"message": "Wylogowano pomyślnie."}
