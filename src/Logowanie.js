@@ -210,10 +210,9 @@ async function checkIfLoggedIn() {
 
 
 async function sendVerReq(userEmail, indexValue) {
-    const invite = sessionStorage.getItem('invite')
-    const passwd = document.getElementById('passwd').value
-
     try {
+        const invite = sessionStorage.getItem('invite')
+        const passwd = document.getElementById('passwd').value
         const data = {
             email: userEmail.toString(),
             index: indexValue.toString(),
@@ -247,14 +246,15 @@ async function sendVerReq(userEmail, indexValue) {
         }
     }
     catch (err) {
+        const invite = sessionStorage.getItem('invite')
+        const index = indexInput.value.trim();
+        const passwd = document.getElementById('passwd').value
+
         console.error('Błąd sieci lub inny problem:', err);
         if (passwd) window.location.href = './PanelStarosty.html'
         window.location.href = `./?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
         showErrorColors(prosbaKodu)
 
-        const invite = sessionStorage.getItem('invite')
-        const index = indexInput.value.trim();
-        const passwd = document.getElementById('passwd').value
         let msg;
 
         if (!invite && !passwd) msg = 'Nie wpisałeś hasła ani nie masz zaproszenia!'
