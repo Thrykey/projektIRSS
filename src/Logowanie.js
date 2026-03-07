@@ -255,7 +255,7 @@ async function sendVerReq(userEmail, indexValue) {
         console.error('Błąd sieci lub inny problem:', err);
         alert('Zostajesz przekierowany na inną podstronę')
         if (passwd) window.location.href = './PanelStarosty.html'
-        window.location.href = `../?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
+        else window.location.href = `../?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
         showErrorColors(prosbaKodu)
 
         let msg;
