@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement, createSpan, urlHasHash,
     urlIncludes, getTokenValue, removeQueryParam, showErrorColors,
-    showSuccesColors, getMe
+    showSuccesColors, getMe, logout
 } from './Utils.js';
 import { DragDropManager } from './DragNdropMenager.js';
 
@@ -100,9 +100,11 @@ async function isLoggedIn() {
         '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
         '<br>' + '<strong>Rola</strong>: ' + meStr.role;
 
-    if (!sessionStorage.getItem('loggedIn')) {
+    if (!sessionStorage.getItem('loggedIn') || sessionStorage.getItem('loggedIn') == null) {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-        window.location.href = (urlIncludes('invite') != null) ? './pages/Logowanie.html?invite=' + urlIncludes('invite') : './pages/Logowanie.html'
+        window.location.href = (urlIncludes('invite') != null)
+            ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')
+            : './pages/Logowanie.html'
     }
 }
 console.log(sessionStorage.getItem('loggedIn'));
@@ -148,6 +150,8 @@ async function sendPreferences() {
 
 
 // EVENT LISTENERY
+
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
 
 document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup()

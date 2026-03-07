@@ -1,6 +1,6 @@
 import {
     setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO,
-    showErrorColors, showSuccesColors, getMe
+    showErrorColors, showSuccesColors, getMe, logout
 } from './Utils.js';
 
 // ---------------- ELEMENTY DOM
@@ -303,6 +303,9 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
 
 
 // ---------------- EVENT LISTENERS I INNE REAKCJE NA ZMIANY W DOM
+
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
+
 
 rokStudiowInput[0].addEventListener('input', () => clampValues(rokStudiowInput[0], 1, 5));
 rokStudiowInput[0].addEventListener('change', () => clampValues(rokStudiowInput[0], 1, 5));

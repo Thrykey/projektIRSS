@@ -299,3 +299,20 @@ export function setupDateTime(startInput, endInput, minDaysStart = 0, maxDaysSta
     updateDisplayDate(startInput);
     updateEndRange();
 }
+
+// Funkcja na potrzeby testowe sekretariatu
+
+export async function logout() {
+    const res = await fetch('/api/auth/logout', {
+        method: 'GET'
+    })
+
+    if (res.ok) {
+        console.log('Wylogowano pomyślnie')
+        sessionStorage.removeItem('loggedIn')
+        sessionStorage.removeItem('email')
+        window.location.reload()
+    } else {
+        console.error('Błąd podczas wylogowywania, nie jesteś zalogowany')
+    }
+}

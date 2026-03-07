@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement,
     urlIncludes, appendQueryParam, removeQueryParam,
-    showErrorColors, showSuccesColors, getMe
+    showErrorColors, showSuccesColors, getMe, logout
 } from './Utils.js'
 
 
@@ -157,22 +157,6 @@ console.log(urlIncludes('invite'));
 
 // -------------- API calls 
 
-// Funkcja na potrzeby testowe sekretariatu
-
-async function logout() {
-    const res = await fetch('/api/auth/logout', {
-        method: 'POST'
-    })
-
-    if (res.ok) {
-        console.log('Wylogowano pomyślnie')
-        sessionStorage.removeItem('loggedIn')
-        sessionStorage.removeItem('email')
-        window.location.reload()
-    } else {
-        console.error('Błąd podczas wylogowywania, nie jesteś zalogowany')
-    }
-}
 
 document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
 
@@ -255,6 +239,8 @@ async function sendVerReq(userEmail, indexValue) {
                 sessionStorage.setItem('email', userEmail)
                 setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
                 showSuccesColors(prosbaKodu)
+                if (passwd) window.location.href = './PanelStarosty.html'
+                window.location.href = `./?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
                 break
             default:
                 console.error(`Błąd ${status} - ${resData.message || 'Nieznany błąd'}`)
