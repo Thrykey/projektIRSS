@@ -210,11 +210,10 @@ async function checkIfLoggedIn() {
 
 
 async function sendVerReq(userEmail, indexValue) {
+    const invite = sessionStorage.getItem('invite')
+    const passwd = document.getElementById('passwd').value
+
     try {
-        const invite = sessionStorage.getItem('invite')
-
-        const passwd = document.getElementById('passwd').value
-
         const data = {
             email: userEmail.toString(),
             index: indexValue.toString(),
