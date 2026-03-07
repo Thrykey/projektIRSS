@@ -68,6 +68,7 @@ async function isLoggedIn() {
         indicator.classList.add('error');
         indicatorText.textContent = 'Nie zalogowany!'
         indicatorInfo.textContent = 'Nie zalogowany!'
+        window.location.href = './Logowanie.html'
         return;
     }
 

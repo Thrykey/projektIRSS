@@ -86,21 +86,22 @@ async function isLoggedIn() {
         indicator.classList.add('error');
         indicatorText.textContent = 'Nie zalogowany!'
         indicatorInfo.textContent = 'Nie zalogowany!'
-        return;
+    }
+    else {
+
+        const meStr = await me.json();
+
+        indicator.classList.remove('error');
+        indicator.classList.add('animate', 'success');
+        indicatorInfo.classList.remove('error')
+        indicatorInfo.classList.add('statusTooltip', 'success')
+        indicatorText.textContent = 'Zalogowany!'
+        indicatorInfo.innerHTML =
+            '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
+            '<br>' + '<strong>Rola</strong>: ' + meStr.role;
     }
 
-    const meStr = await me.json();
-
-    indicator.classList.remove('error');
-    indicator.classList.add('animate', 'success');
-    indicatorInfo.classList.remove('error')
-    indicatorInfo.classList.add('statusTooltip', 'success')
-    indicatorText.textContent = 'Zalogowany!'
-    indicatorInfo.innerHTML =
-        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
-        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
-
-    if (!sessionStorage.getItem('loggedIn') || sessionStorage.getItem('loggedIn') == null) {
+    if (!sessionStorage.getItem('loggedIn') || sessionStorage.getItem('loggedIn') == null || sessionStorage.getItem('loggedIn') == 'false') {
         alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
         window.location.href = (urlIncludes('invite') != null)
             ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')

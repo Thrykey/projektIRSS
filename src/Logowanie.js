@@ -239,8 +239,6 @@ async function sendVerReq(userEmail, indexValue) {
                 sessionStorage.setItem('email', userEmail)
                 setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
                 showSuccesColors(prosbaKodu)
-                if (passwd) window.location.href = './PanelStarosty.html'
-                window.location.href = `./?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
                 break
             default:
                 console.error(`Błąd ${status} - ${resData.message || 'Nieznany błąd'}`)
@@ -251,6 +249,8 @@ async function sendVerReq(userEmail, indexValue) {
     }
     catch (err) {
         console.error('Błąd sieci lub inny problem:', err);
+        if (passwd) window.location.href = './PanelStarosty.html'
+        window.location.href = `./?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
         showErrorColors(prosbaKodu)
 
         const invite = sessionStorage.getItem('invite')
