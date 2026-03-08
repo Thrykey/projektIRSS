@@ -253,9 +253,13 @@ async function sendVerReq(userEmail, indexValue) {
         console.log(passwd);
 
         console.error('Błąd sieci lub inny problem:', err);
-        alert('Zostajesz przekierowany na inną podstronę')
-        if (passwd) window.location.href = './PanelStarosty.html'
-        else window.location.href = `../?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
+
+        if (passwd) alert('Zostajesz przekierowany na inną podstronę'), window.location.href = './PanelStarosty.html'
+        if (urlIncludes('group_id') && urlIncludes('invite')) {
+            alert('Zostajesz przekierowany na inną podstronę')
+            window.location.href = `../?group_id=${urlIncludes('group_id')}&invite=${urlIncludes('invite')}`
+        }
+        else alert('Zalogowano bez zaproszenia')
         showErrorColors(prosbaKodu)
 
         let msg;
