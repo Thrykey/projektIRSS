@@ -1,7 +1,7 @@
 import {
     setDisplayByElement, setTextContentByElement,
     urlIncludes, appendQueryParam, removeQueryParam,
-    showErrorColors, showSuccesColors, getMe, logout
+    showErrorColors, showSuccesColors, getMe, logout, logoutDemo
 } from './Utils.js'
 
 import { CookieHandler } from './CookieHandler.js'
@@ -162,14 +162,7 @@ console.log(urlIncludes('invite'));
 
 // -------------- API calls 
 
-function logoutDemo() {
-    cookies.delete('email');
-    cookies.delete('index');
-    cookies.delete('loggedIn');
-    cookies.delete('role');
-    alert('Wylogowano (demo)')
-    window.location.href = './Logowanie.html'
-}
+
 
 document.getElementById('zmienSesjeBtn').addEventListener('click', logoutDemo)
 
@@ -463,4 +456,4 @@ wyslijBtn.addEventListener('click', () => {
 
 console.warn('Jak czegoś tutaj szukasz, to pewnie znajdziesz. \
     Jak uważasz że umiesz napisać lepiej lub chcesz nam pomóc w rozwinięciu strony, \
-    zgłoś się do SKNI.')
+    zgłoś się do SKNI...')
