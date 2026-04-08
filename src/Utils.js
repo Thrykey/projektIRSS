@@ -316,3 +316,20 @@ export async function logout() {
         console.error('Błąd podczas wylogowywania, nie jesteś zalogowany')
     }
 }
+
+import { CookieHandler } from './CookieHandler.js';
+
+const cookies = new CookieHandler();
+
+export function logoutDemo() {
+    cookies.delete('email');
+    cookies.delete('index');
+    cookies.delete('loggedIn');
+    cookies.delete('role');
+    alert('Wylogowano (demo)')
+    if (window.location.pathname.endsWith('PanelStarosty.html')) {
+        window.location.href = './Logowanie.html';
+    } else {
+        window.location.href = './pages/Logowanie.html';
+    }
+}
