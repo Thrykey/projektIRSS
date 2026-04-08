@@ -1,14 +1,9 @@
 import {
     setDisplayByElement, setTextContentByElement, createSpan, urlHasHash,
     urlIncludes, getTokenValue, removeQueryParam, showErrorColors,
-    showSuccesColors, getMe, logout, logoutDemo
+    showSuccesColors, getMe, logout
 } from './Utils.js';
-
-import { CookieHandler } from './CookieHandler.js';
-
 import { DragDropManager } from './DragNdropMenager.js';
-
-const cookies = new CookieHandler();
 
 const panelButtons = document.querySelectorAll('.PanelStarostyBtnBehv')
 const feedback = document.getElementById('feedbackWyslania')
@@ -113,40 +108,6 @@ async function isLoggedIn() {
             : './pages/Logowanie.html'
     }
 }
-
-function checkIfLoggedInDemo() {
-    if (!cookies.exists('loggedIn') || cookies.get('loggedIn') !== 'true') {
-        indicator.classList.add('error');
-        indicatorText.textContent = 'Nie zalogowany!'
-        indicatorInfo.textContent = 'Nie zalogowany!'
-        return;
-    }
-
-    const meStr = {
-        email: cookies.get('email'),
-        role: cookies.get('role')
-    }
-
-    indicator.classList.remove('error');
-    indicator.classList.add('animate', 'success');
-    indicatorInfo.classList.remove('error')
-    indicatorInfo.classList.add('statusTooltip', 'success')
-    indicatorText.textContent = 'Zalogowany!'
-    indicatorInfo.innerHTML =
-        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
-        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
-
-    // Jeśli zalogowany jako starosta i dest=panel -> przekieruj do panelu
-
-    if (!cookies.get('loggedIn') || cookies.get('loggedIn') == null || cookies.get('loggedIn') == 'false') {
-        alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-        window.location.href = (urlIncludes('invite') != null)
-            ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')
-            : './pages/Logowanie.html'
-    }
-
-    // W pozostałych przypadkach - nie przekierowujemy
-}
 console.log(sessionStorage.getItem('loggedIn'));
 
 
@@ -188,20 +149,14 @@ async function sendPreferences() {
     }
 }
 
-function sendPreferencesDemo() {
-    console.log('Wysłano preferencje (demo):', getCurrentPreferences());
-    showSuccesColors(feedback)
-    setTextContentByElement('feedbackSpan', 'Wniosek został wysłany poprawnie! (demo)')
-}
-
 
 // EVENT LISTENERY
 
-document.getElementById('zmienSesjeBtn').addEventListener('click', logoutDemo)
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
 
 document.addEventListener('DOMContentLoaded', () => {
     generujWyborGrup()
-    checkIfLoggedInDemo()
+    isLoggedIn()
 
     new DragDropManager('.wybor', '.wyborGrupyLabolatoryjnej');
 
@@ -223,7 +178,7 @@ document.getElementById('wniosekBtn').addEventListener('click', () => {
         .forEach(el => {
             el.classList.add('active')
         })
-    sendPreferencesDemo()
+    sendPreferences()
 
 });
 

@@ -4,12 +4,8 @@ import {
     showErrorColors, showSuccesColors, getMe, logout
 } from './Utils.js'
 
-import { CookieHandler } from './CookieHandler.js'
-
 
 // ----------------- Constants and DOM elements
-
-const cookies = new CookieHandler();
 
 const indexInput = document.getElementById('indexInput');
 const mailInput = document.getElementById('mail');
@@ -27,8 +23,7 @@ let prosbaKodu = document.getElementById("prosbaKodu");
 
 document.addEventListener('DOMContentLoaded', () => {
     prosbaKodu = document.getElementById("prosbaKodu");
-    // checkIfLoggedIn()
-    checkIfLoggedInDemo()
+    checkIfLoggedIn()
 });
 
 
@@ -162,16 +157,8 @@ console.log(urlIncludes('invite'));
 
 // -------------- API calls 
 
-function logoutDemo() {
-    cookies.delete('email');
-    cookies.delete('index');
-    cookies.delete('loggedIn');
-    cookies.delete('role');
-    alert('Wylogowano (demo)')
-    window.location.href = './Logowanie.html'
-}
 
-document.getElementById('zmienSesjeBtn').addEventListener('click', logoutDemo)
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
 
 async function checkIfLoggedIn() {
     const me = await getMe();
@@ -221,54 +208,6 @@ async function checkIfLoggedIn() {
     // W pozostałych przypadkach - nie przekierowujemy
 }
 
-function checkIfLoggedInDemo() {
-    if (!cookies.exists('loggedIn') || cookies.get('loggedIn') !== 'true') {
-        indicator.classList.add('error');
-        indicatorText.textContent = 'Nie zalogowany!'
-        indicatorInfo.textContent = 'Nie zalogowany!'
-        return;
-    }
-
-    const meStr = {
-        email: cookies.get('email'),
-        role: cookies.get('role')
-    }
-
-    indicator.classList.remove('error');
-    indicator.classList.add('animate', 'success');
-    indicatorInfo.classList.remove('error')
-    indicatorInfo.classList.add('statusTooltip', 'success')
-    indicatorText.textContent = 'Zalogowany!'
-    indicatorInfo.innerHTML =
-        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
-        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
-
-    const invite = urlIncludes('invite');
-    const groupId = urlIncludes('group_id');
-    const dest = urlIncludes('dest');
-
-    // Jeśli zalogowany jako starosta i dest=panel -> przekieruj do panelu
-    if (meStr.role === 'starosta' && dest === 'panel') {
-        window.location.href = './PanelStarosty.html';
-        return;
-    }
-
-    // Jeśli zalogowany i w URL występuje zarówno invite jak i group_id -> przekieruj zawsze
-    if (invite && groupId) {
-        const target = `../?group_id=${groupId}&invite=${invite}`;
-        window.location.href = target;
-        return;
-    }
-
-    //  Jeśli URL nie ma parametrów (np. /pages/Logowanie.html) i użytkownik to starosta -> panel
-    const hasQuery = new URL(window.location.href).search !== '';
-    if (!hasQuery && meStr.role === 'starosta') {
-        window.location.href = './PanelStarosty.html';
-        return;
-    }
-
-    // W pozostałych przypadkach - nie przekierowujemy
-}
 
 async function sendVerReq(userEmail, indexValue) {
     try {
@@ -333,26 +272,6 @@ async function sendVerReq(userEmail, indexValue) {
         setTextContentByElement('potwierdzenieSpan', `Błąd sieci lub inny problem: ${msg || err}`)
     }
 
-}
-
-function sendVerReqDemo(userEmail, indexValue) {
-    console.log('Dane poprawne, wysłany maila (demo)')
-    cookies.set('email', userEmail, 1)
-    cookies.set('index', indexValue, 1)
-    cookies.set('loggedIn', 'true', 1)
-
-    setTimeout(() => {
-        setTextContentByElement('potwierdzenieSpan', `Kod został wysłany na: ${userEmail}, nr indexu: ${indexValue}`)
-        showSuccesColors(prosbaKodu)
-    }, 1000)
-    if (document.getElementById('passwd').value != '') {
-        cookies.set('role', 'starosta', 1)
-        setTimeout(() => {
-            alert('Zostajesz przekierowany na inną podstronę (demo)')
-            window.location.href = './PanelStarosty.html'
-        }, 2000)
-    }
-    else cookies.set('role', 'student', 1)
 }
 
 // ----------------- Event listeners
@@ -457,8 +376,7 @@ wyslijBtn.addEventListener('click', () => {
         .forEach(el => {
             el.classList.add('active')
         })
-    // sendVerReq(userEmail, indexValue)
-    sendVerReqDemo(userEmail, indexValue)
+    sendVerReq(userEmail, indexValue)
 });
 
 console.warn('Jak czegoś tutaj szukasz, to pewnie znajdziesz. \

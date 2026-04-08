@@ -1,14 +1,9 @@
 import {
     setDisplayByElement, setTextContentByElement, clampValues, setupDateTime, localToISO,
-    showErrorColors, showSuccesColors, getMe, logout, logoutDemo
+    showErrorColors, showSuccesColors, getMe, logout
 } from './Utils.js';
 
-import { CookieHandler } from './CookieHandler.js';
-
 // ---------------- ELEMENTY DOM
-
-const cookies = new CookieHandler();
-
 const rokStudiowInput = document.getElementsByClassName('rokStudiow');
 const stopienStudiowInput = document.getElementsByClassName('stopienStudiow');
 const liczbaGrupInput = document.getElementsByClassName('iloscGrup');
@@ -90,33 +85,7 @@ async function isLoggedIn() {
 
     console.log(sessionStorage.getItem('loggedIn'));
 }
-// isLoggedIn();
-function isLoggedInDemo() {
-    if (!cookies.exists('loggedIn') || cookies.get('loggedIn') !== 'true') {
-        indicator.classList.add('error');
-        indicatorText.textContent = 'Nie zalogowany!'
-        indicatorInfo.textContent = 'Nie zalogowany!'
-        window.location.href = './Logowanie.html'
-        return;
-    }
-    const meStr = {
-        email: cookies.get('email'),
-        role: cookies.get('role')
-    }
-
-    indicator.classList.remove('error');
-    indicator.classList.add('animate', 'success');
-    indicatorInfo.classList.remove('error')
-    indicatorInfo.classList.add('statusTooltip', 'success')
-    indicatorText.textContent = 'Zalogowany!'
-    indicatorInfo.innerHTML =
-        '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
-        '<br>' + '<strong>Rola</strong>: ' + meStr.role;
-
-    console.log(sessionStorage.getItem('loggedIn'));
-}
-isLoggedInDemo();
-
+isLoggedIn();
 
 async function loadCampaigns() {
     const container = document.getElementById('campaignsContainer');
@@ -272,59 +241,6 @@ async function loadCampaigns() {
     }
 }
 
-function loadCampaignsDemo() {
-    const container = document.getElementById('campaignsContainer');
-    for (let i = 1; i <= 5; i++) {
-        const card = document.createElement('div');
-        card.classList.add('campaignCard');
-        card.classList.add('hide');
-        card.classList.add(i % 2 === 0 ? 'active' : 'inactive');
-
-        // add active/inactive and success/error overlay layers (under content)
-        const activeLayer = document.createElement('div');
-        activeLayer.className = 'cardActiveLayer';
-        const inactiveLayer = document.createElement('div');
-        inactiveLayer.className = 'cardInactiveLayer';
-        const successLayer = document.createElement('div');
-        successLayer.className = 'cardSuccess';
-        const errorLayer = document.createElement('div');
-        errorLayer.className = 'cardError';
-        // append layers first so content sits above them
-        card.appendChild(activeLayer);
-        card.appendChild(inactiveLayer);
-        card.appendChild(successLayer);
-        card.appendChild(errorLayer);
-
-        const titleEl = document.createElement('h3');
-        titleEl.textContent = `KAMPUS-${i}`;
-
-        const registeredEl = document.createElement('p');
-        registeredEl.textContent = `Zapisanych: ${Math.floor(Math.random() * 100)}`;
-
-        const timeEl = document.createElement('p');
-        timeEl.textContent = `Pozostało: ${Math.floor(Math.random() * 24)}h`;
-
-        const footer = document.createElement('div');
-        footer.classList.add('cardFooter');
-
-        const btn = document.createElement('button');
-        btn.textContent = i % 2 === 0 ? 'Resolve' : 'Download';
-        footer.appendChild(btn);
-
-        card.appendChild(titleEl);
-        card.appendChild(registeredEl);
-        card.appendChild(timeEl);
-        card.appendChild(footer);
-
-        container.appendChild(card);
-
-        void card.offsetWidth;
-        card.classList.remove('hide');
-        card.classList.add('show');
-    }
-}
-// loadCampaignsDemo();
-
 
 
 async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit) {
@@ -386,21 +302,10 @@ async function generateLink(name, startsAt, endsAt, method, groupAmmount, groupL
     }
 }
 
-function generateLinkDemo(name, startsAt, endsAt, method, groupAmmount, groupLimit) {
-    console.log('Symulacja generowania linku z danymi:', { name, startsAt, endsAt, method, groupAmmount, groupLimit });
-    const link = 'https://zapisy-grupowe.xyz/?group_id=' + name.slice(0, 3).toUpperCase() + '-' + groupAmmount + "G" + '&invite=' + Math.random().toString(36).substring(2, 8);
-    setTimeout(() => {
-        showSuccesColors(infoGather)
-        setDisplayByElement('copyLink', 'block')
-        setTextContentByElement('copyLink', link)
-        setTextContentByElement('confirmationLink', 'Link wygenerowany poprawnie!')
-    }, 1500);
-}
-
 
 // ---------------- EVENT LISTENERS I INNE REAKCJE NA ZMIANY W DOM
 
-document.getElementById('zmienSesjeBtn').addEventListener('click', logoutDemo)
+document.getElementById('zmienSesjeBtn').addEventListener('click', logout)
 
 
 rokStudiowInput[0].addEventListener('input', () => clampValues(rokStudiowInput[0], 1, 5));
@@ -494,7 +399,7 @@ document.getElementById('sprawdzRejestracje').addEventListener('click', () => {
     document.getElementById('campaignsContainer').textContent = ''
     document.getElementById('aktywneKampanie').style.overflow = 'unset'
 
-    loadCampaignsDemo();
+    loadCampaigns();
     setTimeout(() => {
         // document.getElementsByClassName('grid-container')[0].classList.add('ovflowHidden')
         document.getElementById('aktywneKampanie').classList.remove('hide')
@@ -584,8 +489,7 @@ submitButton[0].addEventListener('click', (e) => {
         const groupLimit = inputsMap['maxOsob'].value
 
 
-        // generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
-        generateLinkDemo(name, startsAt, endsAt, method, groupAmmount, groupLimit)
+        generateLink(name, startsAt, endsAt, method, groupAmmount, groupLimit)
 
         document.getElementById('gridLayout').classList.add('hide')
         setDisplayByElement('infoGather', 'grid')
