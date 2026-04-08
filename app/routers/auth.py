@@ -1,0 +1,246 @@
+from datetime import datetime, timedelta
+from fastapi import APIRouter, HTTPException, Response
+from fastapi.responses import RedirectResponse
+from sqlmodel import select, col, func
+
+from app.database import SessionDep
+from app.serializers.schemas import (
+    EmailRequest, MagicLinkResponse, 
+    RegisterWithInviteRequest, TokenResponse
+)
+from app.core.security import (
+    create_access_token, generate_magic_token, 
+    send_magic_link_email, validate_uni_email
+)
+from app.models.models import (
+    AuthToken, Invitation,
+    RegistrationCampaign, RegistrationGroup,
+    User, UserRole
+)
+
+from app.config import get_settings
+
+settings = get_settings()
+router = APIRouter(prefix="/auth", tags=["Auth"])
+
+# rejestracja z kodem (dla nowych osób) 
+@router.post("/register-with-invite", response_model=MagicLinkResponse)
+async def register_with_invite(
+    payload: RegisterWithInviteRequest,
+    db: SessionDep
+):
+    """
+    Tworzy konto lub dopisuje istniejącego użytkownika do nowej kampanii na podstawie kodu zaproszenia wygenerowanego przez Starostę.
+    Następnie wysyła maila do logowania.
+    System automatycznie przypisuje rolę i kampanię zdefiniowane w zaproszeniu.
+    Obsługuje dopisywanie wielu kampanii do jednego adresu e-mail.
+    """
+    email = payload.email
+    code = payload.invite
+
+    # waliduj domene uni
+    if not validate_uni_email(email):
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Wymagany mail w domenie {settings.ALLOWED_DOMAINS}"
+        )
+
+    # pobranie i walidacja zaproszenia
+    invite = db.exec(select(Invitation).where(Invitation.token == code)).first()
+    if not invite:
+        raise HTTPException(status_code=404, detail="Nieprawidłowy kod zaproszenia.")
+    
+    if not invite.is_valid:
+        raise HTTPException(status_code=400, detail="Ten kod zaproszenia wygasł lub został w pełni wykorzystany.")
+
+    # walidacja kampanii (jeśli kod dotyczy kampanii)
+    if invite.target_campaign_id is not None:
+        campaign = db.get(RegistrationCampaign, invite.target_campaign_id)
+        if not campaign:
+            raise HTTPException(status_code=404, detail="Kampania z zaproszenia już nie istnieje.")
+        if not campaign.is_active:
+            raise HTTPException(status_code=400, detail="Kampania jeszcze się nie zaczęła albo już się skończyła.")
+
+    # sprawdź czy user już istnieje
+    user = db.exec(select(User).where(User.email == email)).first()
+
+    if user:
+    # --- SCENARIUSZ A: UPDATE ISTNIEJĄCEGO USERA ---
+        
+        # Logika: Jeśli to link do kampanii (student), a user tej kampanii nie ma -> dodaj.
+        if invite.target_campaign_id is not None:
+            # sprawdź duplikaty w liście
+            if invite.target_campaign_id not in user.allowed_campaign_ids:
+                current_campaigns = list(user.allowed_campaign_ids)
+                current_campaigns.append(invite.target_campaign_id)
+                user.allowed_campaign_ids = current_campaigns
+                
+                db.add(user)
+                message_detail = "Zaktualizowano Twoje konto o dostęp do nowego rocznika."
+            else:
+                message_detail = "Masz już dostęp do tej kampanii. Logowanie..."
+        else:
+            message_detail = "Konto już istnieje. Logowanie..."
+
+    else:
+    # --- SCENARIUSZ B: TWORZENIE NOWEGO USERA ---
+        
+        # przygotuj listę kampanii
+        initial_campaigns = []
+        if invite.target_campaign_id is not None:
+            initial_campaigns.append(invite.target_campaign_id)
+
+        new_user = User(
+            email=email,
+            index=payload.index,
+            role=invite.target_role,                 
+            allowed_campaign_ids=initial_campaigns 
+        )
+        db.add(new_user)
+        message_detail = "Konto utworzone pomyślnie!"
+
+    # generuj i wyslij magic link
+    token = generate_magic_token()
+    expires_at = datetime.now() + timedelta(minutes=settings.TOKEN_EXPIRE_MINUTES)
+    
+    auth_token = AuthToken(
+        email=email,
+        token=token,
+        expires_at=expires_at
+    )
+
+    db.add(auth_token)
+
+    # podbij licznik uzycia zaproszenia
+    invite.current_uses += 1
+    db.add(invite)
+
+    db.commit()
+    
+    # Jeżeli starosta się loguje albo rejestruje, nie przekazujemy kodu zaproszenia
+    # Zamiast tego przekierujemy go do panelu starosty
+    if code == settings.DEFAULT_ADMIN_INVITE_TOKEN:
+        code = None
+
+    await send_magic_link_email(email, token, invite=code)
+
+    return MagicLinkResponse(
+        message="Sukces!",
+        detail=f"{message_detail} Na adres {email} wysłaliśmy link logujący."
+    )
+    
+  
+@router.get("/verify", response_model=TokenResponse)
+async def verify_token(token: str, db: SessionDep, invite: str | None = None):
+    """
+    Weryfikuje link logowania.
+    Generuje link zgodny z wymaganiami frontendu:
+    /?group_id={3_LITERY}-{ILOSC_GRUP}G&invite={KOD}
+    
+    Jeśli nie uda się ustalić kampanii (np. błędny invite),
+    zwraca link bez group_id: /?invite={KOD}
+    """
+    
+    # 1. Walidacja tokenu AuthToken
+    auth_token = db.exec(select(AuthToken).where(AuthToken.token == token)).first()
+    
+    if not auth_token or not auth_token.is_valid:
+        raise HTTPException(status_code=401, detail="Link jest nieważny lub wygasł.")
+
+    # 2. Walidacja użytkownika
+    user = db.exec(select(User).where(User.email == auth_token.email)).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Użytkownik nie istnieje.")
+    
+    # 3. Budowanie URL przekierowania
+    # Domyślny fallback (gdyby nic innego nie zadziałało)
+    redirect = f"{settings.FRONTEND_URL}/"
+
+    if invite:
+        # Próba zbudowania "bogatego" linku dla frontendu
+        # Używamy try-except, żeby błąd w pobieraniu detali kampanii nie zablokował logowania
+        try:
+            # Pobierz samo zaproszenie (nie sprawdzamy czy user jest przypisany!)
+            campaign_invite = db.exec(
+                select(Invitation).where(Invitation.token == invite)
+            ).first()
+
+            # Flaga sukcesu budowania pełnego linku
+            full_link_created = False
+
+            if campaign_invite and campaign_invite.target_campaign_id:
+                campaign_id = campaign_invite.target_campaign_id
+                
+                # Pobierz kampanię
+                campaign = db.get(RegistrationCampaign, campaign_id)
+                
+                if campaign:
+                    three_letters = campaign.title[:3].upper()
+                    
+                    # Policz grupy (używamy scalar dla bezpieczeństwa typu)
+                    group_amount = db.scalar(
+                        select(func.count(RegistrationGroup.id))
+                        .where(RegistrationGroup.campaign_id == campaign_id)
+                    )
+                    
+                    # Zabezpieczenie na wypadek None (0 grup)
+                    if group_amount is None:
+                        group_amount = 0
+
+                    # SUKCES: Mamy wszystkie dane, budujemy pełny link
+                    redirect = f"{settings.FRONTEND_URL}/?group_id={three_letters}-{group_amount}G&invite={invite}"
+                    full_link_created = True
+            
+            # Jeśli nie udało się zbudować pełnego linku (np. brak kampanii pod tym invite),
+            # ustawiamy wersję podstawową z samym invite
+            if not full_link_created:
+                redirect = f"{settings.FRONTEND_URL}/?invite={invite}"
+
+        except Exception as e:
+            # W razie błędu bazy (np. problem z liczeniem grup), logujemy błąd,
+            # ale puszczamy użytkownika dalej z prostym linkiem.
+            print(f"Non-critical error generating redirect link: {e}")
+            redirect = f"{settings.FRONTEND_URL}/?invite={invite}"
+
+    else:
+        # Zwykłe logowanie (bez zaproszenia)
+        if user.role == UserRole.ADMIN:
+            redirect = f"{settings.FRONTEND_URL}/pages/PanelStarosty.html"
+        else:
+            redirect = f"{settings.FRONTEND_URL}/pages/StudentPanel.html"
+
+    # 4. Generowanie JWT
+    access_token_expires = timedelta(hours=settings.SESSION_EXPIRE_HOURS)
+    access_token = create_access_token(
+        data={"sub": str(user.id)},
+        expires_delta=access_token_expires
+    )
+
+    # 5. Zużycie tokenu jednorazowego
+    auth_token.is_used = True
+    db.add(auth_token)
+    db.commit()
+
+    # 6. Odpowiedź z ciasteczkiem
+    response = RedirectResponse(url=redirect)
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        max_age=access_token_expires.total_seconds(),
+        httponly=True,
+        secure=True, 
+        samesite="lax",
+        path="/"
+    )
+    
+    return response
+
+@router.get("/logout")
+async def logout(response: Response):
+    """
+    Wylogowanie użytkownika.
+    Usuwa ciasteczko z tokenem JWT, ustawiając je jako wygasłe.
+    """
+
+    response.delete_cookie(key="access_token", path="/")
+    return {"message": "Wylogowano pomyślnie."}

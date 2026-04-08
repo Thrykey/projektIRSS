@@ -1,0 +1,80 @@
+// --- ENUMS (Słowniki) ---
+
+Enum UserRole {
+  student
+  starosta
+}
+
+Enum RegistrationStatus {
+  submitted // zgłoszony, czeka
+  assigned  // przydzielony
+  rejected  // odrzucony
+}
+
+Enum AssignmentMethod {
+  fcfs    // kto pierwszy ten lepszy
+  lottery // losowanie
+  random  // totalna losowość
+}
+
+// --- TABELE ---
+
+Table users {
+  id int [pk, increment]
+  email varchar [unique, not null]
+  role UserRole [default: 'student']
+  // Przechowuje listę ID, np. [1, 2, 5]
+  allowed_campaign_ids json [default: '[]'] 
+}
+
+Table auth_tokens {
+  id int [pk, increment]
+  email varchar [not null]
+  token varchar [unique, not null]
+  expires_at datetime [not null]
+  is_used bool [default: false]
+  created_at datetime [default: `now()`]
+}
+
+Table invitations {
+  id int [pk, increment]
+  token varchar [unique, not null]
+  target_role UserRole [not null]
+  target_campaign_id int [ref: > registration_campaigns.id]
+  max_uses int [default: 1]
+  current_uses int [default: 0]
+  expires_at datetime [not null]
+}
+
+Table registration_campaigns {
+  id int [pk, increment]
+  creator_id int [ref: > users.id, null] // Starosta
+  title varchar [not null]
+  starts_at datetime [not null]
+  ends_at datetime [not null]
+  access_code varchar [null, note: 'Opcjonalne hasło']
+  is_active bool [default: true]
+  assignment_method AssignmentMethod [default: 'fcfs']
+  last_resolved_method AssignmentMethod [null]
+}
+
+Table registration_groups {
+  id int [pk, increment]
+  campaign_id int [ref: > registration_campaigns.id, note: 'Delete cascade']
+  name varchar [not null]
+  limit int [not null]
+}
+
+Table registrations {
+  id int [pk, increment]
+  user_id int [ref: > users.id]
+  group_id int [ref: > registration_groups.id]
+  priority int [default: 1]
+  status RegistrationStatus [default: 'submitted']
+  created_at datetime [default: `now()`]
+
+  // Unique Constraint: Student nie może zapisać się 2x do tej samej grupy
+  indexes {
+    (user_id, group_id) [unique]
+  }
+}

@@ -1,0 +1,119 @@
+## Project status checklist
+<!-- [x] done, [ ] not done yet -->
+- [x] passwordless login (magic links)
+- [x] async smtp via gmail for magic links  
+- [x] jwt tokens are implemented, stateless session
+- [x] roles are split: admin (starosta) and regular student
+- [x] script to create the first admin (starosta) user is ready
+- [x] invites: 
+    - [x] to generate starosta invite use `create_invite.py` script
+    - [x] starosta can generate invite link for students
+- [x] nice project structure (i suppose :3)
+- [x] database models and relations are set up
+- [x] description for each endpoint (swagger docs(localhost:8000/docs))
+- [x] campaign management by the administrator
+    - [x] defining groups and slots
+    - [x] editing the campaign title and dates
+    - [x] editing the group names, limits
+    - [x] previewing popularity of given group(how many people picked priority 1)
+- [x] student registration logic
+    - [x] preview available campaigns with "wkrótce / aktywny / zakończono" status
+    - [x] POST /student/register - students submit their priorities for ALL groups
+    - [x] validation for unique priorities (no cheating)
+    - [x] logic to prevent double signups (one submission per campaign)
+    - [x] fix the N+1 problem in /available-campaigns
+- [x] campaign finish management
+    - [x] assigning students to groups according to specified methods:
+        - [x] FCFS (priorities + time of applications)
+        - [x] lottery (priorities and luck)
+        - [x] random (ignore preferences) 
+    - [X] generating excel results
+- [x] adding debug mode that enables a dangerous test endpoints, which can be enabled in .env
+- [ ] using a throttling mechanism for smtp to ensure the limits are not exceeded (30 mails/min in outlook's case)
+- [ ] smtp error handling
+- [ ] transferring SMTP to the university's service account (i wish)
+- [ ] add rate limiting and other protection methods if needed
+- [ ] pretty readme
+- [x] docker build
+- [ ] real automized tests
+
+
+## Project structure
+The purpose of each folder in the project tree is the following:
+1. `/app`
+    - `/models`: SQLModel Python representation of the database tables.
+    - `/routes`: Routes for accessing the api (auth, admin, student, etc).
+    - `/serializers`: Models/Schemas to handle the request/response bodies.
+    - `/core`: Utility functions related to security, dependencies and whatnot.
+2. `/database`: Schematic of DB in picture and dbdiagram.io code
+
+
+## Running locally
+
+**Prerequisites:** Python interpreter and PostgreSQL server
+
+1. Copy `.env.example` to `.env` and fill in the required credentials (database and SMTP)
+2. Run the startup script:
+   - **Windows:** `.\run.ps1` in PowerShell
+   - **Linux/macOS:** `./run.sh` in terminal
+
+The script will create a virtual environment, install dependencies, and start the server.
+
+**Tested on:**
+- Python 3.14.2
+- PostgreSQL 18.1
+
+## Running with Docker
+
+**Prerequisites:** Docker and Docker Compose
+
+1. Run `docker-compose up --build` from the repository root
+2. That's it!
+
+**Useful commands:**
+- Stop the application: `docker-compose down`
+- Stop and remove database volume: `docker-compose down -v`
+- Access container shell: `docker-compose exec api bash` or `docker-compose exec db bash`
+- Connect to PostgreSQL: `docker-compose exec db psql -U $POSTGRES_USER -d $POSTGRES_DB`
+
+
+## API Endpoints
+
+Detailed description of every endpoint is avaiable on localhost:8000/docs
+
+| method | endpoint | who | what it does |
+| :---: | --- | :---: | --- |
+|**POST**|auth/register-with-invite|anyone|signup for newbies (u need a code)|
+|**GET**|/auth/verify|anyone|"the thing u click in email, swaps link for jwt token"|
+|**GET**|/users/me|logged-in user|shows ur info & checks if ur admin or student|
+|**GET**|/users/available-campaigns|logged-in user|see what campaigns are there + popularity stats|
+|**POST**|/admin/create-student-invite|admin|generates the invitation link for student|
+|**POST**|/admin/campaigns/create|admin|creates new registration campaign|
+|**GET**|/admin/campaigns/{id}|admin|shows stats, priority counts and who is assigned|
+|**PATCH**|/admin/campaigns/{id}|admin|edit campaign dates or title|
+|**POST**|/admin/campaigns/{id}/groups|admin|bulk add groups to campaign|
+|**PATCH**|/admin/groups/{id}|admin|edit group name or limit|
+|**POST**|/admin/campaigns/{id}/resolve|admin|assigns students to groups according to the selected method|
+|**POST**|/admin/campaigns/{id}/download|admin|downloads excel file with registrations from a resolved campaign|
+|**POST**|/student/register|logged-in user|send your priorities for a campaign|
+|**GET**|/student/my-groups|logged-in user|shows ur assigned classes and ur priorities|
+|**POST**|/debug/create-user|anyone|creates user instantly (skips email magic link)|
+
+
+## Database structure
+
+#### DB Schematic
+![alt text](/database/database.png)
+
+#### DB legend
+1. `users`: All users (Student/Admin(Starosta)). The role defines permissions.
+
+2. `invitations`: Invitation codes generated by the Admin (for students) or by a script (for the Admin).
+
+3. `auth_tokens`: “Magic links” for logging in (one-time use).
+
+4. `registration_campaigns`: Registration Campaigns opened by the Admin (e.g., “Rekrutacja zima 2026”).
+
+5. `registration_groups`: Specific subjects/slots within the campaign (e.g., “DevOps gr. 1”).
+
+6. `registrations`: Connection between the Student and the Group (registration request). The student's preferences are saved here.
