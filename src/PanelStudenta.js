@@ -119,6 +119,10 @@ function checkIfLoggedInDemo() {
         indicator.classList.add('error');
         indicatorText.textContent = 'Nie zalogowany!'
         indicatorInfo.textContent = 'Nie zalogowany!'
+        alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
+        window.location.href = (urlIncludes('invite') != null)
+            ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')
+            : './pages/Logowanie.html'
         return;
     }
 
@@ -135,15 +139,6 @@ function checkIfLoggedInDemo() {
     indicatorInfo.innerHTML =
         '<strong>Zalogowany jako</strong>: ' + meStr.email.split('@')[0] +
         '<br>' + '<strong>Rola</strong>: ' + meStr.role;
-
-    // Jeśli zalogowany jako starosta i dest=panel -> przekieruj do panelu
-
-    if (!cookies.get('loggedIn') || cookies.get('loggedIn') == null || cookies.get('loggedIn') == 'false') {
-        alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
-        window.location.href = (urlIncludes('invite') != null)
-            ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')
-            : './pages/Logowanie.html'
-    }
 
     // W pozostałych przypadkach - nie przekierowujemy
 }

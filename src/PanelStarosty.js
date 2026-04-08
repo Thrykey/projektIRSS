@@ -96,7 +96,10 @@ function isLoggedInDemo() {
         indicator.classList.add('error');
         indicatorText.textContent = 'Nie zalogowany!'
         indicatorInfo.textContent = 'Nie zalogowany!'
-        window.location.href = './Logowanie.html'
+        alert('Nie jesteś zalogowany! Zostaniesz przekierowany na stronę logowania.')
+        window.location.href = (urlIncludes('invite') != null)
+            ? './pages/Logowanie.html?group_id=' + urlIncludes('group_id') + '&invite=' + urlIncludes('invite')
+            : './pages/Logowanie.html'
         return;
     }
     const meStr = {
